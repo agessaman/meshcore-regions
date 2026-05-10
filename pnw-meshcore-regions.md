@@ -1,0 +1,748 @@
+# Pacific Northwest MeshCore Region Strategy
+
+## Overview
+
+This document proposes a region naming scheme for the Pacific Northwest MeshCore mesh network, spanning from Southern Oregon through the Puget Sound region of Washington State to Vancouver and Victoria in British Columbia, and east across the Cascades to the Inland Empire. The scheme is designed for use with MeshCore's region filtering system (firmware 1.10.0+), which uses hierarchical region tags on repeaters and transport code scoping on messages to control flood propagation.
+
+The scheme prioritizes short, flat, human-readable names. The parent/child hierarchy is enforced by `region put` commands, not by encoding structure into the names themselves.
+
+## Design Principles
+
+- **Short names**: Region names are purely administrative — they never appear in flood packets. But shorter names are easier to type in CLI, easier to remember, and conserve the 172-byte budget in the regions response payload. Three letters or fewer where possible.
+- **MSA-scale regions**: The third level corresponds roughly to OMB Metropolitan Statistical Areas rather than individual counties. People don't segment their daily lives by county lines, and the mesh shouldn't either. The Seattle-Tacoma-Bellevue MSA (King, Pierce, Snohomish counties) is one region: `sea`.
+- **Flat naming**: `west`, `pnw`, `wa`, `sea` — not a complex string like `west-pnw-wa-sea` or `noam-usa-wa-sea`. The hierarchy lives in the parent relationships, not the strings.
+- **Cross-border pragmatism**: Portland straddles OR/WA — it lives under `or`, and Clark County WA repeaters dual-carry `pdx` and `wa`. The Inland Empire straddles WA/ID and uses the same dual-carry pattern. Vancouver BC uses IATA code `yvr` to avoid ambiguity with Vancouver WA.
+
+## Technical Constraints
+
+| Constraint | Value |
+|---|---|
+| Characters allowed | Lowercase a-z, 0-9, hyphen |
+| Max name length | 29 bytes (UTF-8) |
+| Max regions per repeater | 32 |
+| Regions response budget | 172 bytes (comma-separated names) |
+| Region names must be | Unique within the mesh |
+
+---
+
+## Proposed Region Hierarchy
+
+```
+west                            Entire mesh (Western US / SW Canada)
+    pnw                         Pacific Northwest
+        wa                      Washington State
+            w-wa                Western Washington
+                sea             Seattle / Tacoma / Bellevue (King, Pierce, Snohomish)
+                oly             Olympia / Lacey / Tumwater (Thurston)
+                kit             Kitsap / Bremerton / Silverdale
+                grh             Grays Harbor / WA coast
+                bvs             Skagit Valley / Mount Vernon / Anacortes
+                bli             Bellingham / Whatcom County
+            sw-wa               Southwest Washington
+                cls             Centralia / Chehalis (Lewis)
+                kls             Kelso / Longview (Cowlitz)
+            c-wa                Central Washington
+                ykm             Yakima (Yakima)
+                eat             Wenatchee (Chelan)
+                eln             Ellensburg (Kittitas)
+                mwh             Moses Lake (Grant)
+            e-wa                Eastern Washington
+                geg             Spokane metro
+                alw             Walla Walla (Walla Walla)
+                puw             Pullman (Whitman)
+        ie                      Inland Empire (Spokane WA + N. Idaho panhandle)
+        or                      Oregon
+            pdx                 Portland metro (OR + Clark County WA)
+            wv                  Willamette Valley
+                sle             Salem / Keizer (Marion, Polk)
+                cvo             Corvallis / Albany (Benton, Linn)
+                eug             Eugene / Springfield (Lane)
+            s-or                Southern Oregon
+                mfr             Medford / Ashland (Jackson)
+                rbg             Roseburg (Douglas)
+                lmt             Klamath Falls (Klamath)
+            or-coast            Oregon Coast
+                onp             Newport / Lincoln City (Lincoln)
+                ast             Astoria / Seaside (Clatsop)
+                oth             North Bend / Coos Bay (Coos)
+            c-or                Central Oregon
+                ben             Bend / Redmond (Deschutes)
+                pdt             Pendleton (Umatilla)
+                bke             Baker City (Baker)
+        id                      Idaho
+            boi                 Boise metro
+            cda                 Coeur d'Alene / N. Idaho panhandle
+        bc                      British Columbia (southern)
+            yvr                 Metro Vancouver / Lower Mainland
+            fra                 Fraser Valley / Abbotsford / Chilliwack
+            vic                 Victoria / southern Vancouver Island
+    ca                          California (future)
+        nca                     Northern California
+        bay                     Bay Area
+        sca                     Southern California
+```
+
+### Name Rationale
+
+| Tag | Source | Notes |
+|---|---|---|
+| `west` | Abbreviation | Western — top level for the entire mesh |
+| `pnw` | Abbreviation | Pacific Northwest — well understood regionally |
+| `wa`, `or`, `bc`, `id` | Postal / standard | State and province abbreviations |
+| `sea` | IATA | Seattle-Tacoma International — universally recognized |
+| `pdx` | IATA | Portland International — iconic, avoids OR/WA ambiguity |
+| `ie` | Abbreviation | Inland Empire — established regional identity for Spokane-CdA corridor |
+| `yvr` | IATA | Vancouver International — avoids Vancouver WA confusion |
+| `bli` | IATA | Bellingham International |
+| `oly` | Abbreviation | Olympia — IATA code `OLM` exists but `oly` is more recognizable as a short form of the city name |
+| `kit` | Abbreviation | Kitsap — Bremerton National Airport IATA code is `PWT`, but `kit` better represents the broader Kitsap Peninsula community |
+| `w-wa` | Abbreviation | Western Washington |
+| `sw-wa` | Abbreviation | Southwest Washington |
+| `c-wa` | Abbreviation | Central Washington |
+| `e-wa` | Abbreviation | Eastern Washington |
+| `bvs` | IATA | Skagit Regional Airport (Burlington) |
+| `grh` | Abbreviation | Grays Harbor |
+| `cls` | IATA | Chehalis-Centralia Airport |
+| `kls` | IATA | Kelso-Longview (Southwest Washington Regional) |
+| `ykm` | IATA | Yakima Air Terminal |
+| `eat` | IATA | Pangborn Memorial Airport (Wenatchee) |
+| `eln` | IATA | Bowers Field (Ellensburg) |
+| `mwh` | IATA | Grant County International (Moses Lake) |
+| `geg` | IATA | Spokane International Airport (Geiger Field) |
+| `alw` | IATA | Walla Walla Regional Airport |
+| `puw` | IATA | Pullman-Moscow Regional Airport |
+| `boi` | IATA | Boise (Boise Airport) |
+| `cda` | Abbreviation | Coeur d'Alene — standard local abbreviation; no nearby IATA airport |
+| `wv` | Abbreviation | Willamette Valley |
+| `s-or` | Abbreviation | Southern Oregon |
+| `or-coast` | Abbreviation | Oregon Coast |
+| `c-or` | Abbreviation | Central Oregon |
+| `sle` | IATA | McNary Field (Salem) |
+| `cvo` | IATA | Corvallis Municipal Airport |
+| `eug` | IATA | Eugene (Mahlon Sweet Field) |
+| `mfr` | IATA | Rogue Valley International-Medford Airport |
+| `rbg` | IATA | Roseburg Regional Airport |
+| `lmt` | IATA | Klamath Falls (Crater Lake-Klamath Regional) |
+| `onp` | IATA | Newport Municipal Airport |
+| `ast` | IATA | Astoria Regional Airport |
+| `oth` | IATA | Southwest Oregon Regional (North Bend) |
+| `bend` | Full name | Bend — short enough to use unabbreviated; no well-known IATA code |
+| `pdt` | IATA | Eastern Oregon Regional Airport (Pendleton) |
+| `bke` | IATA | Baker City Municipal Airport |
+| `fra` | Abbreviation | Fraser Valley |
+| `vic` | Abbreviation | Victoria |
+| `nca` | Abbreviation | Northern California |
+| `ca` | Postal | California state |
+
+IATA airport codes are used where they are well-known and unambiguous. Plain abbreviations are used where IATA codes are obscure or nonexistent. All names are lowercase per MeshCore firmware requirements.
+
+---
+
+## How Regions Work in MeshCore
+
+Understanding the underlying mechanism helps explain why the naming convention matters and what it doesn't affect.
+
+### Region names never appear in packets
+
+When a message is sent with a region scope, the packet header carries **two 16-bit transport codes** — not the region name. These codes are computed as an HMAC-SHA256 of the region's TransportKey over the packet payload, truncated to 16 bits. A receiving repeater matches incoming transport codes by recomputing the HMAC for each of its configured regions until one matches.
+
+| Packet field | Size | Present when |
+|---|---|---|
+| header | 1 byte | Always |
+| transport_codes | 4 bytes | Only for `TRANSPORT_FLOOD` or `TRANSPORT_DIRECT` route types |
+| path_len | 1 byte | Always |
+| path | variable | Routing |
+| payload | variable | Message content |
+
+This means region names have **zero impact on packet size or airtime**. A region called `sea` produces the same 4-byte transport code overhead as one called `seattle-tacoma-bellevue-metropolitan-area`.
+
+### Where region names do appear
+
+Region names are transmitted only in response to an explicit **anonymous regions request** (`ANON_REQ` type `0x01`). This is a direct-routed, rate-limited exchange (max 4 anonymous requests per 180 seconds). The response carries a comma-separated list of region names that allow flooding, with a 172-byte budget.
+
+Budget example for a typical repeater:
+
+```
+west,pnw,wa,w-wa,sea = 20 bytes including commas (152 bytes remaining)
+```
+
+A repeater with sub-region depth in Oregon:
+
+```
+west,pnw,or,wv,sle = 18 bytes (154 bytes remaining)
+```
+
+Even a heavily tagged border repeater stays well within budget:
+
+```
+west,pnw,or,pdx,wa,sw-wa = 24 bytes (148 bytes remaining)
+```
+
+### The naming convention is the coordination mechanism
+
+TransportKeys are derived deterministically from region names. When two repeaters both configure a region called `sea`, they generate the same TransportKey and will therefore match the same transport codes. No separate key distribution or coordination is needed — agreement on region names is the entire protocol.
+
+This is why a published naming standard matters.
+
+### The hierarchy is administrative, not functional
+
+The parent/child relationships defined by `region put sea w-wa` are used only for display and organizational purposes in the firmware. They do **not** affect packet matching. When a flood packet arrives, the firmware iterates through every region the repeater carries and independently computes a transport code from that region's name hash. If any one matches, the packet is forwarded. The parent field is never consulted.
+
+This means carrying `wa` does **not** automatically match traffic scoped to `w-wa` or `sea`. A repeater must explicitly carry every region it wants to forward — which is why the configuration examples in this document list every ancestor with its own `region put` and `region allowf` command. The hierarchy in this document describes the intended scoping relationships and helps operators understand which tags to configure; the firmware enforces scope purely through independent name-based matching.
+
+---
+
+## Scoping Behavior
+
+| Scope on message | Forwarded by |
+|---|---|
+| *(none)* | All repeaters (wildcard `*`) |
+| `west` | All repeaters carrying `west` (entire mesh) |
+| `pnw` | Pacific Northwest repeaters |
+| `wa` | Washington State repeaters |
+| `w-wa` | Western Washington repeaters |
+| `sea` | Seattle metro repeaters |
+| `e-wa` | Eastern Washington repeaters |
+| `or` | Oregon repeaters (including `pdx`, since `pdx` is under `or`) |
+| `pdx` | Portland metro repeaters (both OR and WA sides) |
+| `wv` | Willamette Valley repeaters |
+| `ie` | Inland Empire repeaters (both WA and ID sides) |
+| `id` | Idaho repeaters (not including `ie` unless they also carry `id`) |
+
+A repeater only forwards scoped traffic if the transport code matches one of its configured regions. The parent/child hierarchy means a repeater configured with `west`, `pnw`, `wa`, `w-wa`, `sea` will forward traffic scoped to any of those five tags.
+
+---
+
+## Repeater Configuration
+
+### Example: Lake Stevens, WA (Snohomish County)
+
+This repeater serves the Seattle metro area.
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region put w-wa wa
+region put sea w-wa
+region allowf west
+region allowf pnw
+region allowf wa
+region allowf w-wa
+region allowf sea
+region save
+```
+
+Tags carried: `west`, `pnw`, `wa`, `w-wa`, `sea` (20 bytes in regions response)
+
+### Example: Victoria, BC
+
+```
+region put west
+region put pnw west
+region put bc pnw
+region put vic bc
+region allowf west
+region allowf pnw
+region allowf bc
+region allowf vic
+region save
+```
+
+Tags carried: `west`, `pnw`, `bc`, `vic` (17 bytes)
+
+### Example: Portland metro (OR side)
+
+```
+region put west
+region put pnw west
+region put or pnw
+region put pdx or
+region allowf west
+region allowf pnw
+region allowf or
+region allowf pdx
+region save
+```
+
+Tags carried: `west`, `pnw`, `or`, `pdx` (15 bytes)
+
+Portland sits within the Willamette Valley geographically. A Portland repeater that also wants to participate in Willamette Valley traffic can add `wv`:
+
+```
+region put wv or
+region allowf wv
+region save
+```
+
+Tags become: `west`, `pnw`, `or`, `pdx`, `wv` (18 bytes)
+
+### Example: Spokane, WA
+
+Spokane sits under `e-wa` (Eastern Washington), and also carries the cross-border `ie` tag for Inland Empire community traffic.
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region put e-wa wa
+region put geg e-wa
+region put ie pnw
+region allowf west
+region allowf pnw
+region allowf wa
+region allowf e-wa
+region allowf geg
+region allowf ie
+region save
+```
+
+Tags carried: `west`, `pnw`, `wa`, `e-wa`, `geg`, `ie` (23 bytes)
+
+### Example: Coeur d'Alene, ID
+
+The Idaho-side mirror of Spokane. Carries `id` for Idaho-scoped traffic and `ie` for Inland Empire community traffic.
+
+```
+region put west
+region put pnw west
+region put id pnw
+region put cda id
+region put ie pnw
+region allowf west
+region allowf pnw
+region allowf id
+region allowf cda
+region allowf ie
+region save
+```
+
+Tags carried: `west`, `pnw`, `id`, `cda`, `ie` (21 bytes)
+
+### Example: Boise, ID
+
+Boise is straightforward — deep in Idaho, no cross-border community to straddle.
+
+```
+region put west
+region put pnw west
+region put id pnw
+region put boi id
+region allowf west
+region allowf pnw
+region allowf id
+region allowf boi
+region save
+```
+
+Tags carried: `west`, `pnw`, `id`, `boi` (17 bytes)
+
+### Example: Backbone / high-site relay
+
+See the dedicated [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters) section below for detailed guidance on tagging strategy for long-range linkers.
+
+### Example: Border repeater near Portland (Clark County, WA)
+
+A repeater that serves the Portland metro from the Washington side. It carries `pdx` (under `or`) for Portland metro traffic, plus `wa` and `sw-wa` for Washington-scoped traffic. This dual-carry pattern mirrors how Spokane carries both `wa` and `ie`.
+
+```
+region put west
+region put pnw west
+region put or pnw
+region put pdx or
+region put wa pnw
+region put sw-wa wa
+region allowf west
+region allowf pnw
+region allowf or
+region allowf pdx
+region allowf wa
+region allowf sw-wa
+region save
+```
+
+Tags carried: `west`, `pnw`, `or`, `pdx`, `wa`, `sw-wa` (24 bytes)
+
+### Example: Salem, OR (Willamette Valley)
+
+A repeater serving Salem, in the Willamette Valley sub-region of Oregon.
+
+```
+region put west
+region put pnw west
+region put or pnw
+region put wv or
+region put sle wv
+region allowf west
+region allowf pnw
+region allowf or
+region allowf wv
+region allowf sle
+region save
+```
+
+Tags carried: `west`, `pnw`, `or`, `wv`, `sle` (18 bytes in regions response)
+
+### Example: Medford, OR (Southern Oregon)
+
+```
+region put west
+region put pnw west
+region put or pnw
+region put s-or or
+region put mfr s-or
+region allowf west
+region allowf pnw
+region allowf or
+region allowf s-or
+region allowf mfr
+region save
+```
+
+Tags carried: `west`, `pnw`, `or`, `s-or`, `mfr` (20 bytes)
+
+### Example: Yakima, WA (Central Washington)
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region put c-wa wa
+region put ykm c-wa
+region allowf west
+region allowf pnw
+region allowf wa
+region allowf c-wa
+region allowf ykm
+region save
+```
+
+Tags carried: `west`, `pnw`, `wa`, `c-wa`, `ykm` (20 bytes)
+
+---
+
+## Cross-Border Metro Regions
+
+### Portland
+
+Portland lives under `or` in the hierarchy, reflecting that the Portland metro's center of gravity is in Oregon. Clark County WA repeaters use a dual-carry pattern: they carry `pdx` (under `or`) for Portland metro traffic, and also carry `wa` and `sw-wa` for Washington-scoped traffic. This mirrors how Spokane carries both `wa`/`e-wa` and `ie`.
+
+Repeaters on the Oregon side carry `or`, `pdx`. Repeaters on the Washington side (Clark County) carry `or`, `pdx`, `wa`, and `sw-wa`. A `pdx`-scoped message reaches both sides. An `or`-scoped message also reaches Portland (since `pdx` is under `or`). A `wa`-scoped message reaches the Clark County side but not the Oregon side.
+
+### Inland Empire
+
+The Inland Empire follows the same pattern as Portland — a cross-border community (`ie`) sitting as a direct child of `pnw`, not nested under either `wa` or `id`. The Spokane-Coeur d'Alene corridor functions as a single metro area that happens to straddle a state line.
+
+Spokane repeaters carry `ie`, `wa`, and `e-wa`. Coeur d'Alene repeaters carry `ie` and `id`. An `ie`-scoped message reaches both sides. A `wa`-scoped message reaches Spokane but not CdA. An `id`-scoped message reaches CdA but not Spokane. The state boundary and the community boundary are both respected without conflict.
+
+---
+
+## Backbone and High-Site Repeaters
+
+High-site repeaters that link metro areas together are the most important nodes to tag correctly. A local neighborhood repeater is straightforward — it carries its full ancestry and serves one metro. But a mountaintop repeater whose RF footprint spans multiple metros or crosses the boundary between two regions requires deliberate choices about what traffic it should and shouldn't forward.
+
+### The core principle
+
+**RF reach is not scope boundary.** A repeater on Cougar Mountain may be physically heard by nodes in both Seattle and Vancouver, but it only forwards scoped traffic that matches its own region tags. A `sea`-scoped message forwarded by Cougar Mountain will be *heard* by Vancouver repeaters, but they won't re-forward it because they don't carry `sea`. The packet dies at the scope boundary — one hop past the last matching repeater.
+
+That one extra hop is the cost of having a high-site repeater carry a local tag. It's generally acceptable: the packet is transmitted once into non-matching territory and stops. It does not cascade.
+
+### Tagging strategies
+
+There are three approaches for backbone repeaters, each with different tradeoffs:
+
+**Strategy 1: State-level only (strictest filtering)**
+
+The backbone repeater carries only its ancestry down to the state level and does not carry any metro tag.
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region allowf west
+region allowf pnw
+region allowf wa
+region save
+```
+
+Tags: `west`, `pnw`, `wa` (11 bytes)
+
+This repeater forwards `west`, `pnw`, and `wa` scoped traffic. It **ignores** `sea`, `yvr`, `bli`, and all other metro-scoped messages. Local chatter stays local. Only state-wide or broader messages cross the backbone.
+
+Best for: Dedicated long-haul links between distant metros (e.g. a Seattle-to-Portland chain over the I-5 corridor). These repeaters exist to carry wide-scope traffic and shouldn't be burdened with local flood from either end.
+
+**Strategy 2: Single metro affiliation (common case)**
+
+The backbone repeater carries one metro tag reflecting where it primarily serves, even though its signal reaches further.
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region put w-wa wa
+region put sea w-wa
+region allowf west
+region allowf pnw
+region allowf wa
+region allowf w-wa
+region allowf sea
+region save
+```
+
+Tags: `west`, `pnw`, `wa`, `w-wa`, `sea` (20 bytes)
+
+This repeater forwards Seattle metro traffic. If it's heard in Bellingham or Skagit, those repeaters won't re-forward `sea` traffic — it stops at the first non-matching hop. Meanwhile `wa`-scoped traffic flows freely through the backbone.
+
+Best for: High-site repeaters that primarily serve one metro but happen to have long range. A repeater on Cougar Mountain that's part of the Seattle mesh but can be heard from Whidbey Island would use this approach. The Whidbey repeaters don't carry `sea`, so Seattle-local traffic doesn't propagate north.
+
+**Strategy 3: Dual metro affiliation (use sparingly)**
+
+The backbone repeater carries tags for two metros because it genuinely serves as the bridge between them.
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region put w-wa wa
+region put sea w-wa
+region put bli w-wa
+region allowf west
+region allowf pnw
+region allowf wa
+region allowf w-wa
+region allowf sea
+region allowf bli
+region save
+```
+
+Tags: `west`, `pnw`, `wa`, `w-wa`, `sea`, `bli` (24 bytes)
+
+This repeater forwards local traffic for **both** Seattle and Bellingham. A `sea`-scoped message will be forwarded into Bellingham's RF space (and vice versa), though Bellingham repeaters still won't re-forward `sea` traffic.
+
+Best for: Rare cases where a single high-site genuinely bridges two adjacent metros and the operator wants both communities' local traffic to cross. **Use this sparingly** — if too many backbone repeaters carry dual metro tags, the benefit of metro-level scoping erodes. The whole point of local scoping is that local traffic stays local.
+
+### Decision guide for backbone operators
+
+| Question | If yes → | If no → |
+|---|---|---|
+| Does this repeater primarily serve one metro area? | Use Strategy 2 with that metro's tag | Continue below |
+| Is this repeater a dedicated long-haul link? | Use Strategy 1 (state-level only) | Continue below |
+| Does this repeater intentionally bridge two adjacent metros? | Use Strategy 3 (dual affiliation) | Use Strategy 1 |
+
+### Example: Seattle-to-Vancouver corridor
+
+Consider a chain of repeaters linking Seattle to Vancouver BC through Bellingham:
+
+```
+Seattle neighborhood repeater           →  west, pnw, wa, w-wa, sea
+Cougar Mountain (high-site)             →  west, pnw, wa, w-wa, sea     (Strategy 2)
+Haystack Mountain (high-site)           →  west, pnw, wa, w-wa, sea     (Strategy 2)
+Skagit Valley repeater                  →  west, pnw, wa, w-wa, bvs
+Bellingham repeater                     →  west, pnw, wa, w-wa, bli
+Sumas Mountain border-area high-site    →  west, pnw, wa               (Strategy 1)
+Metro Vancouver repeater                →  west, pnw, bc, yvr
+```
+
+Traffic flow for a message scoped to `sea`:
+- Seattle neighborhood repeater: **forwards** (carries `sea`)
+- Cougar Mountain: **forwards** (carries `sea`)
+- Skagit Valley: **heard but not forwarded** (no `sea` tag) → packet stops
+- Bellingham and beyond: never see it
+
+Traffic flow for a message scoped to `wa`:
+- All WA repeaters in the chain: **forward**
+- Sumas border high-site: **forwards** (carries `wa`)
+- Metro Vancouver: **heard but not forwarded** (no `wa` tag) → packet stops
+
+Traffic flow for a message scoped to `pnw`:
+- Every repeater in the chain: **forwards** (all carry `pnw`)
+- The message reaches from Seattle through to Vancouver
+
+This is the intended behavior: local stays local, state-wide reaches the state, PNW-wide crosses the border.
+
+### Example: Seattle-to-Spokane corridor
+
+Consider a chain of repeaters linking the west side to the Inland Empire:
+
+```
+Seattle neighborhood repeater           →  west, pnw, wa, w-wa, sea
+Snoqualmie Pass high-site               →  west, pnw, wa               (Strategy 1)
+Ellensburg repeater                     →  west, pnw, wa, c-wa, eln
+Spokane repeater                        →  west, pnw, wa, e-wa, geg, ie
+Coeur d'Alene repeater                  →  west, pnw, id, cda, ie
+```
+
+Traffic flow for a message scoped to `ie`:
+- Seattle and pass repeaters: **not forwarded** (no `ie` tag)
+- Spokane: **forwards** (carries `ie`)
+- Coeur d'Alene: **forwards** (carries `ie`)
+- Inland Empire chat stays in the Inland Empire
+
+Traffic flow for a message scoped to `wa`:
+- All WA repeaters: **forward**
+- Spokane: **forwards** (carries `wa`)
+- Coeur d'Alene: **heard but not forwarded** (no `wa` tag) → packet stops
+
+Traffic flow for a message scoped to `pnw`:
+- Every repeater in the chain: **forwards** (all carry `pnw`)
+- The message reaches from Seattle through to CdA
+
+---
+
+## Future Extensions
+
+### California
+
+As the mesh extends south, California gets its own state tag under `west`, with sub-regions nested beneath it:
+
+```
+west
+    pnw
+        (existing regions)
+    ca
+        nca                 Northern California
+        bay                 Bay Area
+        sca                 Southern California
+```
+
+No changes to any existing PNW repeater configuration are needed. California repeaters carry `west` and `ca` as their upper-level tags, and `west`-scoped traffic reaches the whole mesh.
+
+### Additional PNW areas
+
+New local areas can be added without restructuring:
+
+| Tag | Area | Parent | Source |
+|---|---|---|---|
+| `frd` | San Juan Islands / Friday Harbor | `w-wa` | IATA |
+| `nuw` | Whidbey / Camano (Island County) | `w-wa` | IATA (NAS Whidbey / Ault Field) |
+| `psc` | Tri-Cities (Pasco / Richland / Kennewick) | `e-wa` | IATA |
+| `gorge` | Columbia Gorge (Hood River OR + White Salmon WA) | `pnw` | Abbreviation — cross-border tag like `ie` and `pdx` |
+| `ycd` | Nanaimo / central Vancouver Island | `bc` | IATA |
+| `ylw` | Kelowna / Okanagan | `bc` | IATA |
+
+---
+
+## Bot Behavior with Regions
+
+Bots (weather, APRS, utilities, etc.) generate flood traffic and should be scoped carefully to avoid polluting the wider mesh.
+
+### Channel scoping
+
+Bot traffic should be sent on dedicated hashtag channels scoped to the bot's service area — for example `#bot-sea`, `#bot-oly`. This keeps bot output separate from general conversation and allows repeater operators to selectively allow or deny bot channels without affecting other traffic.
+
+### Region scoping
+
+In addition to channel scoping, bots should be configured with a default region scope that matches their service area. This ensures bot floods are constrained by the same region boundaries as other traffic.
+
+For the [meshcore-bot](https://github.com/meshcore/meshcore-bot) project, set the `flood_scope` in your configuration to your local region:
+
+```
+flood_scope = #sea
+```
+
+Users of meshcore-bot v0.9.0 and later should set the list of flood scopes they wish to respond to and match in their responses:
+
+```
+flood_scopes = #sea, #w-wa
+```
+
+This means the bot will respond to messages scoped to either `#sea` or `#w-wa`, and its responses will be scoped accordingly. A bot serving the Willamette Valley might use:
+
+```
+flood_scopes = #sle, #wv
+```
+
+### Guidelines for bot operators
+
+- **Match your service area**: A weather bot for Seattle should scope to `#sea`, not `#wa` or `#pnw`. Scope as narrowly as practical.
+- **Use hashtag channels**: Sending bot output on `#bot-sea` rather than the general channel lets users and repeater operators filter bot traffic independently of human conversation.
+- **Avoid unscoped floods**: A bot that floods without a region scope reaches the entire mesh. This is almost never appropriate.
+
+---
+
+## Adoption Notes
+
+- **Backward compatible**: Unscoped messages flood everywhere via `*`. Regions are opt-in for traffic reduction.
+- **Minimum config**: Every repeater should carry its full ancestry. Because region matching is independent per name (see [The hierarchy is administrative, not functional](#the-hierarchy-is-administrative-not-functional)), skipping a level means that scope won't be forwarded. A Seattle repeater carries `west`, `pnw`, `wa`, `w-wa`, `sea` (5 tags). A Salem repeater carries `west`, `pnw`, `or`, `wv`, `sle` (5 tags). Cross-border community tags like `ie` are additional — they sit alongside the state ancestry, not in place of it.
+- **Firmware requirement**: MeshCore 1.10.0 or newer. Older firmware ignores transport codes entirely.
+- **Companion app**: As of early 2026, scope selection in the Companion app is limited. CLI and meshcore-cli support scoping fully. Broader app support is expected in future releases.
+- **Community agreement**: Local area codes (the fourth level) should be agreed upon by the local mesh community. This document provides a starting point; the names should be ratified through Puget Mesh, Cascadia Mesh, PDX Mesh, Salish Mesh, and other local groups.
+
+---
+
+## Quick Reference
+
+| Tag | Scope | Parent |
+|---|---|---|
+| `west` | Entire mesh | *(root)* |
+| `pnw` | Pacific Northwest | `west` |
+| `wa` | Washington State | `pnw` |
+| `w-wa` | Western Washington | `wa` |
+| `sea` | Seattle / Tacoma / Bellevue metro | `w-wa` |
+| `oly` | Olympia / South Sound | `w-wa` |
+| `kit` | Kitsap / Bremerton | `w-wa` |
+| `grh` | Grays Harbor / WA coast | `w-wa` |
+| `bvs` | Skagit Valley | `w-wa` |
+| `bli` | Bellingham / Whatcom | `w-wa` |
+| `sw-wa` | Southwest Washington | `wa` |
+| `cls` | Centralia / Chehalis | `sw-wa` |
+| `kls` | Kelso / Longview | `sw-wa` |
+| `c-wa` | Central Washington | `wa` |
+| `ykm` | Yakima | `c-wa` |
+| `eat` | Wenatchee | `c-wa` |
+| `eln` | Ellensburg | `c-wa` |
+| `mwh` | Moses Lake | `c-wa` |
+| `e-wa` | Eastern Washington | `wa` |
+| `geg` | Spokane metro | `e-wa` |
+| `alw` | Walla Walla | `e-wa` |
+| `puw` | Pullman | `e-wa` |
+| `ie` | Inland Empire (cross-border) | `pnw` |
+| `or` | Oregon | `pnw` |
+| `pdx` | Portland metro (cross-border) | `or` |
+| `wv` | Willamette Valley | `or` |
+| `sle` | Salem / Keizer | `wv` |
+| `cvo` | Corvallis / Albany | `wv` |
+| `eug` | Eugene / Springfield | `wv` |
+| `s-or` | Southern Oregon | `or` |
+| `mfr` | Medford / Ashland | `s-or` |
+| `rbg` | Roseburg | `s-or` |
+| `lmt` | Klamath Falls | `s-or` |
+| `or-coast` | Oregon Coast | `or` |
+| `onp` | Newport / Lincoln City | `or-coast` |
+| `ast` | Astoria / Seaside | `or-coast` |
+| `oth` | North Bend / Coos Bay | `or-coast` |
+| `c-or` | Central Oregon | `or` |
+| `bend` | Bend / Redmond | `c-or` |
+| `pdt` | Pendleton | `c-or` |
+| `bke` | Baker City | `c-or` |
+| `id` | Idaho | `pnw` |
+| `boi` | Boise metro | `id` |
+| `cda` | Coeur d'Alene / N. Idaho | `id` |
+| `bc` | Southern British Columbia | `pnw` |
+| `yvr` | Metro Vancouver | `bc` |
+| `fra` | Fraser Valley | `bc` |
+| `vic` | Victoria / S. Vancouver Island | `bc` |
+| `ca` | California (future) | `west` |
+| `nca` | Northern California (future) | `ca` |
+| `bay` | Bay Area (future) | `ca` |
+| `sca` | Southern California (future) | `ca` |
+
+---
+
+## Changelog
+
+### 2026-04-08
+
+- **WA sub-regions**: Added intermediate grouping level — Western Washington (`w-wa`), Southwest Washington (`sw-wa`), Central Washington (`c-wa`), Eastern Washington (`e-wa`). All existing WA cities now nest under their respective sub-regions.
+- **Skagit Valley**: Changed region code from `ska` to `bvs` (IATA code for Skagit Regional Airport; `ska` is actually Fairchild AFB in Spokane)
+- **New WA cities**: Added Grays Harbor (`grh`), Centralia/Chehalis (`cls`), Kelso/Longview (`kls`), Yakima (`ykm`), Wenatchee (`eat`), Ellensburg (`eln`), Moses Lake (`mwh`), Walla Walla (`alw`), Pullman (`puw`)
+- **Oregon sub-regions**: Added intermediate grouping level — Willamette Valley (`wv`), Southern Oregon (`s-or`), Oregon Coast (`or-coast`), Central Oregon (`c-or`)
+- **Salem**: Changed region code from `sal` to `sle` (IATA code for McNary Field)
+- **Corvallis**: Changed region code from `cor` to `cvo` (IATA code for Corvallis Municipal Airport)
+- **New OR cities**: Added Medford (`mfr`), Roseburg (`rbg`), Klamath Falls (`lmt`), Newport (`onp`), Astoria (`ast`), North Bend/Coos Bay (`oth`), Bend (`bend`), Pendleton (`pdt`), Baker City (`bke`)
+- **PDX placement**: Moved Portland (`pdx`) from `pnw`-level to under `or`. Clark County WA repeaters dual-carry `pdx` + `wa` + `sw-wa`, mirroring the Spokane/IE cross-border pattern.
+- **Bend**: Moved from Future Extensions into main hierarchy under `c-or`
+- **Grays Harbor**: Moved from Future Extensions into main hierarchy under `w-wa`
+- **Spokane**: Changed region code from `spo` to `geg` (IATA code for Spokane International Airport / Geiger Field)
+- **Coeur d'Alene**: Changed region code from `cde` to `cda` (standard local abbreviation)
+- **Lewis County**: Removed from Future Extensions (now covered by `cls` under `sw-wa`)

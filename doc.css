@@ -1,0 +1,162 @@
+/* Pacific Northwest MeshCore Region Strategy — document styles */
+:root {
+    --mc-text: #1a1a1a;
+    --mc-text-muted: #505050;
+    --mc-border: #e0e2e6;
+    --mc-bg-code: #f4f5f7;
+    --mc-bg-table: #f8f9fa;
+    --mc-accent: #2563eb;
+    --mc-accent-visited: #4f46e5;
+}
+
+body.meshcore-regions-page {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--mc-text);
+    background: #fafbfc;
+    margin: 0;
+    padding: 0 min(24px, 5vw);
+    padding-bottom: 4rem;
+}
+
+body.meshcore-regions-page .meshcore-doc {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-top: 2.5rem;
+}
+
+body.meshcore-regions-page .meshcore-doc h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--mc-text);
+}
+
+body.meshcore-regions-page .meshcore-doc h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 2.25rem 0 0.75rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--mc-border);
+    color: var(--mc-text);
+}
+
+body.meshcore-regions-page .meshcore-doc h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 1.75rem 0 0.5rem;
+    color: var(--mc-text);
+}
+
+body.meshcore-regions-page .meshcore-doc p {
+    margin: 0 0 1rem;
+    color: var(--mc-text);
+}
+
+body.meshcore-regions-page .meshcore-doc ul,
+body.meshcore-regions-page .meshcore-doc ol {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+}
+
+body.meshcore-regions-page .meshcore-doc li {
+    margin-bottom: 0.35rem;
+}
+
+body.meshcore-regions-page .meshcore-doc li > ul,
+body.meshcore-regions-page .meshcore-doc li > ol {
+    margin-top: 0.35rem;
+    margin-bottom: 0;
+}
+
+body.meshcore-regions-page .meshcore-doc a {
+    color: var(--mc-accent);
+    text-decoration: none;
+}
+
+body.meshcore-regions-page .meshcore-doc a:hover {
+    text-decoration: underline;
+}
+
+body.meshcore-regions-page .meshcore-doc a:visited {
+    color: var(--mc-accent-visited);
+}
+
+body.meshcore-regions-page .meshcore-doc hr {
+    border: none;
+    border-top: 1px solid var(--mc-border);
+    margin: 2rem 0;
+}
+
+body.meshcore-regions-page .meshcore-doc table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    margin: 1rem 0 1.5rem;
+    background: #fff;
+    border: 1px solid var(--mc-border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+body.meshcore-regions-page .meshcore-doc th,
+body.meshcore-regions-page .meshcore-doc td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--mc-border);
+}
+
+body.meshcore-regions-page .meshcore-doc th {
+    font-weight: 600;
+    background: var(--mc-bg-table);
+    color: var(--mc-text);
+}
+
+body.meshcore-regions-page .meshcore-doc tr:last-child td {
+    border-bottom: none;
+}
+
+/* Code blocks (fenced ``` in markdown) */
+body.meshcore-regions-page .meshcore-doc pre {
+    margin: 1rem 0 1.5rem;
+    padding: 1rem 1.25rem;
+    background: #eef0f3;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    overflow-x: auto;
+}
+
+/* Inline code (backticks) — applies everywhere except inside pre */
+body.meshcore-regions-page .meshcore-doc code {
+    font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.45em;
+    background: #eef4fc;
+    border: 1px solid #c7d7ed;
+    border-radius: 4px;
+    color: #1e3a5f;
+}
+
+/* Code inside pre: undo inline style so the block provides the look */
+body.meshcore-regions-page .meshcore-doc pre code {
+    padding: 0;
+    background: transparent;
+    border: none;
+    font-size: 0.8125rem;
+    color: var(--mc-text);
+}
+
+body.meshcore-regions-page .meshcore-doc img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid var(--mc-border);
+}
+
+body.meshcore-regions-page .meshcore-doc strong {
+    font-weight: 600;
+}
