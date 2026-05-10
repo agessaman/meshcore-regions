@@ -61,7 +61,7 @@ west                            Entire mesh (Western US / SW Canada)
                 mfr             Medford / Ashland (Jackson)
                 rbg             Roseburg (Douglas)
                 lmt             Klamath Falls (Klamath)
-            or-coast            Oregon Coast
+            coast-or            Oregon Coast
                 onp             Newport / Lincoln City (Lincoln)
                 ast             Astoria / Seaside (Clatsop)
                 oth             North Bend / Coos Bay (Coos)
@@ -115,7 +115,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `cda` | Abbreviation | Coeur d'Alene — standard local abbreviation; no nearby IATA airport |
 | `wv` | Abbreviation | Willamette Valley |
 | `s-or` | Abbreviation | Southern Oregon |
-| `or-coast` | Abbreviation | Oregon Coast |
+| `coast-or` | Abbreviation | Oregon Coast |
 | `c-or` | Abbreviation | Central Oregon |
 | `sle` | IATA | McNary Field (Salem) |
 | `cvo` | IATA | Corvallis Municipal Airport |
@@ -196,7 +196,7 @@ This means carrying `wa` does **not** automatically match traffic scoped to `w-w
 
 | Scope on message | Forwarded by |
 |---|---|
-| *(none)* | All repeaters (wildcard `*`) |
+| *(none)* | Unscoped / legacy flood (firmware uses the reserved root region `*`, not a name wildcard) |
 | `west` | All repeaters carrying `west` (entire mesh) |
 | `pnw` | Pacific Northwest repeaters |
 | `wa` | Washington State repeaters |
@@ -209,7 +209,9 @@ This means carrying `wa` does **not** automatically match traffic scoped to `w-w
 | `ie` | Inland Empire repeaters (both WA and ID sides) |
 | `id` | Idaho repeaters (not including `ie` unless they also carry `id`) |
 
-A repeater only forwards scoped traffic if the transport code matches one of its configured regions. The parent/child hierarchy means a repeater configured with `west`, `pnw`, `wa`, `w-wa`, `sea` will forward traffic scoped to any of those five tags.
+In the firmware, `*` is always present as the root of the region tree (`RegionMap`: id 0, name `"*"`). It is not a pattern that matches every configured region name; it is the bucket for **unscoped** flood traffic (`ROUTE_TYPE_FLOOD`). Whether such packets are forwarded is controlled by flood policy on that root entry (`region allowf` / `region denyf` for `*`—by default, flood is allowed). Scoped traffic still requires a transport-code match to a region you actually carry.
+
+A repeater only forwards scoped traffic if the transport code matches one of its configured regions. The parent/child hierarchy means a repeater configured with `west`, `pnw`, `wa`, `w-wa`, `sea` will forward traffic scoped to any of those five tags as long as flood is allowed (`allowf`) for that region.
 
 ---
 
@@ -645,10 +647,10 @@ flood_scopes = #sle, #wv
 | `mfr` | Medford / Ashland | `s-or` |
 | `rbg` | Roseburg | `s-or` |
 | `lmt` | Klamath Falls | `s-or` |
-| `or-coast` | Oregon Coast | `or` |
-| `onp` | Newport / Lincoln City | `or-coast` |
-| `ast` | Astoria / Seaside | `or-coast` |
-| `oth` | North Bend / Coos Bay | `or-coast` |
+| `coast-or` | Oregon Coast | `or` |
+| `onp` | Newport / Lincoln City | `coast-or` |
+| `ast` | Astoria / Seaside | `coast-or` |
+| `oth` | North Bend / Coos Bay | `coast-or` |
 | `c-or` | Central Oregon | `or` |
 | `bend` | Bend / Redmond | `c-or` |
 | `pdt` | Pendleton | `c-or` |
@@ -668,6 +670,12 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-05-09
+
+- **Scoping (`*`)**: Clarified that firmware `*` is the reserved root region (unscoped / legacy flood), not a name wildcard meaning “all regions”; updated the scoping table and added a short explanation of flood policy on `*`.
+- **Oregon Coast**: Renamed region code from `or-coast` to `coast-or` for consistency with sibling sub-regions (`s-or`, `c-or`)
+- **Repeater CLI examples**: Documented MeshCore **v1.15.0+** behavior (`region put` enables flooding per region); removed redundant `region allowf` lines from examples; added a compatibility note for **v1.14.0** / earlier **1.14.x** (`region allowf` still required after each `put`); updated the Overview and “hierarchy is administrative” sections accordingly.
 
 ### 2026-04-08
 
