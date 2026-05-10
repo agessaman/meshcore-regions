@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document proposes a region naming scheme for the Pacific Northwest MeshCore mesh network, spanning from Southern Oregon through the Puget Sound region of Washington State to Vancouver and Victoria in British Columbia, and east across the Cascades to the Inland Empire. The scheme is designed for use with MeshCore's region filtering system (firmware 1.10.0+), which uses hierarchical region tags on repeaters and transport code scoping on messages to control flood propagation.
+This document proposes a region naming scheme for the Pacific Northwest MeshCore mesh network, spanning from Southern Oregon through the Puget Sound region of Washington State to Vancouver and Victoria in British Columbia, and east across the Cascades to the Inland Empire. The scheme is designed for use with MeshCore's region filtering system (firmware 1.10.0+), which uses hierarchical region tags on repeaters and transport code scoping on messages to control flood propagation. The repeater CLI examples below assume **firmware v1.15.0+**; operators on **v1.14.0** (and earlier 1.14.x) should read the compatibility note under [Repeater Configuration](#repeater-configuration).
 
 The scheme prioritizes short, flat, human-readable names. The parent/child hierarchy is enforced by `region put` commands, not by encoding structure into the names themselves.
 
@@ -188,7 +188,7 @@ This is why a published naming standard matters.
 
 The parent/child relationships defined by `region put sea w-wa` are used only for display and organizational purposes in the firmware. They do **not** affect packet matching. When a flood packet arrives, the firmware iterates through every region the repeater carries and independently computes a transport code from that region's name hash. If any one matches, the packet is forwarded. The parent field is never consulted.
 
-This means carrying `wa` does **not** automatically match traffic scoped to `w-wa` or `sea`. A repeater must explicitly carry every region it wants to forward — which is why the configuration examples in this document list every ancestor with its own `region put` and `region allowf` command. The hierarchy in this document describes the intended scoping relationships and helps operators understand which tags to configure; the firmware enforces scope purely through independent name-based matching.
+This means carrying `wa` does **not** automatically match traffic scoped to `w-wa` or `sea`. A repeater must explicitly carry every region it wants to forward — which is why the configuration examples list each ancestor with its own `region put`. On firmware **v1.15.0+**, each `region put` enables flooding for that region, so a separate `region allowf` after each put is unnecessary. On **v1.14.0** (and earlier 1.14.x), you still need `region allowf <name>` for each region after the corresponding `region put`; see [Repeater Configuration](#repeater-configuration). The hierarchy in this document describes the intended scoping relationships and helps operators understand which tags to configure; the firmware enforces scope purely through independent name-based matching.
 
 ---
 
@@ -215,6 +215,8 @@ A repeater only forwards scoped traffic if the transport code matches one of its
 
 ## Repeater Configuration
 
+**Compatibility:** On **firmware 1.14.0** (and earlier 1.14.x), after each `region put` you must run **`region allowf <regionname>`** for every region you want listed for flooding—mirror the region names from your `put` sequence (same names as in the examples’ `region put` lines). On **firmware 1.15.0+**, the examples omit those lines because **`region put` enables flood by default** for each region.
+
 ### Example: Lake Stevens, WA (Snohomish County)
 
 This repeater serves the Seattle metro area.
@@ -225,11 +227,6 @@ region put pnw west
 region put wa pnw
 region put w-wa wa
 region put sea w-wa
-region allowf west
-region allowf pnw
-region allowf wa
-region allowf w-wa
-region allowf sea
 region save
 ```
 
@@ -242,10 +239,6 @@ region put west
 region put pnw west
 region put bc pnw
 region put vic bc
-region allowf west
-region allowf pnw
-region allowf bc
-region allowf vic
 region save
 ```
 
@@ -258,10 +251,6 @@ region put west
 region put pnw west
 region put or pnw
 region put pdx or
-region allowf west
-region allowf pnw
-region allowf or
-region allowf pdx
 region save
 ```
 
@@ -271,7 +260,6 @@ Portland sits within the Willamette Valley geographically. A Portland repeater t
 
 ```
 region put wv or
-region allowf wv
 region save
 ```
 
@@ -288,12 +276,6 @@ region put wa pnw
 region put e-wa wa
 region put geg e-wa
 region put ie pnw
-region allowf west
-region allowf pnw
-region allowf wa
-region allowf e-wa
-region allowf geg
-region allowf ie
 region save
 ```
 
@@ -309,11 +291,6 @@ region put pnw west
 region put id pnw
 region put cda id
 region put ie pnw
-region allowf west
-region allowf pnw
-region allowf id
-region allowf cda
-region allowf ie
 region save
 ```
 
@@ -328,10 +305,6 @@ region put west
 region put pnw west
 region put id pnw
 region put boi id
-region allowf west
-region allowf pnw
-region allowf id
-region allowf boi
 region save
 ```
 
@@ -352,12 +325,6 @@ region put or pnw
 region put pdx or
 region put wa pnw
 region put sw-wa wa
-region allowf west
-region allowf pnw
-region allowf or
-region allowf pdx
-region allowf wa
-region allowf sw-wa
 region save
 ```
 
@@ -373,11 +340,6 @@ region put pnw west
 region put or pnw
 region put wv or
 region put sle wv
-region allowf west
-region allowf pnw
-region allowf or
-region allowf wv
-region allowf sle
 region save
 ```
 
@@ -391,11 +353,6 @@ region put pnw west
 region put or pnw
 region put s-or or
 region put mfr s-or
-region allowf west
-region allowf pnw
-region allowf or
-region allowf s-or
-region allowf mfr
 region save
 ```
 
@@ -409,11 +366,6 @@ region put pnw west
 region put wa pnw
 region put c-wa wa
 region put ykm c-wa
-region allowf west
-region allowf pnw
-region allowf wa
-region allowf c-wa
-region allowf ykm
 region save
 ```
 
@@ -459,9 +411,6 @@ The backbone repeater carries only its ancestry down to the state level and does
 region put west
 region put pnw west
 region put wa pnw
-region allowf west
-region allowf pnw
-region allowf wa
 region save
 ```
 
@@ -481,11 +430,6 @@ region put pnw west
 region put wa pnw
 region put w-wa wa
 region put sea w-wa
-region allowf west
-region allowf pnw
-region allowf wa
-region allowf w-wa
-region allowf sea
 region save
 ```
 
@@ -506,12 +450,6 @@ region put wa pnw
 region put w-wa wa
 region put sea w-wa
 region put bli w-wa
-region allowf west
-region allowf pnw
-region allowf wa
-region allowf w-wa
-region allowf sea
-region allowf bli
 region save
 ```
 
