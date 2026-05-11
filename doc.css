@@ -160,3 +160,65 @@ body.meshcore-regions-page .meshcore-doc img {
 body.meshcore-regions-page .meshcore-doc strong {
     font-weight: 600;
 }
+
+/* GitHub-style markdown alerts (> [!NOTE], [!TIP], …) — ParsedownGitHubAlerts */
+body.meshcore-regions-page .meshcore-doc .gh-alert {
+    margin: 1rem 0 1.25rem;
+    padding: 0.65rem 1rem 0.85rem;
+    border-radius: 6px;
+    border: 1px solid var(--gh-alert-border, var(--mc-border));
+    border-left-width: 4px;
+    background: var(--gh-alert-bg, #fff);
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-title {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    color: var(--gh-alert-title, var(--mc-text));
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-body {
+    font-size: 0.9375rem;
+    color: var(--mc-text);
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-body > :first-child {
+    margin-top: 0;
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-body > :last-child {
+    margin-bottom: 0;
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-note {
+    --gh-alert-border: #4187e5;
+    --gh-alert-bg: #eef4fc;
+    --gh-alert-title: #1f6feb;
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-tip {
+    --gh-alert-border: #28a745;
+    --gh-alert-bg: #ecf9ef;
+    --gh-alert-title: #1a7f37;
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-important {
+    --gh-alert-border: #8957e5;
+    --gh-alert-bg: #f4edfc;
+    --gh-alert-title: #8250df;
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-warning {
+    --gh-alert-border: #d29922;
+    --gh-alert-bg: #fff8e6;
+    --gh-alert-title: #9a6700;
+}
+
+body.meshcore-regions-page .meshcore-doc .gh-alert-caution {
+    --gh-alert-border: #d1242f;
+    --gh-alert-bg: #fcf1f2;
+    --gh-alert-title: #cf222e;
+}

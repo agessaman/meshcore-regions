@@ -1,12 +1,13 @@
 <?php
 // 1. Include the Parsedown library (local copy; allow_url_include is disabled on server)
 require_once __DIR__ . '/Parsedown.php';
+require_once __DIR__ . '/ParsedownGitHubAlerts.php';
 
 // 2. Load your markdown file
 $markdown = file_get_contents(__DIR__ . '/pnw-meshcore-regions.md');
 
 // 3. Initialize Parsedown and convert to HTML
-$parsedown = new Parsedown();
+$parsedown = new ParsedownGitHubAlerts();
 $content = $parsedown->text($markdown);
 
 // 4. Add id attributes to headings so fragment links (#section-name) resolve

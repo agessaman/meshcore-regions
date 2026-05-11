@@ -1,0 +1,12 @@
+{
+  "name": "pnw-repeater-zone-selector",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build:zones": "node ./scripts/build-zones.mjs",
+    "validate:zones": "node ./scripts/validate-zones.mjs",
+    "test:fixtures": "node ./scripts/test-fixtures.mjs",
+    "check": "npm run validate:zones && npm run test:fixtures"
+  }
+}

@@ -1,0 +1,144 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: #1e293b;
+  background: #f3f6fb;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(350px, 430px) 1fr;
+  height: 100vh;
+}
+
+.panel {
+  background: #ffffff;
+  border-right: 1px solid #d7deec;
+  padding: 14px;
+  overflow-y: auto;
+}
+
+.panel h1 {
+  font-size: 1.15rem;
+  margin: 0 0 6px;
+}
+
+.panel p {
+  margin-top: 0;
+  color: #475569;
+  font-size: 0.92rem;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+label {
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+select,
+input,
+textarea,
+button {
+  width: 100%;
+  padding: 8px 9px;
+  border-radius: 6px;
+  border: 1px solid #c9d3e6;
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: #1d4ed8;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+button.secondary-btn {
+  background: #ffffff;
+  color: #1e293b;
+  border-color: #c9d3e6;
+}
+
+.status {
+  margin: 8px 0 12px;
+  padding: 8px;
+  border-radius: 6px;
+  background: #edf3ff;
+  color: #1d4ed8;
+  font-size: 0.86rem;
+}
+
+.section {
+  margin: 0 0 14px;
+}
+
+.section h2 {
+  font-size: 0.94rem;
+  margin: 0 0 6px;
+}
+
+.kv {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 3px 8px;
+  font-size: 0.88rem;
+}
+
+.kv dt {
+  color: #64748b;
+}
+
+.kv dd {
+  margin: 0;
+}
+
+code,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+pre {
+  margin: 0;
+  border: 1px solid #d7deec;
+  border-radius: 6px;
+  padding: 10px;
+  background: #f8fbff;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-container:focus {
+  outline: none;
+}
+
+.leaflet-container a:focus,
+.leaflet-container .leaflet-interactive:focus,
+.leaflet-container path:focus,
+.leaflet-container svg:focus {
+  outline: none;
+}
+
+ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 0.86rem;
+}

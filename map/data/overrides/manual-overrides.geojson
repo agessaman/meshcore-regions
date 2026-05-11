@@ -1,0 +1,69 @@
+{
+  "type": "FeatureCollection",
+  "name": "pnw-manual-overrides",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "lynden-blaine-wa-to-bli",
+        "forceTag": "bli",
+        "carryAlsoTags": [],
+        "reason": "Keep far north Whatcom (Lynden/Blaine corridor) on WA/BLI rather than BC fallback."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-122.74, 48.83],
+            [-122.30, 48.83],
+            [-122.30, 49.02],
+            [-122.74, 49.02],
+            [-122.74, 48.83]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "arlington-granite-falls-to-sea",
+        "forceTag": "sea",
+        "carryAlsoTags": [],
+        "reason": "Align north Snohomish commuter basin with Seattle metro scope."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-122.45, 47.83],
+            [-121.78, 47.83],
+            [-121.78, 48.20],
+            [-122.45, 48.20],
+            [-122.45, 47.83]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-angeles-sequim-to-kit",
+        "forceTag": "kit",
+        "carryAlsoTags": [],
+        "reason": "Prevent north Olympic Peninsula from falling into Victoria/BC assignment."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-124.90, 48.00],
+            [-123.05, 48.00],
+            [-123.05, 48.30],
+            [-124.90, 48.30],
+            [-124.90, 48.00]
+          ]
+        ]
+      }
+    }
+  ]
+}

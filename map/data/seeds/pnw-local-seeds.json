@@ -1,0 +1,48 @@
+{
+  "version": "2026-05-10",
+  "source": "pnw-meshcore-regions.md",
+  "notes": "Seed points for local-area zone generation. Coordinates are representative city/airport anchors.",
+  "seeds": [
+    { "tag": "sea", "label": "Seattle/Tacoma/Bellevue", "parent": "w-wa", "country": "US", "stateOrProvince": "WA", "lat": 47.4502, "lon": -122.3088, "radiusKm": 68, "priority": 72 },
+    { "tag": "oly", "label": "Olympia/Lacey/Tumwater", "parent": "w-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.9694, "lon": -122.9022, "radiusKm": 34, "priority": 55 },
+    { "tag": "kit", "label": "Kitsap/Bremerton/Silverdale", "parent": "w-wa", "country": "US", "stateOrProvince": "WA", "lat": 47.4902, "lon": -122.7643, "radiusKm": 30, "priority": 55 },
+    { "tag": "grh", "label": "Grays Harbor/WA Coast", "parent": "w-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.9712, "lon": -123.8139, "radiusKm": 44, "priority": 50 },
+    { "tag": "bvs", "label": "Skagit Valley", "parent": "w-wa", "country": "US", "stateOrProvince": "WA", "lat": 48.4699, "lon": -122.4201, "radiusKm": 24, "priority": 58 },
+    { "tag": "bli", "label": "Bellingham/Whatcom", "parent": "w-wa", "country": "US", "stateOrProvince": "WA", "lat": 48.7928, "lon": -122.5375, "radiusKm": 32, "priority": 60 },
+
+    { "tag": "cls", "label": "Centralia/Chehalis", "parent": "sw-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.6760, "lon": -122.9830, "radiusKm": 24, "priority": 52 },
+    { "tag": "kls", "label": "Kelso/Longview", "parent": "sw-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.1180, "lon": -122.8980, "radiusKm": 24, "priority": 52 },
+
+    { "tag": "ykm", "label": "Yakima", "parent": "c-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.5682, "lon": -120.5449, "radiusKm": 30, "priority": 53 },
+    { "tag": "eat", "label": "Wenatchee", "parent": "c-wa", "country": "US", "stateOrProvince": "WA", "lat": 47.3980, "lon": -120.2070, "radiusKm": 26, "priority": 52 },
+    { "tag": "eln", "label": "Ellensburg", "parent": "c-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.9970, "lon": -120.5310, "radiusKm": 22, "priority": 51 },
+    { "tag": "mwh", "label": "Moses Lake", "parent": "c-wa", "country": "US", "stateOrProvince": "WA", "lat": 47.2077, "lon": -119.3191, "radiusKm": 30, "priority": 52 },
+
+    { "tag": "geg", "label": "Spokane", "parent": "e-wa", "country": "US", "stateOrProvince": "WA", "lat": 47.6199, "lon": -117.5338, "radiusKm": 44, "priority": 66 },
+    { "tag": "alw", "label": "Walla Walla", "parent": "e-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.0949, "lon": -118.2880, "radiusKm": 24, "priority": 50 },
+    { "tag": "puw", "label": "Pullman", "parent": "e-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.7439, "lon": -117.1096, "radiusKm": 22, "priority": 50 },
+
+    { "tag": "pdx", "label": "Portland Metro", "parent": "or", "country": "US", "stateOrProvince": "OR", "lat": 45.5898, "lon": -122.5951, "radiusKm": 46, "priority": 68, "crossBorder": true },
+    { "tag": "sle", "label": "Salem/Keizer", "parent": "wv", "country": "US", "stateOrProvince": "OR", "lat": 44.9095, "lon": -123.0025, "radiusKm": 26, "priority": 54 },
+    { "tag": "cvo", "label": "Corvallis/Albany", "parent": "wv", "country": "US", "stateOrProvince": "OR", "lat": 44.4972, "lon": -123.2906, "radiusKm": 27, "priority": 54 },
+    { "tag": "eug", "label": "Eugene/Springfield", "parent": "wv", "country": "US", "stateOrProvince": "OR", "lat": 44.1246, "lon": -123.2119, "radiusKm": 32, "priority": 56 },
+    { "tag": "mfr", "label": "Medford/Ashland", "parent": "s-or", "country": "US", "stateOrProvince": "OR", "lat": 42.3742, "lon": -122.8735, "radiusKm": 30, "priority": 53 },
+    { "tag": "rbg", "label": "Roseburg", "parent": "s-or", "country": "US", "stateOrProvince": "OR", "lat": 43.2388, "lon": -123.3550, "radiusKm": 24, "priority": 50 },
+    { "tag": "lmt", "label": "Klamath Falls", "parent": "s-or", "country": "US", "stateOrProvince": "OR", "lat": 42.1611, "lon": -121.7333, "radiusKm": 26, "priority": 51 },
+    { "tag": "onp", "label": "Newport/Lincoln City", "parent": "coast-or", "country": "US", "stateOrProvince": "OR", "lat": 44.5804, "lon": -124.0580, "radiusKm": 26, "priority": 51 },
+    { "tag": "ast", "label": "Astoria/Seaside", "parent": "coast-or", "country": "US", "stateOrProvince": "OR", "lat": 46.1580, "lon": -123.8780, "radiusKm": 23, "priority": 51 },
+    { "tag": "oth", "label": "North Bend/Coos Bay", "parent": "coast-or", "country": "US", "stateOrProvince": "OR", "lat": 43.4171, "lon": -124.2460, "radiusKm": 26, "priority": 51 },
+    { "tag": "bend", "label": "Bend/Redmond", "parent": "c-or", "country": "US", "stateOrProvince": "OR", "lat": 44.2541, "lon": -121.1499, "radiusKm": 33, "priority": 57 },
+    { "tag": "pdt", "label": "Pendleton", "parent": "c-or", "country": "US", "stateOrProvince": "OR", "lat": 45.6951, "lon": -118.8418, "radiusKm": 24, "priority": 50 },
+    { "tag": "bke", "label": "Baker City", "parent": "c-or", "country": "US", "stateOrProvince": "OR", "lat": 44.8383, "lon": -117.8090, "radiusKm": 23, "priority": 49 },
+
+    { "tag": "boi", "label": "Boise Metro", "parent": "id", "country": "US", "stateOrProvince": "ID", "lat": 43.5644, "lon": -116.2230, "radiusKm": 43, "priority": 63 },
+    { "tag": "cda", "label": "Coeur d'Alene/N. Idaho", "parent": "id", "country": "US", "stateOrProvince": "ID", "lat": 47.7069, "lon": -116.8200, "radiusKm": 38, "priority": 62, "crossBorderPairTag": "geg" },
+
+    { "tag": "fca", "label": "Flathead Valley/Kalispell/Glacier", "parent": "mt", "country": "US", "stateOrProvince": "MT", "lat": 48.3105, "lon": -114.2558, "radiusKm": 58, "priority": 58 },
+
+    { "tag": "yvr", "label": "Metro Vancouver", "parent": "bc", "country": "CA", "stateOrProvince": "BC", "lat": 49.1947, "lon": -123.1792, "radiusKm": 42, "priority": 68 },
+    { "tag": "fra", "label": "Fraser Valley", "parent": "bc", "country": "CA", "stateOrProvince": "BC", "lat": 49.0253, "lon": -122.3600, "radiusKm": 33, "priority": 57 },
+    { "tag": "vic", "label": "Victoria/S. Vancouver Island", "parent": "bc", "country": "CA", "stateOrProvince": "BC", "lat": 48.6490, "lon": -123.4269, "radiusKm": 33, "priority": 57 }
+  ]
+}

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document proposes a region naming scheme for the Pacific Northwest MeshCore mesh network, spanning from Southern Oregon through the Puget Sound region of Washington State to Vancouver and Victoria in British Columbia, and east across the Cascades to the Inland Empire. The scheme is designed for use with MeshCore's region filtering system (firmware 1.10.0+), which uses hierarchical region tags on repeaters and transport code scoping on messages to control flood propagation. The repeater CLI examples below assume **firmware v1.15.0+**; operators on **v1.14.0** (and earlier 1.14.x) should read the compatibility note under [Repeater Configuration](#repeater-configuration).
+This document proposes a region naming scheme for the Pacific Northwest MeshCore mesh network, spanning from Southern Oregon through the Puget Sound region of Washington State to Vancouver and Victoria in British Columbia, east across the Cascades to the Inland Empire, and into northwest Montana's Flathead Valley (geologically part of Cascadia). The scheme is designed for use with MeshCore's region filtering system (firmware 1.10.0+), which uses hierarchical region tags on repeaters and transport code scoping on messages to control flood propagation.
 
 The scheme prioritizes short, flat, human-readable names. The parent/child hierarchy is enforced by `region put` commands, not by encoding structure into the names themselves.
 
@@ -14,6 +14,7 @@ The scheme prioritizes short, flat, human-readable names. The parent/child hiera
 - **Cross-border pragmatism**: Portland straddles OR/WA — it lives under `or`, and Clark County WA repeaters dual-carry `pdx` and `wa`. The Inland Empire straddles WA/ID and uses the same dual-carry pattern. Vancouver BC uses IATA code `yvr` to avoid ambiguity with Vancouver WA.
 
 ## Technical Constraints
+
 
 | Constraint | Value |
 |---|---|
@@ -72,6 +73,8 @@ west                            Entire mesh (Western US / SW Canada)
         id                      Idaho
             boi                 Boise metro
             cda                 Coeur d'Alene / N. Idaho panhandle
+        mt                      Montana (partial — statewide expansion planned)
+            fca                 Flathead Valley / Kalispell / Glacier (Glacier Park Intl)
         bc                      British Columbia (southern)
             yvr                 Metro Vancouver / Lower Mainland
             fra                 Fraser Valley / Abbotsford / Chilliwack
@@ -113,6 +116,8 @@ west                            Entire mesh (Western US / SW Canada)
 | `puw` | IATA | Pullman-Moscow Regional Airport |
 | `boi` | IATA | Boise (Boise Airport) |
 | `cda` | Abbreviation | Coeur d'Alene — standard local abbreviation; no nearby IATA airport |
+| `mt` | Postal | Montana — partial coverage in this scheme (Flathead Valley first; more metros later) |
+| `fca` | IATA | Glacier Park International (Kalispell) — Flathead Valley; distinct from Missoula (`mso`, separate basin) |
 | `wv` | Abbreviation | Willamette Valley |
 | `s-or` | Abbreviation | Southern Oregon |
 | `coast-or` | Abbreviation | Oregon Coast |
@@ -207,6 +212,8 @@ This means carrying `wa` does **not** automatically match traffic scoped to `w-w
 | `pdx` | Portland metro repeaters (both OR and WA sides) |
 | `wv` | Willamette Valley repeaters |
 | `ie` | Inland Empire repeaters (both WA and ID sides) |
+| `mt` | Montana repeaters using this scheme (partial — see `fca`) |
+| `fca` | Flathead Valley repeaters |
 | `id` | Idaho repeaters (not including `ie` unless they also carry `id`) |
 
 In the firmware, `*` is always present as the root of the region tree (`RegionMap`: id 0, name `"*"`). It is not a pattern that matches every configured region name; it is the bucket for **unscoped** flood traffic (`ROUTE_TYPE_FLOOD`). Whether such packets are forwarded is controlled by flood policy on that root entry (`region allowf` / `region denyf` for `*`—by default, flood is allowed). Scoped traffic still requires a transport-code match to a region you actually carry.
@@ -217,7 +224,9 @@ A repeater only forwards scoped traffic if the transport code matches one of its
 
 ## Repeater Configuration
 
-**Compatibility:** On **firmware 1.14.0** (and earlier 1.14.x), after each `region put` you must run **`region allowf <regionname>`** for every region you want listed for flooding—mirror the region names from your `put` sequence (same names as in the examples’ `region put` lines). On **firmware 1.15.0+**, the examples omit those lines because **`region put` enables flood by default** for each region.
+> [!WARNING]
+> On **firmware 1.14.0** (and earlier **1.14.x**), after each `region put` you must run **`region allowf <regionname>`** for every region that should appear in the flood list—match the names from your `put` chain (the same `region put` names used in the examples below).  
+> On **firmware 1.15.0+**, **`region put` turns on flood for that region by default**, so the examples below do not include separate `region allowf` lines.
 
 ### Example: Lake Stevens, WA (Snohomish County)
 
@@ -312,6 +321,21 @@ region save
 
 Tags carried: `west`, `pnw`, `id`, `boi` (17 bytes)
 
+### Example: Flathead Valley, MT (Kalispell / Glacier)
+
+Northwest Montana's Flathead Valley is treated as its own local region under `mt`, not statewide coverage. Like Spokane and Coeur d'Alene, operators who want Inland Empire community scope add `ie` as a sibling under `pnw` (geologic and RF ties to the broader inland corridor).
+
+```
+region put west
+region put pnw west
+region put mt pnw
+region put fca mt
+region put ie pnw
+region save
+```
+
+Tags carried: `west`, `pnw`, `mt`, `fca`, `ie` (18 bytes in regions response). Omit `region put ie pnw` if you only want Montana-scoped ancestry without IE-wide chat.
+
 ### Example: Backbone / high-site relay
 
 See the dedicated [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters) section below for detailed guidance on tagging strategy for long-range linkers.
@@ -388,6 +412,10 @@ Repeaters on the Oregon side carry `or`, `pdx`. Repeaters on the Washington side
 The Inland Empire follows the same pattern as Portland — a cross-border community (`ie`) sitting as a direct child of `pnw`, not nested under either `wa` or `id`. The Spokane-Coeur d'Alene corridor functions as a single metro area that happens to straddle a state line.
 
 Spokane repeaters carry `ie`, `wa`, and `e-wa`. Coeur d'Alene repeaters carry `ie` and `id`. An `ie`-scoped message reaches both sides. A `wa`-scoped message reaches Spokane but not CdA. An `id`-scoped message reaches CdA but not Spokane. The state boundary and the community boundary are both respected without conflict.
+
+### Flathead Valley (Montana)
+
+The Flathead (`fca`) sits under `mt` like other metros under their states. For operators who want regional coherence with the Inland Empire mesh community (and Cascadia-fringe geology), the same dual-carry pattern applies: add `ie` as a direct child of `pnw`, alongside `mt`/`fca` ancestry — `region put ie pnw`. An `ie`-scoped message then reaches Flathead repeaters that carry `ie`, while `fca`-scoped traffic stays local to the valley unless repeaters deliberately carry broader tags.
 
 ---
 
@@ -555,6 +583,7 @@ New local areas can be added without restructuring:
 |---|---|---|---|
 | `frd` | San Juan Islands / Friday Harbor | `w-wa` | IATA |
 | `nuw` | Whidbey / Camano (Island County) | `w-wa` | IATA (NAS Whidbey / Ault Field) |
+| `mso` | Missoula (western Montana, Bitterroot drainage) | `mt` | IATA — distinct basin from Flathead (`fca`) |
 | `psc` | Tri-Cities (Pasco / Richland / Kennewick) | `e-wa` | IATA |
 | `gorge` | Columbia Gorge (Hood River OR + White Salmon WA) | `pnw` | Abbreviation — cross-border tag like `ie` and `pdx` |
 | `ycd` | Nanaimo / central Vancouver Island | `bc` | IATA |
@@ -637,6 +666,8 @@ flood_scopes = #sle, #wv
 | `alw` | Walla Walla | `e-wa` |
 | `puw` | Pullman | `e-wa` |
 | `ie` | Inland Empire (cross-border) | `pnw` |
+| `mt` | Montana (partial) | `pnw` |
+| `fca` | Flathead Valley / Kalispell / Glacier | `mt` |
 | `or` | Oregon | `pnw` |
 | `pdx` | Portland metro (cross-border) | `or` |
 | `wv` | Willamette Valley | `or` |
@@ -671,9 +702,13 @@ flood_scopes = #sle, #wv
 
 ## Changelog
 
+### 2026-05-10
+
+- **Montana / Flathead Valley**: Added `mt` (Montana, partial coverage) and `fca` (Flathead Valley / Kalispell / Glacier, Glacier Park International) under `pnw` → `mt` → `fca`. Documented dual-carry with `ie` for Inland Empire community scope, matching the Spokane / Coeur d'Alene pattern. Reserved `mso` (Missoula) in Future Extensions as a distinct basin from Flathead. Added a Flathead Valley repeater configuration example.
+
 ### 2026-05-09
 
-- **Scoping (`*`)**: Clarified that firmware `*` is the reserved root region (unscoped / legacy flood), not a name wildcard meaning “all regions”; updated the scoping table and added a short explanation of flood policy on `*`.
+- **Scoping** (`*`): Clarified that firmware `*` is the reserved root region (unscoped / legacy flood), not a name wildcard meaning “all regions”; updated the scoping table and added a short explanation of flood policy on `*`.
 - **Oregon Coast**: Renamed region code from `or-coast` to `coast-or` for consistency with sibling sub-regions (`s-or`, `c-or`)
 - **Repeater CLI examples**: Documented MeshCore **v1.15.0+** behavior (`region put` enables flooding per region); removed redundant `region allowf` lines from examples; added a compatibility note for **v1.14.0** / earlier **1.14.x** (`region allowf` still required after each `put`); updated the Overview and “hierarchy is administrative” sections accordingly.
 
