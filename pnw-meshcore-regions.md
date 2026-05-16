@@ -149,7 +149,7 @@ Understanding the underlying mechanism helps explain why the naming convention m
 
 ### Region names never appear in packets
 
-When a message is sent with a region scope, the packet header carries **two 16-bit transport codes** — not the region name. These codes are computed as an HMAC-SHA256 of the region's TransportKey over the packet payload, truncated to 16 bits. A receiving repeater matches incoming transport codes by recomputing the HMAC for each of its configured regions until one matches.
+When a message is sent with a region scope, the packet header carries **two 16-bit transport codes** — not the region name. These codes are computed as an HMAC-SHA256 of the region's TransportKey over the packet type byte and payload, truncated to 16 bits. A receiving repeater matches incoming transport codes by recomputing the HMAC for each of its configured regions until one matches.
 
 | Packet field | Size | Present when |
 |---|---|---|
@@ -185,15 +185,13 @@ west,pnw,or,pdx,wa,sw-wa = 24 bytes (148 bytes remaining)
 
 ### The naming convention is the coordination mechanism
 
-TransportKeys are derived deterministically from region names. When two repeaters both configure a region called `sea`, they generate the same TransportKey and will therefore match the same transport codes. No separate key distribution or coordination is needed — agreement on region names is the entire protocol.
-
-This is why a published naming standard matters.
+`TransportKeys` are derived deterministically from region names. When two repeaters both configure a region called `sea`, they derive the same `TransportKey`; for each scoped packet, they compute the same transport code from that key and the packet payload, so forwarding matches without a separate key exchange. No separate key distribution or coordination is needed — agreement on region names is the entire protocol. This is why a published naming standard matters.
 
 ### The hierarchy is administrative, not functional
 
-The parent/child relationships defined by `region put sea w-wa` are used only for display and organizational purposes in the firmware. They do **not** affect packet matching. When a flood packet arrives, the firmware iterates through every region the repeater carries and independently computes a transport code from that region's name hash. If any one matches, the packet is forwarded. The parent field is never consulted.
+The parent/child relationships defined by `region put sea w-wa` are used only for display and organizational purposes in the firmware. They do **not** affect packet matching. When a flood packet arrives, the firmware iterates through every region the repeater carries and independently recomputes the transport code using that region’s `TransportKey` and the received packet’s payload. If any one matches, the packet is forwarded. The parent field is never consulted.
 
-This means carrying `wa` does **not** automatically match traffic scoped to `w-wa` or `sea`. A repeater must explicitly carry every region it wants to forward — which is why the configuration examples list each ancestor with its own `region put`. On firmware **v1.15.0+**, each `region put` enables flooding for that region, so a separate `region allowf` after each put is unnecessary. On **v1.14.0** (and earlier 1.14.x), you still need `region allowf <name>` for each region after the corresponding `region put`; see [Repeater Configuration](#repeater-configuration). The hierarchy in this document describes the intended scoping relationships and helps operators understand which tags to configure; the firmware enforces scope purely through independent name-based matching.
+This means carrying `wa` does **not** automatically match traffic scoped to `w-wa` or `sea`. A repeater must explicitly carry every region it wants to forward — which is why the configuration examples list each ancestor with its own `region put`. On firmware **v1.15.0+**, each `region put` enables flooding for that region, so a separate `region allowf` after each put is unnecessary. On **v1.14.0** (and earlier 1.14.x), you still need `region allowf <name>` for each region after the corresponding `region put`; see [Repeater Configuration](#repeater-configuration). The hierarchy in this document describes the intended scoping relationships and helps operators understand which tags to configure; the firmware enforces scope through `TransportKey` matching (derived from each configured name), not through parent/child relationships.
 
 ---
 
@@ -208,7 +206,7 @@ This means carrying `wa` does **not** automatically match traffic scoped to `w-w
 | `w-wa` | Western Washington repeaters |
 | `sea` | Seattle metro repeaters |
 | `e-wa` | Eastern Washington repeaters |
-| `or` | Oregon repeaters (including `pdx`, since `pdx` is under `or`) |
+| `or` | Oregon repeaters |
 | `pdx` | Portland metro repeaters (both OR and WA sides) |
 | `wv` | Willamette Valley repeaters |
 | `ie` | Inland Empire repeaters (both WA and ID sides) |
@@ -228,9 +226,9 @@ A repeater only forwards scoped traffic if the transport code matches one of its
 > On **firmware 1.14.0** (and earlier **1.14.x**), after each `region put` you must run **`region allowf <regionname>`** for every region that should appear in the flood list—match the names from your `put` chain (the same `region put` names used in the examples below).  
 > On **firmware 1.15.0+**, **`region put` turns on flood for that region by default**, so the examples below do not include separate `region allowf` lines.
 
-### Example: Lake Stevens, WA (Snohomish County)
+### Example: Seattle, WA and Seattle Metro area
 
-This repeater serves the Seattle metro area.
+Use this repeater configuration in the Seattle metro area. The Seattle Metro area consists of three core counties: King, Snohomish, and Pierce. The same basic set of regions should be applied to repeaters in Tacoma, South Center, Bellevue, Lynnwood, or Everett.
 
 ```
 region put west
@@ -405,7 +403,7 @@ Tags carried: `west`, `pnw`, `wa`, `c-wa`, `ykm` (20 bytes)
 
 Portland lives under `or` in the hierarchy, reflecting that the Portland metro's center of gravity is in Oregon. Clark County WA repeaters use a dual-carry pattern: they carry `pdx` (under `or`) for Portland metro traffic, and also carry `wa` and `sw-wa` for Washington-scoped traffic. This mirrors how Spokane carries both `wa`/`e-wa` and `ie`.
 
-Repeaters on the Oregon side carry `or`, `pdx`. Repeaters on the Washington side (Clark County) carry `or`, `pdx`, `wa`, and `sw-wa`. A `pdx`-scoped message reaches both sides. An `or`-scoped message also reaches Portland (since `pdx` is under `or`). A `wa`-scoped message reaches the Clark County side but not the Oregon side.
+Repeaters on the Oregon side carry `or`, `pdx`. Repeaters on the Washington side (Clark County) carry `or`, `pdx`, `wa`, and `sw-wa`. A `pdx`-scoped message reaches both sides. An `or`-scoped message reaches Portland (because Portland repeaters explicitly carry `or` in their configuration). An `or`-scoped message reaches any repeater that carries `or` (Portland configs include `or` in the ancestry chain). It does not match repeaters that carry only `pdx` without `or`. A `wa`-scoped message reaches the Clark County side but not the Oregon side.
 
 ### Inland Empire
 
@@ -701,6 +699,11 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-05-16
+
+- **Clarify TransportKeys and Codes** to improve clarity on how `TransportKeys` are distinct from transport codes.
+- **Changed Lake Stevens example** to add clarification that the same region set should work for Seattle and the Seattle Metro Area.
 
 ### 2026-05-10
 

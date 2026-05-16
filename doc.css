@@ -7,6 +7,22 @@
     --mc-bg-table: #f8f9fa;
     --mc-accent: #2563eb;
     --mc-accent-visited: #4f46e5;
+    --mc-doc-max: 720px;
+    --mc-toc-width: 14rem;
+    --mc-toc-gap: 2.5rem;
+    --mc-toc-indent: 0.65rem;
+    --mc-toc-box-bg: #fff;
+    --mc-toc-box-padding: 0.85rem 0.9rem;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
 }
 
 body.meshcore-regions-page {
@@ -20,10 +36,148 @@ body.meshcore-regions-page {
     padding-bottom: 4rem;
 }
 
-body.meshcore-regions-page .meshcore-doc {
-    max-width: 720px;
-    margin: 0 auto;
+/* Skip link — visible on keyboard focus */
+body.meshcore-regions-page .meshcore-skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0.75rem;
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    background: var(--mc-text);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    outline-offset: 2px;
+}
+
+body.meshcore-regions-page .meshcore-skip-link:focus {
+    left: min(24px, 5vw);
+}
+
+body.meshcore-regions-page .meshcore-doc-shell {
     padding-top: 2.5rem;
+}
+
+/* TOC in flow when the viewport is too narrow for a left gutter */
+body.meshcore-regions-page .meshcore-doc-toc {
+    position: static;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--mc-toc-width);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1.75rem;
+    padding: var(--mc-toc-box-padding);
+    background: var(--mc-toc-box-bg);
+    border: 1px solid var(--mc-border);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    max-height: min(42vh, 18rem);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * Centered article + fixed TOC in the left gutter (does not shift the column).
+ * Larger --mc-toc-gap needs a wider viewport so the box clears the article column.
+ */
+@media (min-width: 1280px) {
+    body.meshcore-regions-page .meshcore-doc-toc {
+        position: fixed;
+        top: 1.25rem;
+        left: max(
+            min(24px, 5vw),
+            calc(
+                50vw - var(--mc-doc-max) / 2 - var(--mc-toc-gap) - var(--mc-toc-width)
+            )
+        );
+        z-index: 2;
+        width: var(--mc-toc-width);
+        margin-left: 0;
+        margin-right: 0;
+        max-height: calc(100vh - 2.5rem);
+        margin-bottom: 0;
+        overflow: auto;
+    }
+}
+
+
+body.meshcore-regions-page .meshcore-doc-toc-label {
+    margin: 0 0 0.65rem;
+    padding-left: 0.15rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mc-text-muted);
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-item {
+    margin: 0;
+    padding: 0;
+    padding-left: calc(var(--toc-depth, 0) * var(--mc-toc-indent));
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-item + .meshcore-doc-toc-item {
+    margin-top: 0.2rem;
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-item a {
+    display: block;
+    padding: 0.28rem 0.5rem 0.28rem 0.6rem;
+    margin-left: -0.6rem;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--mc-text-muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    outline-offset: 1px;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-item a:hover {
+    color: var(--mc-accent);
+    background: rgba(37, 99, 235, 0.06);
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-item a:focus-visible {
+    color: var(--mc-text);
+    background: rgba(37, 99, 235, 0.1);
+    border-left-color: var(--mc-accent);
+    outline: none;
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-item a:visited {
+    color: var(--mc-text-muted);
+}
+
+body.meshcore-regions-page .meshcore-doc-toc-item a:visited:hover {
+    color: var(--mc-accent-visited);
+}
+
+body.meshcore-regions-page .meshcore-doc {
+    max-width: var(--mc-doc-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0;
+}
+
+body.meshcore-regions-page .meshcore-doc h1,
+body.meshcore-regions-page .meshcore-doc h2,
+body.meshcore-regions-page .meshcore-doc h3,
+body.meshcore-regions-page .meshcore-doc h4,
+body.meshcore-regions-page .meshcore-doc h5,
+body.meshcore-regions-page .meshcore-doc h6 {
+    scroll-margin-top: 1.25rem;
 }
 
 body.meshcore-regions-page .meshcore-doc h1 {
