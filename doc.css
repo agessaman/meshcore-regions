@@ -80,26 +80,37 @@ body.meshcore-regions-page .meshcore-doc-toc {
 }
 
 /*
- * Centered article + fixed TOC in the left gutter (does not shift the column).
- * Larger --mc-toc-gap needs a wider viewport so the box clears the article column.
+ * Two-column grid: TOC sidebar + content.
+ * The TOC becomes sticky so it follows the scroll without a fixed-position
+ * gutter calculation — works on any viewport wide enough to hold both columns.
  */
-@media (min-width: 1280px) {
+@media (min-width: 960px) {
+    body.meshcore-regions-page .meshcore-doc-shell {
+        display: grid;
+        grid-template-columns: var(--mc-toc-width) minmax(0, var(--mc-doc-max));
+        column-gap: var(--mc-toc-gap);
+        align-items: start;
+        /* Centre the grid itself once the content hits its max-width */
+        max-width: calc(var(--mc-doc-max) + var(--mc-toc-gap) + var(--mc-toc-width));
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     body.meshcore-regions-page .meshcore-doc-toc {
-        position: fixed;
+        position: sticky;
         top: 1.25rem;
-        left: max(
-            min(24px, 5vw),
-            calc(
-                50vw - var(--mc-doc-max) / 2 - var(--mc-toc-gap) - var(--mc-toc-width)
-            )
-        );
-        z-index: 2;
-        width: var(--mc-toc-width);
+        /* Reset the in-flow "box" sizing */
+        width: auto;
+        max-width: none;
+        margin: 0;
+        max-height: calc(100vh - 2.5rem);
+        overflow: auto;
+    }
+
+    body.meshcore-regions-page .meshcore-doc {
+        /* Grid cell handles the column; clear the centring margins */
         margin-left: 0;
         margin-right: 0;
-        max-height: calc(100vh - 2.5rem);
-        margin-bottom: 0;
-        overflow: auto;
     }
 }
 
@@ -375,4 +386,61 @@ body.meshcore-regions-page .meshcore-doc .gh-alert-caution {
     --gh-alert-border: #d1242f;
     --gh-alert-bg: #fcf1f2;
     --gh-alert-title: #cf222e;
+}
+
+/* ── Firmware toggle ─────────────────────────────────────────────────────── */
+#fw-toggle {
+    position: fixed;
+    top: 1.25rem;
+    right: 1rem;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: #fff;
+    border: 1px solid var(--mc-border);
+    border-radius: 999px;
+    padding: 3px 4px 3px 8px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.10);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    user-select: none;
+}
+
+.fw-toggle-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mc-text-muted);
+    padding-right: 4px;
+    white-space: nowrap;
+}
+
+.fw-opt {
+    border: none;
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+    font-weight: 600;
+    color: var(--mc-text-muted);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    line-height: 1.4;
+}
+
+.fw-opt:hover {
+    background: #eff3ff;
+    color: var(--mc-accent);
+}
+
+.fw-opt[aria-pressed="true"] {
+    background: var(--mc-accent);
+    color: #fff;
+}
+
+/* Push toggle down on narrow screens so it doesn't sit over the in-flow TOC */
+@media (max-width: 600px) {
+    #fw-toggle { top: auto; bottom: 1rem; }
 }

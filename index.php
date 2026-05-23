@@ -99,5 +99,159 @@ $tocItems = meshcore_doc_toc_items($content);
             <?php echo $content; ?>
         </main>
     </div>
+
+    <!-- Firmware toggle — injected by JS only when region-config blocks are found -->
+    <script>
+    (function () {
+      'use strict';
+
+      // Compact parent-lookup table for the PNW hierarchy (labels omitted).
+      // Used to walk any tag up to the root so partial blocks get a full prefix.
+      // "west" is omitted — its parent is null (the firmware root *).
+      var HIER = {
+        "pnw":"west",
+        "wa":"pnw","w-wa":"wa","sw-wa":"wa","c-wa":"wa","e-wa":"wa",
+        "sea":"w-wa","oly":"w-wa","kit":"w-wa","grh":"w-wa","bvs":"w-wa","bli":"w-wa",
+        "cls":"sw-wa","kls":"sw-wa",
+        "ykm":"c-wa","eat":"c-wa","eln":"c-wa","mwh":"c-wa",
+        "geg":"e-wa","alw":"e-wa","puw":"e-wa",
+        "ie":"pnw",
+        "or":"pnw","wv":"or","s-or":"or","coast-or":"or","c-or":"or","pdx":"or",
+        "sle":"wv","cvo":"wv","eug":"wv",
+        "mfr":"s-or","rbg":"s-or","lmt":"s-or",
+        "onp":"coast-or","ast":"coast-or","oth":"coast-or",
+        "bend":"c-or","pdt":"c-or","bke":"c-or",
+        "id":"pnw","boi":"id","cda":"id",
+        "mt":"pnw","fca":"mt",
+        "bc":"pnw","swbc":"bc","vanisle":"bc","southisland":"vanisle","salishmesh":"bc"
+      };
+
+      // Extract region-put commands from a code block's text.
+      // Returns null if the block contains no region puts.
+      function parseBlock(text) {
+        var puts = [];
+        text.split('\n').forEach(function (line) {
+          var m = line.trim().match(/^region put (\S+)(?:\s+(\S+))?$/);
+          if (m) puts.push({ tag: m[1], parent: m[2] || null });
+        });
+        return puts.length ? puts : null;
+      }
+
+      function fmt(p) {
+        return p.parent ? 'region put ' + p.tag + ' ' + p.parent : 'region put ' + p.tag;
+      }
+
+      function toV14(puts) {
+        var lines = [];
+        puts.forEach(function (p) { lines.push(fmt(p)); lines.push('region allowf ' + p.tag); });
+        lines.push('region save');
+        return lines.join('\n');
+      }
+
+      function toV15(puts) {
+        var lines = puts.map(fmt);
+        lines.push('region save');
+        return lines.join('\n');
+      }
+
+      // Walk tag up through HIER, returning [root, …, tag] inclusive.
+      function ancestryOf(tag) {
+        var chain = [];
+        var cur = tag;
+        while (cur) {
+          chain.unshift(cur);
+          cur = HIER[cur] || null;
+        }
+        return chain;
+      }
+
+      function toV16(puts) {
+        // Build a parentOf map, seeded from HIER then overridden by the block's
+        // own explicit parents (which take precedence for cross-border tags, etc.).
+        var parentOf = {};
+        puts.forEach(function (p) {
+          if (HIER[p.tag] !== undefined) parentOf[p.tag] = HIER[p.tag];
+          if (p.parent !== null) parentOf[p.tag] = p.parent;
+        });
+
+        // If the block doesn't start at the root, prepend the missing ancestors.
+        // We walk up from the first put's parent until we reach a tag already
+        // accounted for (or the root).
+        var inBlock = {};
+        puts.forEach(function (p) { inBlock[p.tag] = true; });
+
+        var prefixTags = [];
+        var firstParent = puts[0].parent;
+        if (firstParent !== null && !inBlock[firstParent]) {
+          // ancestryOf returns root-first; include all ancestors up through firstParent
+          ancestryOf(firstParent).forEach(function (t) {
+            if (!inBlock[t]) {
+              prefixTags.push(t);
+              if (!parentOf[t]) parentOf[t] = HIER[t] || null;
+            }
+          });
+        }
+
+        var allTags = prefixTags.concat(puts.map(function (p) { return p.tag; }));
+
+        var tokens = allTags.map(function (tag, i) {
+          if (i === allTags.length - 1) return tag;
+          var np = parentOf[allTags[i + 1]] || '*';
+          return np === tag ? tag : tag + '|' + np;
+        });
+
+        return 'region def ' + tokens.join(' ') + '\nregion save';
+      }
+
+      var blocks = [];
+
+      function apply(fw) {
+        blocks.forEach(function (b) {
+          if (fw === '1.14') {
+            b.code.textContent = toV14(b.puts);
+          } else if (fw === '1.16') {
+            b.code.textContent = toV16(b.puts);
+          } else {
+            b.code.textContent = b.v15;
+          }
+        });
+      }
+
+      function buildToggle() {
+        var el = document.createElement('div');
+        el.id = 'fw-toggle';
+        el.setAttribute('role', 'group');
+        el.setAttribute('aria-label', 'Firmware version for CLI examples');
+        el.innerHTML =
+          '<span class="fw-toggle-label">Firmware</span>' +
+          ['1.14', '1.15', '1.16'].map(function (fw) {
+            return '<button class="fw-opt" data-fw="' + fw + '" aria-pressed="' + (fw === '1.15') + '">' + fw + '</button>';
+          }).join('');
+        el.addEventListener('click', function (e) {
+          var btn = e.target.closest('.fw-opt');
+          if (!btn) return;
+          el.querySelectorAll('.fw-opt').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+          btn.setAttribute('aria-pressed', 'true');
+          apply(btn.dataset.fw);
+        });
+        document.body.appendChild(el);
+      }
+
+      function init() {
+        document.querySelectorAll('.meshcore-doc pre code').forEach(function (code) {
+          var puts = parseBlock(code.textContent);
+          if (!puts) return;
+          blocks.push({ code: code, puts: puts, v15: toV15(puts) });
+        });
+        if (blocks.length) buildToggle();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+    </script>
 </body>
 </html>
