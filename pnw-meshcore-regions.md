@@ -11,7 +11,7 @@ The scheme prioritizes short, flat, human-readable names. The parent/child hiera
 - **Short names**: Region names are purely administrative — they never appear in flood packets. But shorter names are easier to type in CLI, easier to remember, and conserve the 172-byte budget in the regions response payload. Three letters or fewer where possible.
 - **MSA-scale regions**: The third level corresponds roughly to OMB Metropolitan Statistical Areas rather than individual counties. People don't segment their daily lives by county lines, and the mesh shouldn't either. The Seattle-Tacoma-Bellevue MSA (King, Pierce, Snohomish counties) is one region: `sea`.
 - **Flat naming**: `west`, `pnw`, `wa`, `sea` — not a complex string like `west-pnw-wa-sea` or `noam-usa-wa-sea`. The hierarchy lives in the parent relationships, not the strings.
-- **Cross-border pragmatism**: Portland straddles OR/WA — it lives under `or`, and Clark County WA repeaters dual-carry `pdx` and `wa`. The Inland Empire straddles WA/ID and uses the same dual-carry pattern. Vancouver BC uses IATA code `yvr` to avoid ambiguity with Vancouver WA.
+- **Cross-border pragmatism**: Portland straddles OR/WA — it lives under `or`, and Clark County WA repeaters dual-carry `pdx` and `wa`. The Inland Empire straddles WA/ID and uses the same dual-carry pattern. Vancouver BC uses community-established region tags (`swbc`, `vanisle`, `southisland`, `salishmesh`) rather than IATA codes to reflect the actual geographic communities that have formed on the mesh.
 
 ## Technical Constraints
 
@@ -76,9 +76,10 @@ west                            Entire mesh (Western US / SW Canada)
         mt                      Montana (partial — statewide expansion planned)
             fca                 Flathead Valley / Kalispell / Glacier (Glacier Park Intl)
         bc                      British Columbia (southern)
-            yvr                 Metro Vancouver / Lower Mainland
-            fra                 Fraser Valley / Abbotsford / Chilliwack
-            vic                 Victoria / southern Vancouver Island
+            swbc                Southwest BC / Lower Mainland
+            vanisle             Vancouver Island
+                southisland     South Vancouver Island / Victoria
+            salishmesh          Salish Sea / Gulf Islands
     ca                          California (future)
         nca                     Northern California
         bay                     Bay Area
@@ -95,7 +96,10 @@ west                            Entire mesh (Western US / SW Canada)
 | `sea` | IATA | Seattle-Tacoma International — universally recognized |
 | `pdx` | IATA | Portland International — iconic, avoids OR/WA ambiguity |
 | `ie` | Abbreviation | Inland Empire — established regional identity for Spokane-CdA corridor |
-| `yvr` | IATA | Vancouver International — avoids Vancouver WA confusion |
+| `swbc` | Abbreviation | Southwest BC / Lower Mainland — community-established name reflecting the Metro Vancouver area |
+| `vanisle` | Abbreviation | Vancouver Island — full island region |
+| `southisland` | Abbreviation | South Vancouver Island / Victoria — established community sub-region of `vanisle` |
+| `salishmesh` | Community name | Salish Sea / Gulf Islands — named after the active Salish Mesh community in the Gulf Islands |
 | `bli` | IATA | Bellingham International |
 | `oly` | Abbreviation | Olympia — IATA code `OLM` exists but `oly` is more recognizable as a short form of the city name |
 | `kit` | Abbreviation | Kitsap — Bremerton National Airport IATA code is `PWT`, but `kit` better represents the broader Kitsap Peninsula community |
@@ -134,8 +138,6 @@ west                            Entire mesh (Western US / SW Canada)
 | `bend` | Full name | Bend — short enough to use unabbreviated; no well-known IATA code |
 | `pdt` | IATA | Eastern Oregon Regional Airport (Pendleton) |
 | `bke` | IATA | Baker City Municipal Airport |
-| `fra` | Abbreviation | Fraser Valley |
-| `vic` | Abbreviation | Victoria |
 | `nca` | Abbreviation | Northern California |
 | `ca` | Postal | California state |
 
@@ -241,17 +243,30 @@ region save
 
 Tags carried: `west`, `pnw`, `wa`, `w-wa`, `sea` (20 bytes in regions response)
 
-### Example: Victoria, BC
+### Example: Victoria / South Vancouver Island, BC
 
 ```
 region put west
 region put pnw west
 region put bc pnw
-region put vic bc
+region put vanisle bc
+region put southisland vanisle
 region save
 ```
 
-Tags carried: `west`, `pnw`, `bc`, `vic` (17 bytes)
+Tags carried: `west`, `pnw`, `bc`, `vanisle`, `southisland` (33 bytes)
+
+A repeater serving Metro Vancouver (Lower Mainland) instead:
+
+```
+region put west
+region put pnw west
+region put bc pnw
+region put swbc bc
+region save
+```
+
+Tags carried: `west`, `pnw`, `bc`, `swbc` (18 bytes)
 
 ### Example: Portland metro (OR side)
 
@@ -444,7 +459,7 @@ region save
 
 Tags: `west`, `pnw`, `wa` (11 bytes)
 
-This repeater forwards `west`, `pnw`, and `wa` scoped traffic. It **ignores** `sea`, `yvr`, `bli`, and all other metro-scoped messages. Local chatter stays local. Only state-wide or broader messages cross the backbone.
+This repeater forwards `west`, `pnw`, and `wa` scoped traffic. It **ignores** `sea`, `swbc`, `bli`, and all other metro-scoped messages. Local chatter stays local. Only state-wide or broader messages cross the backbone.
 
 Best for: Dedicated long-haul links between distant metros (e.g. a Seattle-to-Portland chain over the I-5 corridor). These repeaters exist to carry wide-scope traffic and shouldn't be burdened with local flood from either end.
 
@@ -506,7 +521,7 @@ Haystack Mountain (high-site)           →  west, pnw, wa, w-wa, sea     (Strat
 Skagit Valley repeater                  →  west, pnw, wa, w-wa, bvs
 Bellingham repeater                     →  west, pnw, wa, w-wa, bli
 Sumas Mountain border-area high-site    →  west, pnw, wa               (Strategy 1)
-Metro Vancouver repeater                →  west, pnw, bc, yvr
+Metro Vancouver repeater                →  west, pnw, bc, swbc
 ```
 
 Traffic flow for a message scoped to `sea`:
@@ -584,7 +599,7 @@ New local areas can be added without restructuring:
 | `mso` | Missoula (western Montana, Bitterroot drainage) | `mt` | IATA — distinct basin from Flathead (`fca`) |
 | `psc` | Tri-Cities (Pasco / Richland / Kennewick) | `e-wa` | IATA |
 | `gorge` | Columbia Gorge (Hood River OR + White Salmon WA) | `pnw` | Abbreviation — cross-border tag like `ie` and `pdx` |
-| `ycd` | Nanaimo / central Vancouver Island | `bc` | IATA |
+| `ycd` | Nanaimo / central Vancouver Island | `vanisle` | IATA |
 | `ylw` | Kelowna / Okanagan | `bc` | IATA |
 
 ---
@@ -688,9 +703,10 @@ flood_scopes = #sle, #wv
 | `boi` | Boise metro | `id` |
 | `cda` | Coeur d'Alene / N. Idaho | `id` |
 | `bc` | Southern British Columbia | `pnw` |
-| `yvr` | Metro Vancouver | `bc` |
-| `fra` | Fraser Valley | `bc` |
-| `vic` | Victoria / S. Vancouver Island | `bc` |
+| `swbc` | Southwest BC / Lower Mainland | `bc` |
+| `vanisle` | Vancouver Island | `bc` |
+| `southisland` | South Vancouver Island / Victoria | `vanisle` |
+| `salishmesh` | Salish Sea / Gulf Islands | `bc` |
 | `ca` | California (future) | `west` |
 | `nca` | Northern California (future) | `ca` |
 | `bay` | Bay Area (future) | `ca` |
@@ -699,6 +715,10 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-05-21
+
+- **BC region overhaul**: Replaced the IATA-approximation tags (`yvr`, `fra`, `vic`) with the community-established region tags that BC mesh operators are actively using: `swbc` (Southwest BC / Lower Mainland), `vanisle` (Vancouver Island), `southisland` (South Vancouver Island / Victoria, nested under `vanisle`), and `salishmesh` (Salish Sea / Gulf Islands). Updated hierarchy tree, Name Rationale table, Quick Reference table, Victoria repeater example, and all inline references accordingly. Updated Design Principles to reflect that BC uses community-established names rather than IATA codes. Moved `ycd` (Nanaimo / central Vancouver Island) parent from `bc` to `vanisle` in Future Extensions.
 
 ### 2026-05-16
 

@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeshCore Region Config — Pacific Northwest</title>
+  <style>
+    :root {
+      --green:       #2d6a4f;
+      --green-dark:  #1b4332;
+      --green-mid:   #40916c;
+      --green-light: #74c69d;
+      --blue:        #1a3a4a;
+      --gold:        #f4c842;
+      --gold-warm:   #f4a261;
+      --bg:          #f4f7f5;
+      --surface:     #ffffff;
+      --text:        #1a2e25;
+      --text-muted:  #607a6e;
+      --border:      #cce0d5;
+      --radius:      14px;
+      --shadow:      0 2px 16px rgba(27,67,50,0.10);
+      --shadow-card: 0 1px 4px rgba(27,67,50,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--blue) 100%);
+      color: #fff;
+      padding: 1.5rem 1.5rem 1.75rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpolygon points='0,60 60,0 120,60' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E") repeat-x bottom;
+      background-size: 120px 60px;
+    }
+    header .badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 99px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    header h1 {
+      font-size: clamp(1.3rem, 4vw, 1.75rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    header p {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+      opacity: 0.75;
+      max-width: 400px;
+      margin-inline: auto;
+    }
+
+    /* ── Wizard wrapper ────────────────────────────── */
+    main {
+      flex: 1;
+      max-width: 560px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem;
+    }
+
+    /* ── Progress pills ────────────────────────────── */
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.75rem;
+      gap: 0;
+      user-select: none;
+    }
+    .step-dot {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 700;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      position: relative; z-index: 1;
+    }
+    .step-dot .dot-label {
+      position: absolute;
+      top: calc(100% + 4px);
+      font-size: 0.65rem;
+      white-space: nowrap;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .step-dot.active  { background: var(--green); border-color: var(--green); color: #fff; }
+    .step-dot.done    { background: var(--green-light); border-color: var(--green-light); color: #fff; }
+    .step-line        { height: 2px; background: var(--border); width: 52px; transition: background 0.2s; }
+    .step-line.done   { background: var(--green-light); }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem;
+      border: 1px solid var(--border);
+    }
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 0.35rem;
+    }
+    .card .hint {
+      font-size: 0.865rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.45;
+    }
+
+    /* ── Inputs ────────────────────────────────────── */
+    .input-row { display: flex; gap: 0.5rem; }
+    input[type="text"] {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 9px;
+      font-size: 1rem;
+      outline: none;
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="text"]:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(45,106,79,0.12);
+    }
+    input[type="text"]::placeholder { color: #aac0b4; }
+
+    /* ── Buttons ───────────────────────────────────── */
+    .btn {
+      padding: 0.75rem 1.25rem;
+      border-radius: 9px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--green-mid); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--bg); border-color: var(--green-light); }
+
+    .nav-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 1.5rem; gap: 0.75rem;
+    }
+
+    /* ── Status messages ───────────────────────────── */
+    .status-msg {
+      font-size: 0.86rem;
+      padding: 0.6rem 0.875rem;
+      border-radius: 8px;
+      margin-top: 0.75rem;
+      line-height: 1.4;
+    }
+    .status-msg.error   { background: #fff4f4; color: #b91c1c; border: 1px solid #fca5a5; }
+    .status-msg.info    { background: #f0faf5; color: var(--green-dark); border: 1px solid #b7e4c7; }
+    .status-msg.warning { background: #fffbea; color: #92400e; border: 1px solid #fde68a; }
+
+    /* ── Spinner ───────────────────────────────────── */
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.55s linear infinite;
+      vertical-align: -2px;
+      margin-right: 0.35rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Repeater type cards ───────────────────────── */
+    .type-cards { display: flex; flex-direction: column; gap: 0.7rem; }
+    .type-card {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1rem 1.1rem;
+      border: 2px solid var(--border);
+      border-radius: 11px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      background: var(--surface);
+    }
+    .type-card:hover {
+      border-color: var(--green-light);
+      background: #f5fbf7;
+      box-shadow: var(--shadow-card);
+    }
+    .type-card.selected {
+      border-color: var(--green);
+      background: #edf7f1;
+      box-shadow: 0 0 0 3px rgba(45,106,79,0.10);
+    }
+    .type-card .icon {
+      font-size: 2.1rem; line-height: 1; flex-shrink: 0; margin-top: 1px;
+    }
+    .type-card .info { flex: 1; }
+    .type-card .info strong {
+      display: block; font-size: 0.98rem; font-weight: 700; color: var(--text);
+    }
+    .type-card .info small {
+      display: block; font-size: 0.83rem; color: var(--text-muted); margin-top: 0.2rem; line-height: 1.4;
+    }
+    .type-card .check {
+      width: 20px; height: 20px;
+      border-radius: 50%; border: 2px solid var(--border);
+      flex-shrink: 0; margin-top: 3px;
+      transition: background 0.15s, border-color 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .type-card.selected .check {
+      background: var(--green); border-color: var(--green); color: #fff;
+    }
+    .type-card.selected .check::after { content: "✓"; font-size: 0.7rem; font-weight: 800; }
+
+    /* ── Firmware toggle ───────────────────────────── */
+    .fw-options { display: flex; gap: 0.65rem; flex-wrap: wrap; }
+    .fw-btn {
+      flex: 1;
+      padding: 0.9rem 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: 11px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      line-height: 1.2;
+    }
+    .fw-btn:hover { border-color: var(--green-light); background: #f5fbf7; }
+    .fw-btn.selected {
+      border-color: var(--green); background: #edf7f1;
+      box-shadow: 0 0 0 3px rgba(45,106,79,0.10);
+      color: var(--green-dark);
+    }
+    .fw-btn small {
+      display: block; font-weight: 400; font-size: 0.78rem;
+      color: var(--text-muted); margin-top: 0.3rem; line-height: 1.35;
+    }
+    .fw-btn.selected small { color: var(--green-mid); }
+
+    /* ── Results: location row ─────────────────────── */
+    .result-loc {
+      display: flex; align-items: center; gap: 0.85rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.875rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .result-loc .pin { font-size: 1.6rem; flex-shrink: 0; }
+    .result-loc .name { font-weight: 700; font-size: 1rem; line-height: 1.25; }
+    .result-loc .region { font-size: 0.83rem; color: var(--text-muted); margin-top: 0.2rem; }
+    .result-loc .region code {
+      font-family: "SF Mono","Fira Code","Cascadia Code",monospace;
+      background: rgba(45,106,79,0.10);
+      color: var(--green-dark);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+    }
+
+    /* ── Ancestry breadcrumb ───────────────────────── */
+    .breadcrumb {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 4px; margin-bottom: 1.1rem;
+    }
+    .crumb {
+      font-family: "SF Mono","Fira Code","Cascadia Code",monospace;
+      font-size: 0.8rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 5px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 500;
+    }
+    .crumb.leaf { background: var(--green-dark); font-weight: 700; }
+    .crumb.extra { background: #2a5e6e; }
+    .sep { color: var(--text-muted); font-size: 0.85rem; line-height: 1; }
+
+    /* ── Commands block ────────────────────────────── */
+    .cmds-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .cmds-header span {
+      font-size: 0.78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .copy-btn {
+      font-size: 0.8rem; font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .copy-btn:hover { background: var(--green); color: #fff; border-color: var(--green); }
+    .copy-btn.copied { background: var(--green-light); color: #fff; border-color: var(--green-light); }
+
+    pre.commands {
+      background: var(--blue);
+      color: #d4eee5;
+      font-family: "SF Mono","Fira Code","Cascadia Code","Consolas",monospace;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      padding: 0.5rem 0;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin: 0;
+    }
+    .cmd-line {
+      position: relative;
+      padding: 0.1rem 2.75rem 0.1rem 1.4rem;
+      cursor: pointer;
+      transition: background 0.1s;
+      white-space: pre;
+    }
+    .cmd-line:first-child { padding-top: 0.7rem; }
+    .cmd-line:last-child  { padding-bottom: 0.7rem; }
+    .cmd-line:hover  { background: rgba(255,255,255,0.07); }
+    .cmd-line:active { background: rgba(255,255,255,0.13); }
+    .cmd-copy-icon {
+      position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%);
+      font-size: 0.85rem; color: rgba(255,255,255,0.4);
+      opacity: 0; transition: opacity 0.1s, color 0.1s;
+      pointer-events: none; user-select: none;
+    }
+    .cmd-line:hover .cmd-copy-icon { opacity: 1; }
+    .cmd-line.line-copied { background: rgba(116,198,157,0.15); }
+    .cmd-line.line-copied .cmd-copy-icon { opacity: 1; color: var(--green-light); }
+    .c-kw   { color: #80cbc4; }
+    .c-tag  { color: var(--gold); font-weight: 700; }
+    .c-par  { color: #9dc8c4; }
+    .c-save { color: #80cbc4; font-weight: 600; }
+    .c-af   { color: #f48fb1; }
+    .c-cmt  { color: #607a6e; font-style: italic; }
+
+    /* ── Notes ─────────────────────────────────────── */
+    .notes { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .note {
+      font-size: 0.845rem; color: var(--text-muted); line-height: 1.45;
+      padding: 0.5rem 0.875rem 0.5rem 0.9rem;
+      border-left: 3px solid var(--green-light);
+      background: #f5fbf7;
+      border-radius: 0 6px 6px 0;
+    }
+    .note.warn { border-left-color: #f4a261; background: #fffbf5; color: #7d4400; }
+
+    /* ── Strategy badge ────────────────────────────── */
+    .strategy-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.75rem; font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 99px;
+      background: rgba(45,106,79,0.12);
+      color: var(--green-dark);
+      margin-left: 0.5rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .result-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    footer {
+      text-align: center; padding: 1.25rem 1rem;
+      font-size: 0.8rem; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--green-mid); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Candidate region picker ───────────────────── */
+    .found-place {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.6rem 0.875rem;
+      background: #f0faf5;
+      border: 1px solid #b7e4c7;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+    .found-place .fp-pin { font-size: 1.1rem; flex-shrink: 0; }
+    .found-place .fp-name { font-weight: 600; color: var(--green-dark); flex: 1; }
+    .found-place .fp-change {
+      font-size: 0.78rem; color: var(--text-muted);
+      cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+      background: none; border: none; padding: 0; font-family: inherit;
+    }
+    .found-place .fp-change:hover { color: var(--green); }
+
+    .cand-hint { font-size: 0.865rem; color: var(--text-muted); margin-bottom: 0.9rem; line-height: 1.4; }
+
+    .cand-card {
+      display: flex; align-items: center; gap: 0.875rem;
+      padding: 0.8rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      background: var(--surface);
+      margin-bottom: 0.55rem;
+    }
+    .cand-card:last-child { margin-bottom: 0; }
+    .cand-card:hover { border-color: var(--green-light); background: #f5fbf7; }
+    .cand-card.selected {
+      border-color: var(--green);
+      background: #edf7f1;
+      box-shadow: 0 0 0 3px rgba(45,106,79,0.10);
+    }
+    .cand-rank {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--border); color: var(--text-muted);
+      font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.15s, color 0.15s;
+    }
+    .cand-card.selected .cand-rank { background: var(--green); color: #fff; }
+    .cand-info { flex: 1; min-width: 0; }
+    .cand-info .cand-label {
+      font-weight: 700; font-size: 0.95rem; color: var(--text);
+      display: flex; align-items: baseline; gap: 0.45rem; flex-wrap: wrap;
+    }
+    .cand-info .cand-label code {
+      font-size: 0.8rem; font-weight: 700;
+      font-family: "SF Mono","Fira Code","Cascadia Code",monospace;
+      background: rgba(45,106,79,0.10); color: var(--green-dark);
+      padding: 0.1rem 0.4rem; border-radius: 4px;
+    }
+    .cand-info .cand-sub {
+      font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem;
+    }
+    .cand-km {
+      font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+      flex-shrink: 0; white-space: nowrap;
+    }
+    .cand-card.selected .cand-km { color: var(--green-mid); }
+
+    /* ── Multi-metro selector ──────────────────────── */
+    .metro-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 1.1rem 0 1rem;
+    }
+    .metro-section-label {
+      font-size: 0.9rem; font-weight: 700; color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .metro-section-hint {
+      font-size: 0.83rem; color: var(--text-muted); margin-bottom: 0.85rem;
+    }
+    .metro-group { margin-bottom: 0.85rem; }
+    .metro-group:last-child { margin-bottom: 0; }
+    .metro-group-label {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--text-muted); margin-bottom: 0.4rem;
+    }
+    .metro-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .metro-chip {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.3rem 0.7rem 0.3rem 0.5rem;
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      cursor: pointer;
+      font-size: 0.82rem; color: var(--text);
+      background: var(--surface);
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+      user-select: none;
+      line-height: 1.3;
+    }
+    .metro-chip:hover { border-color: var(--green-light); background: #f5fbf7; }
+    .metro-chip input[type="checkbox"] {
+      width: 13px; height: 13px;
+      accent-color: var(--green);
+      cursor: pointer; margin: 0; flex-shrink: 0;
+    }
+    .metro-chip:has(input:checked) {
+      border-color: var(--green); background: #edf7f1;
+      color: var(--green-dark); font-weight: 600;
+    }
+    .metro-chip code {
+      font-family: "SF Mono","Fira Code","Cascadia Code",monospace;
+      font-size: 0.75rem;
+    }
+
+    /* ── Utility ───────────────────────────────────── */
+    .hidden { display: none !important; }
+
+    @media (max-width: 500px) {
+      main { margin: 1rem auto; }
+      .card { padding: 1.25rem; }
+      .fw-options { flex-direction: column; }
+      .input-row { flex-direction: column; }
+      .step-dot .dot-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">🌲 Pacific Northwest MeshCore</div>
+  <h1>Region Config Generator</h1>
+  <p>Enter your location and repeater type to get ready-to-paste CLI commands.</p>
+</header>
+
+<main>
+
+  <!-- Progress indicator -->
+  <div class="progress" id="progress" aria-hidden="true">
+    <div class="step-dot active" id="dot-1">1<span class="dot-label">Location</span></div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step-dot" id="dot-2">2<span class="dot-label">Type</span></div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step-dot" id="dot-3">3<span class="dot-label">Firmware</span></div>
+  </div>
+
+  <!-- ── Step 1: Location ───────────────────────── -->
+  <div class="card" id="step-1">
+    <h2>Where is your repeater?</h2>
+
+    <!-- Input form -->
+    <div id="loc-form">
+      <p class="hint">Enter a city, town, neighbourhood, or ZIP / postal code.</p>
+      <div class="input-row">
+        <input
+          type="text"
+          id="loc-input"
+          placeholder="e.g.  Seattle,  97201,  Bellingham,  V8W 1N6 …"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Location"
+        />
+        <button class="btn btn-primary" id="locate-btn">Next →</button>
+      </div>
+      <div id="loc-status" role="status" aria-live="polite"></div>
+    </div>
+
+    <!-- Candidate picker (shown after geocoding) -->
+    <div id="candidates" class="hidden">
+      <div class="found-place" id="found-place">
+        <span class="fp-pin">📍</span>
+        <span class="fp-name" id="found-place-name"></span>
+        <button class="fp-change" id="change-location-btn">Change</button>
+      </div>
+      <p class="cand-hint">Which region best describes your repeater's location? The best match is pre-selected.</p>
+      <div id="candidate-list"></div>
+      <div class="nav-row" style="margin-top:1.25rem">
+        <span></span>
+        <button class="btn btn-primary" id="confirm-loc-btn">Confirm →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 2: Repeater type ──────────────────── -->
+  <div class="card hidden" id="step-2">
+    <h2>What type of repeater?</h2>
+    <p class="hint">Your choice shapes which region tags are recommended and how strictly to scope them.</p>
+    <div class="type-cards">
+      <div class="type-card" role="button" tabindex="0" data-type="high-site" aria-pressed="false">
+        <div class="icon">🏔️</div>
+        <div class="info">
+          <strong>Mountaintop / High-Site</strong>
+          <small>Peak, hilltop, tower, or ridgeline with wide-area RF coverage</small>
+        </div>
+        <div class="check" aria-hidden="true"></div>
+      </div>
+      <div class="type-card" role="button" tabindex="0" data-type="urban" aria-pressed="false">
+        <div class="icon">🏙️</div>
+        <div class="info">
+          <strong>Urban Infrastructure</strong>
+          <small>Building rooftop, water tower, or fixed city infrastructure node</small>
+        </div>
+        <div class="check" aria-hidden="true"></div>
+      </div>
+      <div class="type-card" role="button" tabindex="0" data-type="residential" aria-pressed="false">
+        <div class="icon">🏠</div>
+        <div class="info">
+          <strong>Home / Residential</strong>
+          <small>Home station, apartment, portable node, or neighbourhood setup</small>
+        </div>
+        <div class="check" aria-hidden="true"></div>
+      </div>
+    </div>
+    <!-- Multi-metro selector (high-site only) -->
+    <div id="multi-metro-section" class="hidden">
+      <hr class="metro-divider">
+      <div class="metro-section-label">Which metro areas will this repeater serve?</div>
+      <div class="metro-section-hint">Check all that apply — pre-selected based on your location.</div>
+      <div id="metro-groups"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="back-2">← Back</button>
+      <button class="btn btn-primary" id="next-2" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ── Step 3: Firmware ───────────────────────── -->
+  <div class="card hidden" id="step-3">
+    <h2>Which firmware version?</h2>
+    <p class="hint">Newer firmware supports a compact single-line shorthand; older firmware needs one command per tag.</p>
+    <div class="fw-options">
+      <div class="fw-btn" role="button" tabindex="0" data-fw="1.16">
+        v1.16.0+
+        <small><code>region def</code> shorthand — all regions in one compact command</small>
+      </div>
+      <div class="fw-btn selected" role="button" tabindex="0" data-fw="1.15">
+        v1.15.0–1.15.x
+        <small><code>region put</code> per tag — flooding enabled automatically</small>
+      </div>
+      <div class="fw-btn" role="button" tabindex="0" data-fw="1.14">
+        v1.14.x and earlier
+        <small>Requires <code>region allowf &lt;tag&gt;</code> after each <code>region put</code></small>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="back-3">← Back</button>
+      <button class="btn btn-primary" id="generate-btn">Generate Config →</button>
+    </div>
+  </div>
+
+  <!-- ── Results ────────────────────────────────── -->
+  <div class="card hidden" id="step-result">
+    <h2>Your Region Config</h2>
+    <div id="result-content"></div>
+    <div class="result-actions">
+      <button class="btn btn-ghost" id="start-over">↺ Start Over</button>
+      <button class="btn btn-ghost" id="edit-type">✎ Change Type</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Covers WA · OR · ID · MT · BC &nbsp;·&nbsp;
+  Based on <a href="https://github.com/agessaman/meshcore-regions-1" target="_blank" rel="noopener">PNW MeshCore Regions</a> &nbsp;·&nbsp;
+  Geocoding by <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap / Nominatim</a>
+</footer>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+
+// ── Geo ───────────────────────────────────────────────────────────────────────
+
+function haversineKm(aLat, aLon, bLat, bLon) {
+  const R = 6371, rad = d => d * Math.PI / 180;
+  const dLat = rad(bLat - aLat), dLon = rad(bLon - aLon);
+  const a = Math.sin(dLat/2)**2 +
+            Math.sin(dLon/2)**2 * Math.cos(rad(aLat)) * Math.cos(rad(bLat));
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// ── Resolver ─────────────────────────────────────────────────────────────────
+
+function ancestryFor(tag) {
+  const chain = [];
+  const seen = new Set();
+  let cur = tag;
+  while (cur) {
+    if (seen.has(cur)) break;
+    seen.add(cur);
+    chain.unshift(cur);
+    cur = HIERARCHY[cur]?.parent ?? null;
+  }
+  return chain;
+}
+
+function rankSeeds(lat, lon) {
+  return SEEDS.map(s => {
+    const km    = haversineKm(lat, lon, s.lat, s.lon);
+    const score = km - s.r;
+    return { seed: s, km, score, inRadius: km <= s.r };
+  }).sort((a, b) => a.score - b.score);
+}
+
+function resolveLocation(lat, lon, forcePrimaryTag = null) {
+  const ranked = rankSeeds(lat, lon);
+
+  const primaryEntry = forcePrimaryTag
+    ? (ranked.find(r => r.seed.tag === forcePrimaryTag) ?? ranked[0])
+    : ranked[0];
+  const secondary = ranked.find(r => r.seed.tag !== primaryEntry.seed.tag);
+  const inCount   = ranked.filter(r => r.inRadius).length;
+  const overlap   = inCount > 1;
+
+  // Inland Empire cross-border: recommend ie when geg and cda are both top-2
+  const top2 = new Set([primaryEntry.seed.tag, secondary?.seed.tag]);
+  const extraTags  = (top2.has("geg") && top2.has("cda")) ? ["ie"] : [];
+  const extraNotes = extraTags.length
+    ? ["Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."]
+    : [];
+
+  return {
+    nearestKm:    ranked[0].km,
+    top5:         ranked.slice(0, 5),
+    primary: {
+      tag:      primaryEntry.seed.tag,
+      label:    primaryEntry.seed.label,
+      km:       primaryEntry.km,
+      ancestry: ancestryFor(primaryEntry.seed.tag)
+    },
+    secondary: secondary ? {
+      tag:      secondary.seed.tag,
+      label:    secondary.seed.label,
+      km:       secondary.km,
+      ancestry: ancestryFor(secondary.seed.tag)
+    } : null,
+    overlapLikely: overlap,
+    gapKm:         secondary ? Math.abs(primaryEntry.km - secondary.km) : null,
+    extraTags,
+    extraNotes
+  };
+}
+
+// ── Policy ────────────────────────────────────────────────────────────────────
+
+function unique(arr) {
+  const seen = new Set(); return arr.filter(v => seen.has(v) ? false : seen.add(v));
+}
+function sharedPrefix(a, b) {
+  const out = [];
+  for (let i = 0; i < Math.min(a.length, b.length); i++) {
+    if (a[i] !== b[i]) break;
+    out.push(a[i]);
+  }
+  return out;
+}
+
+function highSiteStrategy(res) {
+  if (!res.secondary || !res.overlapLikely) return "single-metro";
+  const d = res.gapKm ?? 999;
+  if (d <= 10)  return "dual-metro";
+  if (d >= 28)  return "state-only";
+  return "single-metro";
+}
+
+function computeRecommendation(res, repeaterType, selectedMetros = []) {
+  const pA   = res.primary.ancestry;
+  const pTag = res.primary.tag;
+  const extra      = res.extraTags;
+  const extraNotes = res.extraNotes;
+
+  const nearBoundary = res.secondary && res.overlapLikely &&
+    res.secondary.ancestry[3] !== undefined &&
+    res.secondary.ancestry[3] === pA[3];
+
+  if (repeaterType === "residential") {
+    const tags  = [...pA];
+    const notes = ["Home profile — full ancestry for the selected local area."];
+    if (nearBoundary) {
+      tags.push(res.secondary.tag);
+      notes.push(`Boundary overlap detected — dual local carry added (${pTag} + ${res.secondary.tag}).`);
+    }
+    tags.push(...extra);
+    return { strategy: nearBoundary ? "dual-metro" : "single-metro",
+             tags: unique(tags), notes: [...notes, ...extraNotes] };
+  }
+
+  if (repeaterType === "urban") {
+    const tags  = [...pA];
+    const notes = ["Urban infrastructure — one metro with full ancestry."];
+    if (res.secondary && res.overlapLikely) {
+      tags.push(res.secondary.tag);
+      notes.push(`Dual-carry added — point is in overlapping coverage (${pTag} + ${res.secondary.tag}).`);
+    }
+    tags.push(...extra);
+    return { strategy: tags.length > pA.length ? "dual-metro" : "single-metro",
+             tags: unique(tags), notes: [...notes, ...extraNotes] };
+  }
+
+  if (repeaterType === "high-site") {
+    const metros = selectedMetros.length > 0 ? selectedMetros : [pTag];
+    const allTags = [];
+    for (const tag of metros) allTags.push(...ancestryFor(tag));
+    allTags.push(...extra);
+    const tags = unique(allTags);
+    if (metros.length > 1) {
+      return { strategy: "multi-metro", tags,
+               notes: [`High-site serving ${metros.length} metro areas: ${metros.join(", ")}.`, ...extraNotes] };
+    }
+    return { strategy: "single-metro", tags,
+             notes: ["High-site — single metro affiliation with full ancestry.", ...extraNotes] };
+  }
+
+  return { strategy: "single-metro", tags: unique(pA), notes: [] };
+}
+
+// ── Command builder ───────────────────────────────────────────────────────────
+
+// Build the token sequence for a single `region def` command (firmware 1.16+).
+// tags must be in root-to-leaf order as produced by unique(ancestryFor(...)).
+// Each token is either "tag" (cursor moves to tag) or "tag|jump" (create tag,
+// then reposition cursor to the named existing region).
+function buildRegionDefTokens(tags) {
+  const tokens = [];
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i];
+    if (i === tags.length - 1) {
+      tokens.push(tag);  // last token — no jump needed
+    } else {
+      const nextParent = HIERARCHY[tags[i + 1]]?.parent ?? "*";
+      // If the next tag's parent IS this tag, the cursor will naturally land here.
+      // Otherwise emit tag|nextParent so the cursor is positioned for the next tag.
+      tokens.push(nextParent === tag ? tag : `${tag}|${nextParent}`);
+    }
+  }
+  return tokens;
+}
+
+function buildCommandLines(tags, firmware) {
+  if (firmware === "1.16") {
+    const tokens = buildRegionDefTokens(tags);
+    const defText = `region def ${tokens.join(" ")}`;
+    const lines = [{ type: "def", text: defText, tokens, tooLong: defText.length > 160 }];
+    lines.push({ type: "save" });
+    return lines;
+  }
+
+  const lines = [];
+  const added = new Set();
+  for (const tag of tags) {
+    if (added.has(tag)) continue;
+    const parent = HIERARCHY[tag]?.parent ?? null;
+    lines.push({ type: "put", tag, parent });
+    if (firmware === "1.14") lines.push({ type: "allowf", tag });
+    added.add(tag);
+  }
+  lines.push({ type: "save" });
+  return lines;
+}
+
+function rawText(lines) {
+  return lines.map(l => {
+    if (l.type === "def")    return l.text;
+    if (l.type === "put")    return l.parent ? `region put ${l.tag} ${l.parent}` : `region put ${l.tag}`;
+    if (l.type === "allowf") return `region allowf ${l.tag}`;
+    return "region save";
+  }).join("\n");
+}
+
+function perLineHtml(lines) {
+  return lines.map(l => {
+    let inner, raw;
+    if (l.type === "def") {
+      const tokenHtml = l.tokens.map(t => {
+        const [name, jump] = t.split("|");
+        return `<span class="c-tag">${name}</span>${jump ? `<span class="c-par">|${jump}</span>` : ""}`;
+      }).join(" ");
+      inner = `<span class="c-kw">region def</span> ${tokenHtml}`;
+      raw   = l.text;
+      if (l.tooLong) inner += ` <span title="Command may exceed 160-char serial limit — use v1.15 mode if this causes issues" style="color:var(--gold-warm);cursor:help">⚠</span>`;
+    } else if (l.type === "put") {
+      const par = l.parent ? ` <span class="c-par">${l.parent}</span>` : "";
+      inner = `<span class="c-kw">region put</span> <span class="c-tag">${l.tag}</span>${par}`;
+      raw   = l.parent ? `region put ${l.tag} ${l.parent}` : `region put ${l.tag}`;
+    } else if (l.type === "allowf") {
+      inner = `<span class="c-af">region allowf ${l.tag}</span>`;
+      raw   = `region allowf ${l.tag}`;
+    } else {
+      inner = `<span class="c-save">region save</span>`;
+      raw   = "region save";
+    }
+    return `<div class="cmd-line" data-cmd="${esc(raw)}" title="Click to copy">${inner}<span class="cmd-copy-icon" aria-hidden="true">⎘</span></div>`;
+  }).join("");
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+
+const S = {
+  geocodedName: "",
+  lat: null, lon: null,
+  resolution: null,
+  candidateTag: null,
+  repeaterType: null,
+  selectedMetros: [],
+  firmware: "1.15"
+};
+
+function buildMetroSection() {
+  const preselected = new Set((S.resolution?.top5 ?? []).slice(0, 2).map(e => e.seed.tag));
+  $("metro-groups").innerHTML = METRO_GROUPS.map(group =>
+    `<div class="metro-group">
+       <div class="metro-group-label">${esc(group.label)}</div>
+       <div class="metro-chips">${group.tags.map(tag => {
+         const label = HIERARCHY[tag]?.label ?? tag;
+         const chk   = preselected.has(tag) ? " checked" : "";
+         return `<label class="metro-chip">
+           <input type="checkbox" name="metro" value="${tag}"${chk}>
+           <code>${tag}</code> ${esc(label)}
+         </label>`;
+       }).join("")}</div>
+     </div>`
+  ).join("");
+  S.selectedMetros = [...preselected];
+  $("metro-groups").onchange = () => {
+    S.selectedMetros = [...document.querySelectorAll("#metro-groups input:checked")].map(cb => cb.value);
+    $("next-2").disabled = S.selectedMetros.length === 0;
+  };
+}
+
+// ── UI helpers ────────────────────────────────────────────────────────────────
+
+const $  = id => document.getElementById(id);
+const esc = s => String(s)
+  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function show(id) { $(id).classList.remove("hidden"); }
+function hide(id) { $(id).classList.add("hidden"); }
+
+function setProgress(step) {
+  const labels = ["", "Location", "Type", "Firmware"];
+  for (let i = 1; i <= 3; i++) {
+    const dot  = $(`dot-${i}`);
+    const line = $(`line-${i}`);
+    dot.classList.remove("active","done");
+    const lbl = dot.querySelector(".dot-label");
+    if (i < step) {
+      dot.classList.add("done");
+      dot.childNodes[0].textContent = "✓";
+      if (lbl) lbl.textContent = labels[i];
+    } else if (i === step) {
+      dot.classList.add("active");
+      dot.childNodes[0].textContent = String(i);
+      if (lbl) lbl.textContent = labels[i];
+    } else {
+      dot.childNodes[0].textContent = String(i);
+      if (lbl) lbl.textContent = labels[i];
+    }
+    if (line) line.classList.toggle("done", i < step);
+  }
+}
+
+function showStep(n) {
+  ["step-1","step-2","step-3","step-result"].forEach(id => hide(id));
+  if (n === "result") { show("step-result"); return; }
+  show(`step-${n}`);
+  setProgress(n);
+}
+
+function setStatus(msg, type) {
+  $("loc-status").innerHTML = msg
+    ? `<div class="status-msg ${type}" role="alert">${msg}</div>`
+    : "";
+}
+
+// ── Geocoding ─────────────────────────────────────────────────────────────────
+
+async function geocode(query) {
+  const url = "https://nominatim.openstreetmap.org/search?" +
+    new URLSearchParams({ q: query, format: "json", limit: "1", countrycodes: "us,ca" });
+  const res = await fetch(url, { headers: { "Accept-Language": "en-US,en" } });
+  if (!res.ok) throw new Error("Geocoding service error");
+  const data = await res.json();
+  if (!data.length) throw new Error("No matching location found");
+  const parts = data[0].display_name.split(",").map(s => s.trim());
+  const name  = parts.slice(0, Math.min(3, parts.length)).join(", ");
+  return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), name };
+}
+
+// ── Results renderer ──────────────────────────────────────────────────────────
+
+const STRATEGY_LABELS = {
+  "single-metro": "single metro",
+  "dual-metro":   "dual metro",
+  "state-only":   "state / province only",
+  "multi-metro":  "multi-metro"
+};
+
+const TYPE_LABELS = {
+  "residential": "Home / Residential",
+  "urban":       "Urban Infrastructure",
+  "high-site":   "Mountaintop / High-Site"
+};
+
+function renderResult(res, rec, firmware) {
+  const container = $("result-content");
+  const lines     = buildCommandLines(rec.tags, firmware);
+
+  // Location summary
+  const locHtml = `
+    <div class="result-loc">
+      <div class="pin">📍</div>
+      <div>
+        <div class="name">${esc(S.geocodedName)}</div>
+        <div class="region">
+          ${esc(res.primary.label)}
+          &nbsp;<code>${res.primary.tag}</code>
+          <span class="strategy-badge">${esc(STRATEGY_LABELS[rec.strategy] ?? rec.strategy)}</span>
+        </div>
+      </div>
+    </div>`;
+
+  // Ancestry breadcrumb
+  const breadHtml = (() => {
+    const all  = res.primary.ancestry;
+    const extra = rec.tags.filter(t => !all.includes(t));
+    const crumbs = all.map((t, i) => {
+      const cls = i === all.length - 1 ? "crumb leaf" : "crumb";
+      return `<span class="${cls}">${t}</span>`;
+    }).join('<span class="sep" aria-hidden="true"> › </span>');
+    const extras = extra.map(t => `<span class="crumb extra">${t}</span>`).join("");
+    return `<div class="breadcrumb" title="Region ancestry chain">${crumbs}${extras ? '<span class="sep" aria-hidden="true"> + </span>' + extras : ""}</div>`;
+  })();
+
+  // Commands
+  const defLine = lines.find(l => l.type === "def");
+  const fwNote = firmware === "1.16"
+    ? `<div class="note">Firmware v1.16.0+ — <code>region def</code> defines the full hierarchy in one command.${defLine?.tooLong ? " <strong>⚠ Command is long — if your device rejects it, switch to v1.15 mode.</strong>" : ""}</div>`
+    : firmware === "1.14"
+    ? `<div class="note warn">Firmware v1.14.x — <code>region allowf</code> commands are included after each <code>region put</code>. Send each command on a separate line.</div>`
+    : `<div class="note">Firmware v1.15.0+ — <code>region put</code> enables flooding automatically. Send each command on a separate line.</div>`;
+
+  const notesHtml = rec.notes.length
+    ? `<div class="notes">${rec.notes.map(n => `<div class="note">${esc(n)}</div>`).join("")}</div>`
+    : "";
+
+  container.innerHTML = locHtml + breadHtml +
+    `<div class="cmds-header">
+       <span>CLI Commands · ${esc(TYPE_LABELS[S.repeaterType] ?? S.repeaterType)}</span>
+       <button class="copy-btn" id="copy-btn" title="Copy commands to clipboard">Copy</button>
+     </div>
+     <pre class="commands" id="cmd-pre">${perLineHtml(lines)}</pre>
+     <div class="notes" style="margin-top:0.65rem">${fwNote}</div>
+     ${notesHtml}`;
+
+  // Clipboard
+  const raw = rawText(lines);
+  $("copy-btn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(raw);
+    } catch {
+      const range = document.createRange();
+      range.selectNodeContents($("cmd-pre"));
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      document.execCommand("copy");
+      sel.removeAllRanges();
+    }
+    const btn = $("copy-btn");
+    btn.textContent = "Copied ✓";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2200);
+  });
+
+  // Per-line copy
+  $("cmd-pre").addEventListener("click", async e => {
+    const line = e.target.closest(".cmd-line");
+    if (!line) return;
+    const icon = line.querySelector(".cmd-copy-icon");
+    try { await navigator.clipboard.writeText(line.dataset.cmd); } catch { /* silent */ }
+    line.classList.add("line-copied");
+    if (icon) icon.textContent = "✓";
+    setTimeout(() => {
+      line.classList.remove("line-copied");
+      if (icon) icon.textContent = "⎘";
+    }, 1200);
+  });
+}
+
+// ── Step 1: Location ──────────────────────────────────────────────────────────
+
+function showCandidates(top5) {
+  const list = $("candidate-list");
+  list.innerHTML = top5.map((entry, i) => {
+    const ancestry = ancestryFor(entry.seed.tag);
+    const context  = ancestry.slice(0, -1).map(t => HIERARCHY[t]?.label ?? t).join(" › ");
+    return `<div class="cand-card${i === 0 ? " selected" : ""}"
+                 role="button" tabindex="0" data-tag="${entry.seed.tag}" aria-pressed="${i === 0}">
+      <div class="cand-rank">${i + 1}</div>
+      <div class="cand-info">
+        <div class="cand-label">${esc(entry.seed.label)} <code>${entry.seed.tag}</code></div>
+        <div class="cand-sub">${esc(context)}</div>
+      </div>
+      <div class="cand-km">~${Math.round(entry.km)} km</div>
+    </div>`;
+  }).join("");
+
+  S.candidateTag = top5[0].seed.tag;
+
+  list.querySelectorAll(".cand-card").forEach(card => {
+    const select = () => {
+      list.querySelectorAll(".cand-card").forEach(c => {
+        c.classList.remove("selected"); c.setAttribute("aria-pressed","false");
+      });
+      card.classList.add("selected"); card.setAttribute("aria-pressed","true");
+      S.candidateTag = card.dataset.tag;
+    };
+    card.addEventListener("click", select);
+    card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(); } });
+  });
+
+  $("found-place-name").textContent = S.geocodedName;
+  hide("loc-form");
+  show("candidates");
+}
+
+async function doLocate() {
+  const val = $("loc-input").value.trim();
+  if (!val) { setStatus("Please enter a city name or ZIP / postal code.", "error"); return; }
+
+  const btn = $("locate-btn");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Looking up…';
+  setStatus("", "");
+
+  try {
+    const geo = await geocode(val);
+    S.lat          = geo.lat;
+    S.lon          = geo.lon;
+    S.geocodedName = geo.name;
+
+    const initial = resolveLocation(geo.lat, geo.lon);
+
+    if (initial.nearestKm > 450) {
+      setStatus(
+        "This tool covers the Pacific Northwest (WA, OR, ID, MT, BC). " +
+        "That location appears to be outside the covered area — try a city in the region.",
+        "warning"
+      );
+      return;
+    }
+
+    showCandidates(initial.top5);
+  } catch (err) {
+    setStatus(
+      `Couldn't find that location — try a nearby city name or check the spelling. <em>(${esc(err.message)})</em>`,
+      "error"
+    );
+  } finally {
+    btn.disabled = false; btn.textContent = "Next →";
+  }
+}
+
+$("locate-btn").addEventListener("click", doLocate);
+$("loc-input").addEventListener("keydown", e => { if (e.key === "Enter") doLocate(); });
+
+$("change-location-btn").addEventListener("click", () => {
+  hide("candidates");
+  show("loc-form");
+  $("loc-input").focus();
+});
+
+$("confirm-loc-btn").addEventListener("click", () => {
+  S.resolution = resolveLocation(S.lat, S.lon, S.candidateTag);
+  showStep(2);
+});
+
+// ── Step 2: Repeater type ─────────────────────────────────────────────────────
+
+document.querySelectorAll(".type-card").forEach(card => {
+  const select = () => {
+    document.querySelectorAll(".type-card").forEach(c => {
+      c.classList.remove("selected"); c.setAttribute("aria-pressed","false");
+    });
+    card.classList.add("selected"); card.setAttribute("aria-pressed","true");
+    S.repeaterType = card.dataset.type;
+    if (S.repeaterType === "high-site") {
+      buildMetroSection();
+      show("multi-metro-section");
+      $("next-2").disabled = S.selectedMetros.length === 0;
+    } else {
+      hide("multi-metro-section");
+      S.selectedMetros = [];
+      $("next-2").disabled = false;
+    }
+  };
+  card.addEventListener("click", select);
+  card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(); } });
+});
+
+$("next-2").addEventListener("click", () => { if (S.repeaterType) showStep(3); });
+$("back-2").addEventListener("click", () => showStep(1));
+
+// ── Step 3: Firmware ──────────────────────────────────────────────────────────
+
+document.querySelectorAll(".fw-btn").forEach(btn => {
+  const select = () => {
+    document.querySelectorAll(".fw-btn").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    S.firmware = btn.dataset.fw;
+  };
+  btn.addEventListener("click", select);
+  btn.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(); } });
+});
+
+$("back-3").addEventListener("click", () => showStep(2));
+
+$("generate-btn").addEventListener("click", () => {
+  const rec = computeRecommendation(S.resolution, S.repeaterType, S.selectedMetros);
+  showStep("result");
+  renderResult(S.resolution, rec, S.firmware);
+});
+
+// ── Reset / edit ──────────────────────────────────────────────────────────────
+
+function resetAll() {
+  Object.assign(S, { geocodedName:"", lat:null, lon:null, resolution:null, candidateTag:null, repeaterType:null, selectedMetros:[], firmware:"1.15" });
+  $("loc-input").value = "";
+  setStatus("", "");
+  hide("candidates"); show("loc-form");
+  hide("multi-metro-section");
+  document.querySelectorAll(".type-card").forEach(c => {
+    c.classList.remove("selected"); c.setAttribute("aria-pressed","false");
+  });
+  document.querySelectorAll(".fw-btn").forEach(b => b.classList.remove("selected"));
+  document.querySelector('[data-fw="1.15"]').classList.add("selected");
+  $("next-2").disabled = true;
+  showStep(1);
+}
+
+$("start-over").addEventListener("click", resetAll);
+$("edit-type").addEventListener("click", () => showStep(2));
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+
+showStep(1);
+</script>
+</body>
+</html>
