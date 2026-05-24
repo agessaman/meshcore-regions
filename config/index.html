@@ -812,7 +812,7 @@ function computeRecommendation(res, repeaterType, selectedMetros = []) {
 
   if (repeaterType === "high-site") {
     const metros = selectedMetros.length > 0 ? selectedMetros : [pTag];
-    const allTags = [];
+    const allTags = [...pA];
     for (const tag of metros) allTags.push(...ancestryFor(tag));
     allTags.push(...extra);
     const tags = unique(allTags);
