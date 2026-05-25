@@ -715,7 +715,7 @@ function rankSeeds(lat, lon) {
   }).sort((a, b) => a.score - b.score);
 }
 
-function resolveLocation(lat, lon, forcePrimaryTag = null) {
+function resolveLocation(lat, lon, forcePrimaryTag = null, stateOrProvince = null) {
   const ranked = rankSeeds(lat, lon);
 
   const primaryEntry = forcePrimaryTag
@@ -725,12 +725,25 @@ function resolveLocation(lat, lon, forcePrimaryTag = null) {
   const inCount   = ranked.filter(r => r.inRadius).length;
   const overlap   = inCount > 1;
 
-  // Inland Empire cross-border: recommend ie when geg and cda are both top-2
   const top2 = new Set([primaryEntry.seed.tag, secondary?.seed.tag]);
-  const extraTags  = (top2.has("geg") && top2.has("cda")) ? ["ie"] : [];
-  const extraNotes = extraTags.length
-    ? ["Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."]
-    : [];
+  const extraTags  = [];
+  const extraNotes = [];
+
+  // Inland Empire cross-border: recommend ie when geg and cda are both top-2
+  if (top2.has("geg") && top2.has("cda")) {
+    extraTags.push("ie");
+    extraNotes.push(
+      "Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."
+    );
+  }
+
+  // Clark County / SW Washington: Portland metro from the WA side carries wa + sw-wa
+  if (stateOrProvince === "Washington" && primaryEntry.seed.tag === "pdx") {
+    extraTags.push("wa", "sw-wa");
+    extraNotes.push(
+      "Washington side of Portland metro — wa and sw-wa added for state-scoped traffic (Clark County dual-carry with pdx)."
+    );
+  }
 
   return {
     nearestKm:    ranked[0].km,
@@ -910,6 +923,7 @@ function perLineHtml(lines) {
 
 const S = {
   geocodedName: "",
+  stateOrProvince: null,
   lat: null, lon: null,
   resolution: null,
   candidateTag: null,
@@ -989,14 +1003,23 @@ function setStatus(msg, type) {
 
 async function geocode(query) {
   const url = "https://nominatim.openstreetmap.org/search?" +
-    new URLSearchParams({ q: query, format: "json", limit: "1", countrycodes: "us,ca" });
+    new URLSearchParams({
+      q: query, format: "json", limit: "1", countrycodes: "us,ca", addressdetails: "1"
+    });
   const res = await fetch(url, { headers: { "Accept-Language": "en-US,en" } });
   if (!res.ok) throw new Error("Geocoding service error");
   const data = await res.json();
   if (!data.length) throw new Error("No matching location found");
   const parts = data[0].display_name.split(",").map(s => s.trim());
   const name  = parts.slice(0, Math.min(3, parts.length)).join(", ");
-  return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), name };
+  const addr  = data[0].address ?? {};
+  const stateOrProvince = addr.state ?? addr.province ?? null;
+  return {
+    lat: parseFloat(data[0].lat),
+    lon: parseFloat(data[0].lon),
+    name,
+    stateOrProvince
+  };
 }
 
 // ── Results renderer ──────────────────────────────────────────────────────────
@@ -1148,11 +1171,12 @@ async function doLocate() {
 
   try {
     const geo = await geocode(val);
-    S.lat          = geo.lat;
-    S.lon          = geo.lon;
-    S.geocodedName = geo.name;
+    S.lat              = geo.lat;
+    S.lon              = geo.lon;
+    S.geocodedName     = geo.name;
+    S.stateOrProvince  = geo.stateOrProvince;
 
-    const initial = resolveLocation(geo.lat, geo.lon);
+    const initial = resolveLocation(geo.lat, geo.lon, null, geo.stateOrProvince);
 
     if (initial.nearestKm > 450) {
       setStatus(
@@ -1184,7 +1208,7 @@ $("change-location-btn").addEventListener("click", () => {
 });
 
 $("confirm-loc-btn").addEventListener("click", () => {
-  S.resolution = resolveLocation(S.lat, S.lon, S.candidateTag);
+  S.resolution = resolveLocation(S.lat, S.lon, S.candidateTag, S.stateOrProvince);
   showStep(2);
 });
 
@@ -1237,7 +1261,7 @@ $("generate-btn").addEventListener("click", () => {
 // ── Reset / edit ──────────────────────────────────────────────────────────────
 
 function resetAll() {
-  Object.assign(S, { geocodedName:"", lat:null, lon:null, resolution:null, candidateTag:null, repeaterType:null, selectedMetros:[], firmware:"1.15" });
+  Object.assign(S, { geocodedName:"", stateOrProvince:null, lat:null, lon:null, resolution:null, candidateTag:null, repeaterType:null, selectedMetros:[], firmware:"1.15" });
   $("loc-input").value = "";
   setStatus("", "");
   hide("candidates"); show("loc-form");
