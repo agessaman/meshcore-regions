@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8100", "-d", "config"],
       "port": 8100
+    },
+    {
+      "name": "explainer",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8200", "-d", "explainer"],
+      "port": 8200
     }
   ]
 }
