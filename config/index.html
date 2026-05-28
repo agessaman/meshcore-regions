@@ -676,6 +676,8 @@
   Covers WA · OR · ID · MT · BC &nbsp;·&nbsp;
   Based on <a href="https://gessaman.com/meshcore/regions/" target="_blank" rel="noopener">PNW MeshCore Regions</a> &nbsp;·&nbsp;
   Geocoding by <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap / Nominatim</a>
+  &nbsp;·&nbsp;
+  Canadian postal codes via <a href="https://geocoder.ca" target="_blank" rel="noopener">geocoder.ca</a>
 </footer>
 
 <script src="data.js"></script>
@@ -1001,25 +1003,74 @@ function setStatus(msg, type) {
 
 // ── Geocoding ─────────────────────────────────────────────────────────────────
 
-async function geocode(query) {
-  const url = "https://nominatim.openstreetmap.org/search?" +
-    new URLSearchParams({
-      q: query, format: "json", limit: "1", countrycodes: "us,ca", addressdetails: "1"
-    });
+const CA_PROVINCES = {
+  AB: "Alberta", BC: "British Columbia", MB: "Manitoba",
+  NB: "New Brunswick", NL: "Newfoundland and Labrador",
+  NS: "Nova Scotia", NT: "Northwest Territories", NU: "Nunavut",
+  ON: "Ontario", PE: "Prince Edward Island", QC: "Quebec",
+  SK: "Saskatchewan", YT: "Yukon"
+};
+
+function parseCanadianPostalCode(query) {
+  const compact = query.trim().replace(/[\s-]+/g, "").toUpperCase();
+  if (!/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(compact)) return null;
+  return { compact, formatted: `${compact.slice(0, 3)} ${compact.slice(3)}` };
+}
+
+function parseNominatimHit(hit) {
+  const parts = hit.display_name.split(",").map(s => s.trim());
+  const name  = parts.slice(0, Math.min(3, parts.length)).join(", ");
+  const addr  = hit.address ?? {};
+  return {
+    lat: parseFloat(hit.lat),
+    lon: parseFloat(hit.lon),
+    name,
+    stateOrProvince: addr.state ?? addr.province ?? null
+  };
+}
+
+async function nominatimSearch(params) {
+  const url = "https://nominatim.openstreetmap.org/search?" + new URLSearchParams({
+    format: "json", limit: "1", addressdetails: "1", ...params
+  });
   const res = await fetch(url, { headers: { "Accept-Language": "en-US,en" } });
   if (!res.ok) throw new Error("Geocoding service error");
   const data = await res.json();
-  if (!data.length) throw new Error("No matching location found");
-  const parts = data[0].display_name.split(",").map(s => s.trim());
-  const name  = parts.slice(0, Math.min(3, parts.length)).join(", ");
-  const addr  = data[0].address ?? {};
-  const stateOrProvince = addr.state ?? addr.province ?? null;
+  return data.length ? parseNominatimHit(data[0]) : null;
+}
+
+async function geocodeCanadianPostal({ compact, formatted }) {
+  const fromPostal = await nominatimSearch({ postalcode: formatted, country: "ca" });
+  if (fromPostal) return fromPostal;
+
+  const fromQuery = await nominatimSearch({ q: formatted, countrycodes: "ca" });
+  if (fromQuery) return fromQuery;
+
+  const res = await fetch(`https://geocoder.ca/?locate=${encodeURIComponent(compact)}&json=1`);
+  if (!res.ok) throw new Error("Geocoding service error");
+  const data = await res.json();
+  const lat = parseFloat(data.latt);
+  const lon = parseFloat(data.longt);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    throw new Error("No matching location found");
+  }
+  const city     = data.standard?.city;
+  const provAbbr = data.standard?.prov;
+  const provName = provAbbr ? (CA_PROVINCES[provAbbr] ?? provAbbr) : null;
   return {
-    lat: parseFloat(data[0].lat),
-    lon: parseFloat(data[0].lon),
-    name,
-    stateOrProvince
+    lat, lon,
+    name: [formatted, city, provName].filter(Boolean).join(", "),
+    stateOrProvince: provName
   };
+}
+
+async function geocode(query) {
+  const caPostal = parseCanadianPostalCode(query);
+  if (caPostal) return geocodeCanadianPostal(caPostal);
+
+  const hit = await nominatimSearch({ q: query, countrycodes: "us,ca" });
+  if (hit) return hit;
+  throw new Error("No matching location found");
 }
 
 // ── Results renderer ──────────────────────────────────────────────────────────
