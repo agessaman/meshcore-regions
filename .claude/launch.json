@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "docs",
+      "runtimeExecutable": "php",
+      "runtimeArgs": ["-S", "127.0.0.1:8300"],
+      "port": 8300
+    },
+    {
       "name": "config-tool",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8100", "-d", "config"],
