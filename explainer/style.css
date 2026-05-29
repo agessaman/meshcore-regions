@@ -70,6 +70,67 @@ a:hover { color: var(--green-dark); }
 }
 .skip-link:focus { top: 1rem; }
 
+/* ── Skip callout ──────────────────────────────────────────────────────────── */
+
+.skip-callout {
+  background: var(--surface);
+  border-top: 3px solid var(--gold);
+  padding: 1.25rem 1.5rem;
+}
+
+.skip-callout-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.skip-callout-icon {
+  color: var(--gold-warm);
+  flex-shrink: 0;
+}
+
+.skip-callout-text {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.95rem;
+}
+
+.skip-callout-text strong {
+  color: var(--text);
+}
+
+.skip-callout-text span {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.skip-callout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--green-dark);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.skip-callout-btn:hover {
+  background: var(--green);
+  color: #fff;
+}
+
 /* ── Section containers ────────────────────────────────────────────────────── */
 
 .explainer-section {

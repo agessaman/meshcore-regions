@@ -41,6 +41,23 @@
   </div>
 </header>
 
+<!-- Skip callout -->
+<div class="skip-callout">
+  <div class="skip-callout-inner">
+    <div class="skip-callout-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+    </div>
+    <div class="skip-callout-text">
+      <strong>Just want to configure your repeater?</strong>
+      <span>Skip the background — the Config Generator gives you ready-to-paste commands for your location.</span>
+    </div>
+    <a href="../config/" class="skip-callout-btn">
+      Config Generator
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</div>
+
 <!-- ════════════════════════════════════════════════════════════════════════════
      SECTION 1 — The Problem
      ════════════════════════════════════════════════════════════════════════ -->
@@ -160,7 +177,88 @@
 </section>
 
 <!-- ════════════════════════════════════════════════════════════════════════════
-     SECTION 3 — How Regions Work (hierarchy + scope demo)
+     SECTION 3 — Using Regions in the App
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<section class="explainer-section" id="using-in-app">
+  <div class="section-inner fade-in">
+    <h2 class="section-heading">Using Regions in the App</h2>
+    <p class="section-lead">Two steps: discover which regions are active around you, then scope a channel so your messages stay where they belong.</p>
+
+    <div class="walkthrough">
+
+      <!-- Step 1 -->
+      <div class="walkthrough-step">
+        <div class="step-number">1</div>
+
+        <div class="step-content">
+          <h3>Discover Nearby Regions</h3>
+          <div class="app-controls-hint">
+            <div class="app-controls-img-wrap">
+              <img src="meshcore_app_controls.png" alt="App top-right controls showing antenna, settings, and menu icons">
+            </div>
+            <span>Tap <span class="ui-key">⋮</span> (top-right) to open the menu</span>
+          </div>
+          <p>From the main screen, tap the <strong><span class="ui-key">⋮</span> menu</strong> (top-right), then choose
+            <span class="step-nav">Tools</span> →
+            <span class="step-nav">↳ Discover Regions</span>.
+            The companion scans the mesh and lists every region tag carried by repeaters it can hear.
+          </p>
+          <p>The example here shows a Snohomish County node that responded with the full branch of its hierarchy: <code>west</code> → <code>pnw</code> → <code>wa</code> → <code>w-wa</code> → <code>sea</code>. The repeater also carries the <code>snoco</code> tag because it is in the Snohomish County part of the Seattle metro area.</p>
+          <p>Use this list to confirm which tags are actually live near you before setting a channel scope.</p>
+        </div>
+
+        <div class="step-screenshots">
+          <figure class="phone-screenshot">
+            <img src="tools_discover_regions_with_box.png" alt="Tools menu with Discover Regions highlighted" loading="lazy">
+            <figcaption>Tools → Discover Regions</figcaption>
+          </figure>
+          <figure class="phone-screenshot">
+            <img src="region_discovery_in_progress.png" alt="Discover Regions results: 6 regions found — pnw, wa, snoco, west, w-wa, sea" loading="lazy">
+            <figcaption>6 regions discovered</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="walkthrough-step">
+        <div class="step-number">2</div>
+
+        <div class="step-content">
+          <h3>Set a Channel's Region Scope</h3>
+          <p>Open the channel you want to scope, tap its <strong><span class="ui-key">⋮</span> menu</strong>, and choose
+            <span class="step-nav">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="22" x2="12" y2="13"/><path d="M8.5 10.5a5 5 0 0 0 0 7"/><path d="M15.5 10.5a5 5 0 0 1 0 7"/><path d="M5 7a10 10 0 0 0 0 13"/><path d="M19 7a10 10 0 0 1 0 13"/><circle cx="12" cy="13" r="1.2" fill="currentColor" stroke="none"/></svg>
+              Set Region Scope
+            </span>.
+            Type in the region tag — for a Public channel, your metro (<code>sea</code>, <code>pdx</code>) or sub-region (<code>w-wa</code>, <code>or</code>) is the right starting point.
+          </p>
+          <p>Once set, the region appears as a subtitle under the channel name (<em>Region: pnw</em>). From that point on, messages sent on the channel are only forwarded by repeaters that carry that tag — keeping traffic local and preserving bandwidth in areas that don't need it.</p>
+          <p>You can change or remove the scope at any time through the same menu.</p>
+        </div>
+
+        <div class="step-screenshots">
+          <figure class="phone-screenshot">
+            <img src="channel_set_region_scope.png" alt="Channel ⋮ menu with Set Region Scope option" loading="lazy">
+            <figcaption>⋮ → Set Region Scope</figcaption>
+          </figure>
+          <figure class="phone-screenshot">
+            <img src="channel_with_region_set.png" alt="Channel header now showing Region: pnw" loading="lazy">
+            <figcaption>Channel scoped to pnw</figcaption>
+          </figure>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="analogy-box">
+      <strong>Choosing the right scope:</strong> Start with your metro tag (<code>sea</code>, <code>pdx</code>) or sub-region tag (<code>w-wa</code>, <code>or</code>) for a Public channel — that covers your area without flooding the wider mesh. Step up to <code>pnw</code> or <code>west</code> only for messages that genuinely need to reach the whole network — broadcasts, emergencies, or cross-region coordination.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SECTION 4 — How Regions Work (hierarchy + scope demo)
      ════════════════════════════════════════════════════════════════════════ -->
 
 <section class="explainer-section" id="how-regions-work">
@@ -630,88 +728,7 @@
 </section>
 
 <!-- ════════════════════════════════════════════════════════════════════════════
-     SECTION 7 — Using Regions in the App
-     ════════════════════════════════════════════════════════════════════════ -->
-
-<section class="explainer-section" id="using-in-app">
-  <div class="section-inner fade-in">
-    <h2 class="section-heading">Using Regions in the App</h2>
-    <p class="section-lead">Two steps: discover which regions are active around you, then scope a channel so your messages stay where they belong.</p>
-
-    <div class="walkthrough">
-
-      <!-- Step 1 -->
-      <div class="walkthrough-step">
-        <div class="step-number">1</div>
-
-        <div class="step-content">
-          <h3>Discover Nearby Regions</h3>
-          <div class="app-controls-hint">
-            <div class="app-controls-img-wrap">
-              <img src="meshcore_app_controls.png" alt="App top-right controls showing antenna, settings, and menu icons">
-            </div>
-            <span>Tap <span class="ui-key">⋮</span> (top-right) to open the menu</span>
-          </div>
-          <p>From the main screen, tap the <strong><span class="ui-key">⋮</span> menu</strong> (top-right), then choose
-            <span class="step-nav">Tools</span> →
-            <span class="step-nav">↳ Discover Regions</span>.
-            The companion scans the mesh and lists every region tag carried by repeaters it can hear.
-          </p>
-          <p>The example here shows a Snohomish County node that responded with the full branch of its hierarchy: <code>west</code> → <code>pnw</code> → <code>wa</code> → <code>w-wa</code> → <code>sea</code>. The repeater also carries the <code>snoco</code> tag because it is in the Snohomish County part of the Seattle metro area.</p>
-          <p>Use this list to confirm which tags are actually live near you before setting a channel scope.</p>
-        </div>
-
-        <div class="step-screenshots">
-          <figure class="phone-screenshot">
-            <img src="tools_discover_regions_with_box.png" alt="Tools menu with Discover Regions highlighted" loading="lazy">
-            <figcaption>Tools → Discover Regions</figcaption>
-          </figure>
-          <figure class="phone-screenshot">
-            <img src="region_discovery_in_progress.png" alt="Discover Regions results: 6 regions found — pnw, wa, snoco, west, w-wa, sea" loading="lazy">
-            <figcaption>6 regions discovered</figcaption>
-          </figure>
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="walkthrough-step">
-        <div class="step-number">2</div>
-
-        <div class="step-content">
-          <h3>Set a Channel's Region Scope</h3>
-          <p>Open the channel you want to scope, tap its <strong><span class="ui-key">⋮</span> menu</strong>, and choose
-            <span class="step-nav">
-              <svg viewBox="0 0 24 24"><line x1="12" y1="22" x2="12" y2="13"/><path d="M8.5 10.5a5 5 0 0 0 0 7"/><path d="M15.5 10.5a5 5 0 0 1 0 7"/><path d="M5 7a10 10 0 0 0 0 13"/><path d="M19 7a10 10 0 0 1 0 13"/><circle cx="12" cy="13" r="1.2" fill="currentColor" stroke="none"/></svg>
-              Set Region Scope
-            </span>.
-            Type in the region tag — for a Public channel, your metro (<code>sea</code>, <code>pdx</code>) or sub-region (<code>w-wa</code>, <code>or</code>) is the right starting point.
-          </p>
-          <p>Once set, the region appears as a subtitle under the channel name (<em>Region: pnw</em>). From that point on, messages sent on the channel are only forwarded by repeaters that carry that tag — keeping traffic local and preserving bandwidth in areas that don't need it.</p>
-          <p>You can change or remove the scope at any time through the same menu.</p>
-        </div>
-
-        <div class="step-screenshots">
-          <figure class="phone-screenshot">
-            <img src="channel_set_region_scope.png" alt="Channel ⋮ menu with Set Region Scope option" loading="lazy">
-            <figcaption>⋮ → Set Region Scope</figcaption>
-          </figure>
-          <figure class="phone-screenshot">
-            <img src="channel_with_region_set.png" alt="Channel header now showing Region: pnw" loading="lazy">
-            <figcaption>Channel scoped to pnw</figcaption>
-          </figure>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="analogy-box">
-      <strong>Choosing the right scope:</strong> Start with your metro tag (<code>sea</code>, <code>pdx</code>) or sub-region tag (<code>w-wa</code>, <code>or</code>) for a Public channel — that covers your area without flooding the wider mesh. Step up to <code>pnw</code> or <code>west</code> only for messages that genuinely need to reach the whole network — broadcasts, emergencies, or cross-region coordination.
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════════════════════
-     SECTION 8 — CTA (excisable for standalone deployment)
+     SECTION 7 — CTA (excisable for standalone deployment)
      ════════════════════════════════════════════════════════════════════════ -->
 
 <!-- ===== TOOL LINKS — remove this section for standalone deployment ===== -->
