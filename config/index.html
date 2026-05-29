@@ -747,6 +747,18 @@ function resolveLocation(lat, lon, forcePrimaryTag = null, stateOrProvince = nul
     );
   }
 
+  // San Juan Islands (WA): nodes here often reach the wider mesh through
+  // Vancouver Island / BC nodes, so they land on a BC marine seed
+  // (salishmesh/southisland). Keep that BC tag and add WA ancestry too so
+  // Washington-scoped traffic still reaches them (dual-carry across the marine border).
+  if (stateOrProvince === "Washington" &&
+      (primaryEntry.seed.tag === "salishmesh" || primaryEntry.seed.tag === "southisland")) {
+    extraTags.push("wa", "w-wa");
+    extraNotes.push(
+      "San Juan Islands (WA) — wa and w-wa added for Washington-scoped traffic; the BC island tag is kept because San Juans nodes often mesh into the wider network through Vancouver Island / BC nodes (dual-carry)."
+    );
+  }
+
   return {
     nearestKm:    ranked[0].km,
     top5:         ranked.slice(0, 5),
