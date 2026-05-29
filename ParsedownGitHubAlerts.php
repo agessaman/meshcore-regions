@@ -38,6 +38,13 @@ class ParsedownGitHubAlerts extends Parsedown
         }
 
         if ($Line['text'][0] === '>' && preg_match('/^>[ ]?(.*)/', $Line['text'], $matches)) {
+            // A blank line followed by a new alert marker starts a separate
+            // alert — don't absorb it into this one.
+            if (isset($Block['interrupted'])
+                && preg_match('/^>[ ]?\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/i', $Line['text'])) {
+                return;
+            }
+
             if (isset($Block['interrupted'])) {
                 $Block['alertLines'][] = '';
                 unset($Block['interrupted']);

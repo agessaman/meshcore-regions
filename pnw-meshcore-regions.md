@@ -6,6 +6,9 @@ This document proposes a region naming scheme for the Pacific Northwest MeshCore
 
 The scheme prioritizes short, flat, human-readable names. The parent/child hierarchy is enforced by `region put` commands, not by encoding structure into the names themselves.
 
+> [!NOTE]
+> **Using a phone or client device and not running a repeater?** Region *tags* are configured only on repeaters, so most of this document — everything from [Repeater Configuration](#repeater-configuration) onward — doesn't apply to you. What you control is the **region scope on your outgoing traffic**, set in the Companion app: per channel via **Set Region Scope**, or for all flood packets via **Settings → Experimental Settings → Default Region Scope**. See [Using Regions in the App](explainer/#using-in-app). The rest of this document is reference material for repeater operators.
+
 ## Design Principles
 
 - **Short names**: Region names are purely administrative — they never appear in flood packets. But shorter names are easier to type in CLI, easier to remember, and conserve the 172-byte budget in the regions response payload. Three letters or fewer where possible.
@@ -223,6 +226,9 @@ A repeater only forwards scoped traffic if the transport code matches one of its
 ---
 
 ## Repeater Configuration
+
+> [!TIP]
+> Don't want to assemble the commands by hand? The [Config Generator](config/) builds a ready-to-paste chain of `region` commands your location — pick your area and copy the result straight to your repeater. The examples below show what it produces and explain the reasoning, so you can also verify or adjust the output.
 
 > [!WARNING]
 > On **firmware 1.14.0** (and earlier **1.14.x**), after each `region put` you must run **`region allowf <regionname>`** for every region that should appear in the flood list—match the names from your `put` chain (the same `region put` names used in the examples below).  
@@ -570,6 +576,55 @@ Traffic flow for a message scoped to `pnw`:
 
 ---
 
+## Urban Infrastructure and Neighborhood Repeaters
+
+Most repeaters in this mesh are not on mountaintops — they are indoor nodes, rooftop installs covering a neighborhood or a few city blocks. The [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters) section does not apply to them. For urban infrastructure and neighborhood nodes the configuration is simpler due to the network topology and geographic reach.
+
+### Always carry your full ancestry
+
+**Limited RF range is not a reason to strip tags.** A neighborhood repeater in Portland should carry the same ancestry chain as a Portland backbone node:
+
+```
+region put west
+region put pnw west
+region put or pnw
+region put pdx or
+region save
+```
+
+Tags carried: `west`, `pnw`, `or`, `pdx` (15 bytes)
+
+A repeater's tags do not control how far its traffic travels — that is set by each message's scope and the layout of the mesh, not by your antenna (the same principle as [RF reach is not scope boundary](#the-core-principle), seen from the other side). Carrying `west` and `pnw` does not turn a small node into a region-wide transmitter; it only lets you relay the wide-scope messages that are already flooding the mesh, and those are rare by design. The airtime cost is minimal, and it keeps your corner of the mesh connected to region-wide conversations.
+
+Stripping tags, by contrast, only causes harm. If you omit `or`, your node will not forward an `or`-scoped message — so any device that reaches the mesh only through you is cut off from `or` traffic in both directions, and you leave a hole in `or` coverage for the neighbors behind you. Your role is to be a complete on-ramp for the devices near you, not to gatekeep which scopes pass through.
+
+### Choosing a channel scope
+
+**Tag configuration and channel scope are independent choices.** Carry the full ancestry on your repeater; choose the scope on each channel to match how far you want that conversation to travel.
+
+For everyday chat in a metro area, scope your Public channel to your local metro tag. A `pdx`-scoped message from a low-range node only has to reach one neighboring repeater that carries `pdx`; from there it propagates across the metro through every `pdx`-carrying repeater — including both the Oregon and Clark County WA sides. If you want to talk to people across Oregon, scope to `or`; if you want to reach the whole Pacific Northwest, scope to `pnw`. The point is to match the scope to the intended audience — not to default to the widest available scope for general local chat, which sends neighborhood conversation through repeaters in Salem, Eugene, Medford, and beyond that have no stake in it.
+
+| Scope | Reaches | Use for |
+|---|---|---|
+| `pdx`, `sea`, `bli`, … | One metro area | General public chat, local coordination |
+| `or`, `wa`, `bc`, … | One state or province | Statewide announcements, inter-city coordination |
+| `pnw` | Pacific Northwest | Cross-regional emergencies, PNW-wide nets |
+| `west` | Entire mesh | Mesh-wide announcements only |
+
+Scope as narrowly as the conversation warrants. Metro scope for local chat is the right default.
+
+### Border proximity
+
+Being geographically close to a state or provincial line does not automatically make a repeater a border node. The deciding factor is RF overlap: **if your node can only hear repeaters on one side of the border, carry only that side's tags.**
+
+If you are in Clark County WA and your node can hear Portland metro repeaters across the Columbia River, carrying `pdx` lets you relay Portland metro traffic on both sides — and that is a community choice as much as an RF one. Because regions are matched per-tag, not [hierarchically](#the-hierarchy-is-administrative-not-functional), the `pdx` metro tag does not require also carrying `or`: a Clark County node can join the Portland metro conversation without relaying statewide Oregon traffic. The [Clark County dual-carry configuration](#example-border-repeater-near-portland-clark-county-wa) is the fuller version that carries `or` and the Washington ancestry alongside `pdx`; omit `or` if you want the metro tie without the statewide one.
+
+If your RF footprint stays entirely on your own side of the line, the standard single-state config is correct. Proximity to a line on a map is not, by itself, a reason to add a neighboring *state* tag — but a genuine community tie across it can justify carrying a neighboring *metro* tag like `pdx`.
+
+The US/Canada border follows the same principle, but with one important difference: there is no cross-border community tag for the Bellingham–Vancouver corridor the way `pdx` bridges the Columbia or `ie` bridges Spokane and Coeur d'Alene. Border crossing there happens at the backbone level — high-site repeaters within RF range across the line relay `pnw`-scoped (or `west`-scoped) traffic between the two countries (see the [Seattle-to-Vancouver corridor example](#example-seattle-to-vancouver-corridor)). A Bellingham repeater carries `west`, `pnw`, `wa`, `w-wa`, `bli` — no `bc` tags. A Metro Vancouver repeater carries `west`, `pnw`, `bc`, `swbc` — no `wa` tags. So a `wa`- or `bc`-scoped message won't propagate beyond its own country — it stops at the first repeater across the line that doesn't carry the tag — while `pnw` reaches both. Neither side's urban nodes need to carry the other country's state or provincial tags.
+
+---
+
 ## Future Extensions
 
 ### California
@@ -647,7 +702,7 @@ flood_scopes = #sle, #wv
 - **Backward compatible**: Unscoped messages flood everywhere via `*`. Regions are opt-in for traffic reduction.
 - **Minimum config**: Every repeater should carry its full ancestry. Because region matching is independent per name (see [The hierarchy is administrative, not functional](#the-hierarchy-is-administrative-not-functional)), skipping a level means that scope won't be forwarded. A Seattle repeater carries `west`, `pnw`, `wa`, `w-wa`, `sea` (5 tags). A Salem repeater carries `west`, `pnw`, `or`, `wv`, `sle` (5 tags). Cross-border community tags like `ie` are additional — they sit alongside the state ancestry, not in place of it.
 - **Firmware requirement**: MeshCore 1.10.0 or newer. Older firmware ignores transport codes entirely.
-- **Companion app**: As of early 2026, scope selection in the Companion app is limited. CLI and meshcore-cli support scoping fully. Broader app support is expected in future releases.
+- **Companion app**: The Companion app supports region scoping for client traffic in two ways: a per-channel scope (**Set Region Scope** on the channel) and an app-wide default applied to all flood packets it sends (**Settings → Experimental Settings → Default Region Scope**). It also includes a **Tools → Discover Regions** scan to see which region tags are live nearby. CLI and meshcore-cli expose the full scoping and repeater-configuration commands. Note that region *tags* (`region put`) are still configured only on repeaters, not clients.
 - **Community agreement**: Local area codes (the fourth level) should be agreed upon by the local mesh community. This document provides a starting point; the names should be ratified through Puget Mesh, Cascadia Mesh, PDX Mesh, Salish Mesh, and other local groups.
 
 ---
@@ -715,6 +770,13 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-05-28
+
+- **Urban infrastructure and neighborhood repeaters**: Added a section covering ordinary low-range nodes (rooftop, indoor, portable) — guidance to carry full ancestry regardless of RF range, how to choose a channel scope, and how to handle proximity to the OR/WA and US/Canada borders.
+- **Client-only orientation**: Added a note after the Overview directing users with a phone or client device (no repeater) to the parts that apply to them — per-channel **Set Region Scope** and the **Default Region Scope** in Experimental Settings — and pointing the rest of the document at repeater operators.
+- **Companion app adoption note**: Replaced the outdated "scope selection is limited" note with an accurate description of current app capabilities (per-channel scope, app-wide default scope, Discover Regions), clarifying that region tags remain repeater-only.
+- **Config Generator link**: Added a pointer to the Config Generator at the top of Repeater Configuration for operators who would rather generate their `region put` chain than assemble it by hand.
 
 ### 2026-05-21
 
