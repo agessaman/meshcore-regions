@@ -228,7 +228,7 @@ async function saveOverrides() {
 async function loadData() {
   const [overridesRes, hierarchyRes, partitionRes] = await Promise.all([
     fetch("./data/overrides/manual-overrides.geojson"),
-    fetch("./data/seeds/region-hierarchy.json"),
+    fetch(new URL("../../regions.json", import.meta.url)),
     fetch("./data/zones/zones.partition.geojson")
   ]);
   if (!overridesRes.ok || !hierarchyRes.ok || !partitionRes.ok) {
@@ -242,8 +242,9 @@ async function loadData() {
 }
 
 function populateForceTagOptions(hierarchy) {
-  const tags = Object.keys(hierarchy.regions).filter(
-    (tag) => hierarchy.regions[tag].parent !== null
+  const regions = hierarchy.hierarchy ?? hierarchy.regions ?? {};
+  const tags = Object.keys(regions).filter(
+    (tag) => regions[tag].parent !== null
   );
   tags.sort();
 
@@ -256,7 +257,7 @@ function populateForceTagOptions(hierarchy) {
   for (const tag of tags) {
     const option = document.createElement("option");
     option.value = tag;
-    option.textContent = `${tag} - ${hierarchy.regions[tag].label}`;
+    option.textContent = `${tag} - ${regions[tag].label}`;
     elements.forceTag.appendChild(option);
   }
 }

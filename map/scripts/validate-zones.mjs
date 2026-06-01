@@ -4,7 +4,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const HIERARCHY_PATH = path.join(ROOT, "data", "seeds", "region-hierarchy.json");
+const REPO_ROOT = path.resolve(ROOT, "..");
+const HIERARCHY_PATH = path.join(REPO_ROOT, "regions.json");
 const ZONES_PATH = path.join(ROOT, "data", "zones", "zones.local.geojson");
 const PARTITION_ZONES_PATH = path.join(ROOT, "data", "zones", "zones.partition.geojson");
 const MANUAL_OVERRIDES_PATH = path.join(ROOT, "data", "overrides", "manual-overrides.geojson");
@@ -83,7 +84,7 @@ async function main() {
   const zonesRaw = JSON.parse(await fs.readFile(ZONES_PATH, "utf8"));
   const partitionRaw = JSON.parse(await fs.readFile(PARTITION_ZONES_PATH, "utf8"));
   const overridesRaw = JSON.parse(await fs.readFile(MANUAL_OVERRIDES_PATH, "utf8"));
-  const hierarchy = hierarchyRaw.regions;
+  const hierarchy = hierarchyRaw.hierarchy;
 
   if (zonesRaw.type !== "FeatureCollection") {
     fail("zones file is not a FeatureCollection");

@@ -12,7 +12,7 @@
       "type": "Feature",
       "properties": {
         "tag": "sea",
-        "label": "Seattle/Tacoma/Bellevue",
+        "label": "Seattle / Tacoma / Bellevue",
         "parent": "w-wa",
         "country": "US",
         "stateOrProvince": "WA",
@@ -27,7 +27,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.591Z"
+          "generatedAt": "2026-06-01T19:03:18.887Z"
         }
       },
       "geometry": {
@@ -142,7 +142,7 @@
       "type": "Feature",
       "properties": {
         "tag": "oly",
-        "label": "Olympia/Lacey/Tumwater",
+        "label": "Olympia / Lacey / Tumwater",
         "parent": "w-wa",
         "country": "US",
         "stateOrProvince": "WA",
@@ -157,7 +157,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.596Z"
+          "generatedAt": "2026-06-01T19:03:18.888Z"
         }
       },
       "geometry": {
@@ -272,7 +272,7 @@
       "type": "Feature",
       "properties": {
         "tag": "kit",
-        "label": "Kitsap/Bremerton/Silverdale",
+        "label": "Kitsap / Bremerton",
         "parent": "w-wa",
         "country": "US",
         "stateOrProvince": "WA",
@@ -287,7 +287,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.596Z"
+          "generatedAt": "2026-06-01T19:03:18.888Z"
         }
       },
       "geometry": {
@@ -402,7 +402,7 @@
       "type": "Feature",
       "properties": {
         "tag": "grh",
-        "label": "Grays Harbor/WA Coast",
+        "label": "Grays Harbor / WA Coast",
         "parent": "w-wa",
         "country": "US",
         "stateOrProvince": "WA",
@@ -417,7 +417,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.596Z"
+          "generatedAt": "2026-06-01T19:03:18.888Z"
         }
       },
       "geometry": {
@@ -547,7 +547,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.596Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -662,7 +662,7 @@
       "type": "Feature",
       "properties": {
         "tag": "bli",
-        "label": "Bellingham/Whatcom",
+        "label": "Bellingham / Whatcom",
         "parent": "w-wa",
         "country": "US",
         "stateOrProvince": "WA",
@@ -677,7 +677,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -792,7 +792,7 @@
       "type": "Feature",
       "properties": {
         "tag": "cls",
-        "label": "Centralia/Chehalis",
+        "label": "Centralia / Chehalis",
         "parent": "sw-wa",
         "country": "US",
         "stateOrProvince": "WA",
@@ -807,7 +807,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -922,7 +922,7 @@
       "type": "Feature",
       "properties": {
         "tag": "kls",
-        "label": "Kelso/Longview",
+        "label": "Kelso / Longview",
         "parent": "sw-wa",
         "country": "US",
         "stateOrProvince": "WA",
@@ -937,7 +937,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -1067,7 +1067,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -1197,7 +1197,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -1327,7 +1327,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -1457,7 +1457,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -1587,7 +1587,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.889Z"
         }
       },
       "geometry": {
@@ -1717,7 +1717,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -1847,7 +1847,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -1977,7 +1977,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -2092,7 +2092,7 @@
       "type": "Feature",
       "properties": {
         "tag": "sle",
-        "label": "Salem/Keizer",
+        "label": "Salem / Keizer",
         "parent": "wv",
         "country": "US",
         "stateOrProvince": "OR",
@@ -2107,7 +2107,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -2222,7 +2222,7 @@
       "type": "Feature",
       "properties": {
         "tag": "cvo",
-        "label": "Corvallis/Albany",
+        "label": "Corvallis / Albany",
         "parent": "wv",
         "country": "US",
         "stateOrProvince": "OR",
@@ -2237,7 +2237,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -2352,7 +2352,7 @@
       "type": "Feature",
       "properties": {
         "tag": "eug",
-        "label": "Eugene/Springfield",
+        "label": "Eugene / Springfield",
         "parent": "wv",
         "country": "US",
         "stateOrProvince": "OR",
@@ -2367,7 +2367,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -2482,7 +2482,7 @@
       "type": "Feature",
       "properties": {
         "tag": "mfr",
-        "label": "Medford/Ashland",
+        "label": "Medford / Ashland",
         "parent": "s-or",
         "country": "US",
         "stateOrProvince": "OR",
@@ -2497,7 +2497,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -2627,7 +2627,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -2757,7 +2757,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -2872,7 +2872,7 @@
       "type": "Feature",
       "properties": {
         "tag": "onp",
-        "label": "Newport/Lincoln City",
+        "label": "Newport / Lincoln City",
         "parent": "coast-or",
         "country": "US",
         "stateOrProvince": "OR",
@@ -2887,7 +2887,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3002,7 +3002,7 @@
       "type": "Feature",
       "properties": {
         "tag": "ast",
-        "label": "Astoria/Seaside",
+        "label": "Astoria / Seaside",
         "parent": "coast-or",
         "country": "US",
         "stateOrProvince": "OR",
@@ -3017,7 +3017,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3131,8 +3131,138 @@
     {
       "type": "Feature",
       "properties": {
+        "tag": "otk",
+        "label": "Tillamook",
+        "parent": "coast-or",
+        "country": "US",
+        "stateOrProvince": "OR",
+        "priority": 50,
+        "crossBorder": false,
+        "crossBorderPairTag": null,
+        "seedLat": 45.4563,
+        "seedLon": -123.8443,
+        "seedRadiusKm": 18,
+        "areaHintSqKm": 1018,
+        "generation": {
+          "source": "fallback-circle",
+          "minutes": 35,
+          "profile": "driving-car",
+          "generatedAt": "2026-06-01T19:03:18.890Z"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.84430000000002,
+              45.61817788906537
+            ],
+            [
+              -123.78440479526272,
+              45.612646412059014
+            ],
+            [
+              -123.72862473057131,
+              45.59643208549556
+            ],
+            [
+              -123.68078546880037,
+              45.57064846617678
+            ],
+            [
+              -123.64415592224944,
+              45.53706435194247
+            ],
+            [
+              -123.62122317743074,
+              45.49798008373051
+            ],
+            [
+              -123.61352555052912,
+              45.456067652002524
+            ],
+            [
+              -123.62155441339057,
+              45.41418634853064
+            ],
+            [
+              -123.64472964232978,
+              45.37518712464217
+            ],
+            [
+              -123.68144794773767,
+              45.34171918393355
+            ],
+            [
+              -123.72919845766937,
+              45.316051739086554
+            ],
+            [
+              -123.78473603824025,
+              45.299922458738784
+            ],
+            [
+              -123.84430000000002,
+              45.29442211093462
+            ],
+            [
+              -123.90386396175977,
+              45.299922458738784
+            ],
+            [
+              -123.95940154233065,
+              45.316051739086554
+            ],
+            [
+              -124.00715205226238,
+              45.34171918393355
+            ],
+            [
+              -124.04387035767024,
+              45.37518712464217
+            ],
+            [
+              -124.06704558660945,
+              45.41418634853064
+            ],
+            [
+              -124.0750744494709,
+              45.456067652002524
+            ],
+            [
+              -124.0673768225693,
+              45.49798008373051
+            ],
+            [
+              -124.04444407775058,
+              45.53706435194247
+            ],
+            [
+              -124.00781453119966,
+              45.57064846617678
+            ],
+            [
+              -123.95997526942871,
+              45.59643208549556
+            ],
+            [
+              -123.9041952047373,
+              45.612646412059014
+            ],
+            [
+              -123.84430000000002,
+              45.61817788906537
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "tag": "oth",
-        "label": "North Bend/Coos Bay",
+        "label": "North Bend / Coos Bay",
         "parent": "coast-or",
         "country": "US",
         "stateOrProvince": "OR",
@@ -3147,7 +3277,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3262,7 +3392,7 @@
       "type": "Feature",
       "properties": {
         "tag": "bend",
-        "label": "Bend/Redmond",
+        "label": "Bend / Redmond",
         "parent": "c-or",
         "country": "US",
         "stateOrProvince": "OR",
@@ -3277,7 +3407,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3407,7 +3537,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.597Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3537,7 +3667,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.598Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3667,7 +3797,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.598Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3782,7 +3912,7 @@
       "type": "Feature",
       "properties": {
         "tag": "cda",
-        "label": "Coeur d'Alene/N. Idaho",
+        "label": "Coeur d'Alene / N. Idaho",
         "parent": "id",
         "country": "US",
         "stateOrProvince": "ID",
@@ -3797,7 +3927,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.598Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -3912,7 +4042,7 @@
       "type": "Feature",
       "properties": {
         "tag": "fca",
-        "label": "Flathead Valley/Kalispell/Glacier",
+        "label": "Flathead Valley / Kalispell",
         "parent": "mt",
         "country": "US",
         "stateOrProvince": "MT",
@@ -3927,7 +4057,7 @@
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.598Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -4041,23 +4171,23 @@
     {
       "type": "Feature",
       "properties": {
-        "tag": "yvr",
-        "label": "Metro Vancouver",
+        "tag": "swbc",
+        "label": "Southwest BC / Lower Mainland",
         "parent": "bc",
         "country": "CA",
         "stateOrProvince": "BC",
         "priority": 68,
         "crossBorder": false,
         "crossBorderPairTag": null,
-        "seedLat": 49.1947,
-        "seedLon": -123.1792,
-        "seedRadiusKm": 42,
-        "areaHintSqKm": 5542,
+        "seedLat": 49.17,
+        "seedLon": -122.7,
+        "seedRadiusKm": 80,
+        "areaHintSqKm": 20106,
         "generation": {
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.598Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -4065,104 +4195,104 @@
         "coordinates": [
           [
             [
-              -123.17920000000002,
-              49.57241507448587
+              -122.69999999999999,
+              49.88945728473497
             ],
             [
-              -123.02849015278372,
-              49.559447245771224
+              -122.41112905337252,
+              49.864585950753714
             ],
             [
-              -122.88827634094515,
-              49.521447326646886
+              -122.1427775553486,
+              49.79174056590627
             ],
             [
-              -122.76827731074647,
-              49.46105895563902
+              -121.91383188139619,
+              49.67608547956698
             ],
             [
-              -122.67672777644887,
-              49.38247079906413
+              -121.74009343069237,
+              49.525772291126465
             ],
             [
-              -122.61980266645675,
-              49.291111053753276
+              -121.6331535779023,
+              49.351309170082416
             ],
             [
-              -122.6012150693094,
-              49.19325792746525
+              -121.59968173830458,
+              49.16477279781927
             ],
             [
-              -122.6220092922521,
-              49.09559798325071
+              -121.64114720983153,
+              48.978936488174824
             ],
             [
-              -122.68054987639928,
-              49.004766035095805
+              -121.7539402767001,
+              48.80638615647167
             ],
             [
-              -122.77269086823242,
-              48.926898895772474
+              -121.92982316040812,
+              48.658686319261186
             ],
             [
-              -122.89209874681855,
-              48.867231580043054
+              -122.1566284178298,
+              48.545645083647436
             ],
             [
-              -123.03069708450207,
-              48.8297595341284
+              -122.41912670177547,
+              48.47471348713198
             ],
             [
-              -123.17920000000002,
-              48.816984925514134
+              -122.69999999999999,
+              48.450542715265016
             ],
             [
-              -123.32770291549797,
-              48.8297595341284
+              -122.98087329822454,
+              48.47471348713198
             ],
             [
-              -123.46630125318147,
-              48.867231580043054
+              -123.24337158217021,
+              48.545645083647436
             ],
             [
-              -123.58570913176762,
-              48.926898895772474
+              -123.47017683959189,
+              48.658686319261186
             ],
             [
-              -123.67785012360075,
-              49.004766035095805
+              -123.6460597232999,
+              48.80638615647167
             ],
             [
-              -123.73639070774794,
-              49.09559798325071
+              -123.75885279016848,
+              48.978936488174824
             ],
             [
-              -123.75718493069063,
-              49.19325792746525
+              -123.80031826169542,
+              49.16477279781927
             ],
             [
-              -123.73859733354328,
-              49.291111053753276
+              -123.7668464220977,
+              49.351309170082416
             ],
             [
-              -123.68167222355115,
-              49.38247079906413
+              -123.65990656930764,
+              49.525772291126465
             ],
             [
-              -123.59012268925355,
-              49.46105895563902
+              -123.48616811860381,
+              49.67608547956698
             ],
             [
-              -123.47012365905488,
-              49.521447326646886
+              -123.25722244465139,
+              49.79174056590627
             ],
             [
-              -123.32990984721633,
-              49.559447245771224
+              -122.98887094662749,
+              49.864585950753714
             ],
             [
-              -123.17920000000002,
-              49.57241507448587
+              -122.69999999999999,
+              49.88945728473497
             ]
           ]
         ]
@@ -4171,23 +4301,23 @@
     {
       "type": "Feature",
       "properties": {
-        "tag": "fra",
-        "label": "Fraser Valley",
+        "tag": "vanisle",
+        "label": "Vancouver Island",
         "parent": "bc",
         "country": "CA",
         "stateOrProvince": "BC",
-        "priority": 57,
+        "priority": 60,
         "crossBorder": false,
         "crossBorderPairTag": null,
-        "seedLat": 49.0253,
-        "seedLon": -122.36,
-        "seedRadiusKm": 33,
-        "areaHintSqKm": 3421,
+        "seedLat": 49.5,
+        "seedLon": -124.8,
+        "seedRadiusKm": 150,
+        "areaHintSqKm": 70686,
         "generation": {
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.598Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -4195,104 +4325,104 @@
         "coordinates": [
           [
             [
-              -122.36,
-              49.32207612995317
+              -124.8,
+              50.2
             ],
             [
-              -122.24218099524914,
-              49.311904016352976
+              -124.24760724372317,
+              50.2
             ],
             [
-              -122.13252834929524,
-              49.282092986435266
+              -123.73595978063433,
+              50.2
             ],
             [
-              -122.03861437575969,
-              49.2347075833369
+              -123.30211354610088,
+              50.2
             ],
             [
-              -121.96687428954563,
-              49.173021855731534
+              -122.97629389984638,
+              50.16030572806445
             ],
             [
-              -121.9221585710199,
-              49.10128403502452
+              -122.77969869125765,
+              49.831643098876356
             ],
             [
-              -121.90741348816346,
-              49.02441503773132
+              -122.72340449958534,
+              49.481410893761065
             ],
             [
-              -121.92350812697175,
-              48.94766459575693
+              -122.8083053271755,
+              49.133665986320615
             ],
             [
-              -121.96921183092925,
-              48.876250679433646
+              -123.02586083891957,
+              48.81180109785465
             ],
             [
-              -122.04131360215995,
-              48.81500742581797
+              -123.35937819412159,
+              48.53704981897289
             ],
             [
-              -122.13486600518169,
-              48.7680645109975
+              -123.78557815634159,
+              48.32723297177476
             ],
             [
-              -122.2435306657039,
-              48.738577414039966
+              -124.27626531632842,
+              48.19577749971663
             ],
             [
-              -122.36,
-              48.72852387004682
+              -124.8,
+              48.151017591121914
             ],
             [
-              -122.47646933429608,
-              48.738577414039966
+              -125.32373468367157,
+              48.19577749971663
             ],
             [
-              -122.58513399481829,
-              48.7680645109975
+              -125.6,
+              48.32723297177476
             ],
             [
-              -122.67868639784004,
-              48.81500742581797
+              -125.6,
+              48.53704981897289
             ],
             [
-              -122.75078816907074,
-              48.876250679433646
+              -125.6,
+              48.81180109785464
             ],
             [
-              -122.79649187302823,
-              48.94766459575693
+              -125.6,
+              49.133665986320615
             ],
             [
-              -122.81258651183653,
-              49.02441503773132
+              -125.6,
+              49.481410893761065
             ],
             [
-              -122.79784142898009,
-              49.10128403502452
+              -125.6,
+              49.831643098876356
             ],
             [
-              -122.75312571045436,
-              49.173021855731534
+              -125.6,
+              50.16030572806445
             ],
             [
-              -122.6813856242403,
-              49.2347075833369
+              -125.6,
+              50.2
             ],
             [
-              -122.58747165070476,
-              49.282092986435266
+              -125.6,
+              50.2
             ],
             [
-              -122.47781900475084,
-              49.311904016352976
+              -125.35239275627684,
+              50.2
             ],
             [
-              -122.36,
-              49.32207612995317
+              -124.8,
+              50.2
             ]
           ]
         ]
@@ -4301,23 +4431,23 @@
     {
       "type": "Feature",
       "properties": {
-        "tag": "vic",
-        "label": "Victoria/S. Vancouver Island",
-        "parent": "bc",
+        "tag": "southisland",
+        "label": "South Vancouver Island / Victoria",
+        "parent": "vanisle",
         "country": "CA",
         "stateOrProvince": "BC",
         "priority": 57,
         "crossBorder": false,
         "crossBorderPairTag": null,
-        "seedLat": 48.649,
-        "seedLon": -123.4269,
-        "seedRadiusKm": 33,
-        "areaHintSqKm": 3421,
+        "seedLat": 48.5,
+        "seedLon": -123.4,
+        "seedRadiusKm": 50,
+        "areaHintSqKm": 7854,
         "generation": {
           "source": "fallback-circle",
           "minutes": 35,
           "profile": "driving-car",
-          "generatedAt": "2026-05-10T22:00:32.598Z"
+          "generatedAt": "2026-06-01T19:03:18.890Z"
         }
       },
       "geometry": {
@@ -4325,104 +4455,234 @@
         "coordinates": [
           [
             [
-              -123.4269,
-              48.945776129953174
+              -123.4,
+              48.94966080295936
             ],
             [
-              -123.30997166269752,
-              48.93560480592329
+              -123.2228416911897,
+              48.93420392593574
             ],
             [
-              -123.20114614617606,
-              48.905795929621355
+              -123.05806504137541,
+              48.88891421048206
             ],
             [
-              -123.10793733970294,
-              48.85841345851446
+              -122.91712265172242,
+              48.816953076135945
             ],
             [
-              -123.03673168915017,
-              48.79673064671747
+              -122.80969672021729,
+              48.72332623070536
             ],
             [
-              -122.9923440659721,
-              48.72499493978864
+              -122.74301965410336,
+              48.61451463471968
             ],
             [
-              -122.97770047594294,
-              48.648126689570695
+              -122.72140747841159,
+              48.49800566443644
             ],
             [
-              -122.99366588677314,
-              48.5713754338421
+              -122.74602924673825,
+              48.38176384842242
             ],
             [
-              -123.03902119020249,
-              48.49995936686981
+              -122.81490969644801,
+              48.27368215784696
             ],
             [
-              -123.11058109131831,
-              48.43871320336388
+              -122.92314240769569,
+              48.181052444155874
             ],
             [
-              -123.20343575724759,
-              48.39176739439421
+              -123.06327858838037,
+              48.11008851362157
             ],
             [
-              -123.31129359351783,
-              48.36227818574118
+              -123.22585185459883,
+              48.06552884772272
             ],
             [
-              -123.4269,
-              48.35222387004681
+              -123.4,
+              48.050339197040635
             ],
             [
-              -123.5425064064822,
-              48.36227818574118
+              -123.57414814540118,
+              48.06552884772272
             ],
             [
-              -123.65036424275245,
-              48.39176739439421
+              -123.73672141161965,
+              48.11008851362157
             ],
             [
-              -123.74321890868171,
-              48.43871320336388
+              -123.87685759230433,
+              48.181052444155874
             ],
             [
-              -123.81477880979755,
-              48.49995936686981
+              -123.98509030355201,
+              48.27368215784696
             ],
             [
-              -123.86013411322689,
-              48.5713754338421
+              -124.05397075326178,
+              48.38176384842242
             ],
             [
-              -123.87609952405708,
-              48.648126689570695
+              -124.07859252158843,
+              48.49800566443644
             ],
             [
-              -123.86145593402793,
-              48.72499493978864
+              -124.05698034589666,
+              48.61451463471968
             ],
             [
-              -123.81706831084985,
-              48.79673064671747
+              -123.99030327978274,
+              48.72332623070536
             ],
             [
-              -123.74586266029709,
-              48.85841345851446
+              -123.88287734827757,
+              48.816953076135945
             ],
             [
-              -123.65265385382396,
-              48.905795929621355
+              -123.7419349586246,
+              48.88891421048206
             ],
             [
-              -123.5438283373025,
-              48.93560480592329
+              -123.57715830881033,
+              48.93420392593574
             ],
             [
-              -123.4269,
-              48.945776129953174
+              -123.4,
+              48.94966080295936
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tag": "salishmesh",
+        "label": "Salish Sea / Gulf Islands",
+        "parent": "bc",
+        "country": "CA",
+        "stateOrProvince": "BC",
+        "priority": 55,
+        "crossBorder": false,
+        "crossBorderPairTag": null,
+        "seedLat": 48.85,
+        "seedLon": -123.3,
+        "seedRadiusKm": 65,
+        "areaHintSqKm": 13273,
+        "generation": {
+          "source": "fallback-circle",
+          "minutes": 35,
+          "profile": "driving-car",
+          "generatedAt": "2026-06-01T19:03:18.890Z"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.30000000000003,
+              49.43455904384718
+            ],
+            [
+              -123.06745050960723,
+              49.414408819863716
+            ],
+            [
+              -122.85128492962865,
+              49.355378965611386
+            ],
+            [
+              -122.66662111121705,
+              49.261621710342
+            ],
+            [
+              -122.52617470905528,
+              49.139701515555
+            ],
+            [
+              -122.43936011282759,
+              48.99809932138769
+            ],
+            [
+              -122.41169676841525,
+              48.846587858386705
+            ],
+            [
+              -122.44454494733381,
+              48.69553342973331
+            ],
+            [
+              -122.5351557248519,
+              48.55517995416055
+            ],
+            [
+              -122.67699247158546,
+              48.43496572418402
+            ],
+            [
+              -122.86026763714207,
+              48.34291464565545
+            ],
+            [
+              -123.0726370358303,
+              48.28513393385834
+            ],
+            [
+              -123.30000000000003,
+              48.26544095615282
+            ],
+            [
+              -123.52736296416974,
+              48.28513393385834
+            ],
+            [
+              -123.73973236285796,
+              48.34291464565545
+            ],
+            [
+              -123.92300752841456,
+              48.43496572418402
+            ],
+            [
+              -124.06484427514812,
+              48.55517995416055
+            ],
+            [
+              -124.15545505266623,
+              48.69553342973331
+            ],
+            [
+              -124.18830323158477,
+              48.846587858386705
+            ],
+            [
+              -124.16063988717245,
+              48.99809932138769
+            ],
+            [
+              -124.07382529094475,
+              49.139701515555
+            ],
+            [
+              -123.93337888878298,
+              49.261621710342
+            ],
+            [
+              -123.74871507037138,
+              49.355378965611386
+            ],
+            [
+              -123.53254949039282,
+              49.414408819863716
+            ],
+            [
+              -123.30000000000003,
+              49.43455904384718
             ]
           ]
         ]

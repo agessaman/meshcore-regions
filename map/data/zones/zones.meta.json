@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-10",
+  "version": "2026-06-01",
   "providerRequested": "fallback",
   "providerUsed": "fallback-circle",
   "profile": "driving-car",
@@ -7,8 +7,8 @@
   "fallbackSpeedKmh": 60,
   "simplifyStep": 4,
   "partitionStep": 0.25,
-  "featureCount": 34,
-  "partitionFeatureCount": 34,
+  "featureCount": 36,
+  "partitionFeatureCount": 36,
   "bbox": {
     "minLon": -125.6,
     "minLat": 41.8,
@@ -74,26 +74,38 @@
         "km": 36.9
       },
       {
-        "tag": "fra",
-        "km": 61.9
+        "tag": "southisland",
+        "km": 72.3
+      },
+      {
+        "tag": "salishmesh",
+        "km": 77.2
+      },
+      {
+        "tag": "swbc",
+        "km": 80.5
       }
     ],
     "bli": [
-      {
-        "tag": "fra",
-        "km": 28.9
-      },
       {
         "tag": "bvs",
         "km": 36.9
       },
       {
-        "tag": "yvr",
-        "km": 64.7
+        "tag": "swbc",
+        "km": 43.6
       },
       {
-        "tag": "vic",
-        "km": 67.2
+        "tag": "salishmesh",
+        "km": 56.2
+      },
+      {
+        "tag": "southisland",
+        "km": 71.2
+      },
+      {
+        "tag": "vanisle",
+        "km": 182.4
       }
     ],
     "cls": [
@@ -189,6 +201,7 @@
       }
     ],
     "ast": [],
+    "otk": [],
     "oth": [],
     "bend": [],
     "pdt": [],
@@ -201,42 +214,88 @@
       }
     ],
     "fca": [],
-    "yvr": [
-      {
-        "tag": "fra",
-        "km": 62.5
-      },
-      {
-        "tag": "vic",
-        "km": 63.3
-      },
+    "swbc": [
       {
         "tag": "bli",
-        "km": 64.7
-      }
-    ],
-    "fra": [
+        "km": 43.6
+      },
       {
-        "tag": "bli",
-        "km": 28.9
+        "tag": "salishmesh",
+        "km": 56.4
       },
       {
         "tag": "bvs",
-        "km": 61.9
+        "km": 80.5
       },
       {
-        "tag": "yvr",
-        "km": 62.5
+        "tag": "southisland",
+        "km": 90.4
+      },
+      {
+        "tag": "vanisle",
+        "km": 156.5
       }
     ],
-    "vic": [
+    "vanisle": [
       {
-        "tag": "yvr",
-        "km": 63.3
+        "tag": "salishmesh",
+        "km": 130.8
+      },
+      {
+        "tag": "southisland",
+        "km": 151
+      },
+      {
+        "tag": "swbc",
+        "km": 156.5
       },
       {
         "tag": "bli",
-        "km": 67.2
+        "km": 182.4
+      }
+    ],
+    "southisland": [
+      {
+        "tag": "salishmesh",
+        "km": 39.6
+      },
+      {
+        "tag": "bli",
+        "km": 71.2
+      },
+      {
+        "tag": "bvs",
+        "km": 72.3
+      },
+      {
+        "tag": "swbc",
+        "km": 90.4
+      },
+      {
+        "tag": "vanisle",
+        "km": 151
+      }
+    ],
+    "salishmesh": [
+      {
+        "tag": "southisland",
+        "km": 39.6
+      },
+      {
+        "tag": "bli",
+        "km": 56.2
+      },
+      {
+        "tag": "swbc",
+        "km": 56.4
+      },
+      {
+        "tag": "bvs",
+        "km": 77.2
+      },
+      {
+        "tag": "vanisle",
+        "km": 130.8
       }
     ]
   },

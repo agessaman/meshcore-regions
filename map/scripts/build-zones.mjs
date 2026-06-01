@@ -5,7 +5,8 @@ import path from "node:path";
 import process from "node:process";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const SEEDS_PATH = path.join(ROOT, "data", "seeds", "pnw-local-seeds.json");
+const REPO_ROOT = path.resolve(ROOT, "..");
+const SEEDS_PATH = path.join(REPO_ROOT, "regions.json");
 const OUTPUT_GEOJSON = path.join(ROOT, "data", "zones", "zones.local.geojson");
 const OUTPUT_PARTITION_GEOJSON = path.join(ROOT, "data", "zones", "zones.partition.geojson");
 const OUTPUT_META = path.join(ROOT, "data", "zones", "zones.meta.json");
@@ -250,7 +251,20 @@ function buildPartitionFeatures(seeds, bbox, step) {
 
 async function main() {
   const rawSeeds = JSON.parse(await fs.readFile(SEEDS_PATH, "utf8"));
-  const seeds = rawSeeds.seeds;
+  // Canonical regions.json uses compact field names (r = radius km, p = priority).
+  // Normalize to the radiusKm/priority shape the generator expects.
+  const seeds = rawSeeds.seeds.map((s) => ({
+    ...s,
+    radiusKm: s.radiusKm ?? s.r,
+    priority: s.priority ?? s.p
+  }));
+
+  // Bounding box from meta.map.bounds ([[south, west], [north, east]]) so the
+  // generated grid covers the same extent the map renders; falls back to PNW.
+  const b = rawSeeds.meta?.map?.bounds;
+  const BBOX = b
+    ? { minLon: b[0][1], minLat: b[0][0], maxLon: b[1][1], maxLat: b[1][0] }
+    : DEFAULT_BBOX;
   const apiKey = process.env.ORS_API_KEY;
   const usingProvider = provider === "ors" && apiKey;
 
@@ -276,7 +290,7 @@ async function main() {
       ring = buildFallbackPolygon({ ...seed, radiusKm: derivedRadius });
     }
 
-    const normalizedRing = normalizeRing(ring, DEFAULT_BBOX);
+    const normalizedRing = normalizeRing(ring, BBOX);
     featureList.push(
       buildFeature(seed, normalizedRing, {
         source: generationSource,
@@ -290,15 +304,15 @@ async function main() {
   const geojson = {
     type: "FeatureCollection",
     name: "pnw-local-zones",
-    bbox: [DEFAULT_BBOX.minLon, DEFAULT_BBOX.minLat, DEFAULT_BBOX.maxLon, DEFAULT_BBOX.maxLat],
+    bbox: [BBOX.minLon, BBOX.minLat, BBOX.maxLon, BBOX.maxLat],
     features: featureList
   };
 
-  const partitionFeatures = buildPartitionFeatures(seeds, DEFAULT_BBOX, partitionStep);
+  const partitionFeatures = buildPartitionFeatures(seeds, BBOX, partitionStep);
   const partitionGeojson = {
     type: "FeatureCollection",
     name: "pnw-partition-zones",
-    bbox: [DEFAULT_BBOX.minLon, DEFAULT_BBOX.minLat, DEFAULT_BBOX.maxLon, DEFAULT_BBOX.maxLat],
+    bbox: [BBOX.minLon, BBOX.minLat, BBOX.maxLon, BBOX.maxLat],
     features: partitionFeatures
   };
 
@@ -313,7 +327,7 @@ async function main() {
     partitionStep,
     featureCount: featureList.length,
     partitionFeatureCount: partitionFeatures.length,
-    bbox: DEFAULT_BBOX,
+    bbox: BBOX,
     adjacency: buildAdjacency(seeds),
     warnings
   };

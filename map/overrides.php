@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+<?php
+  // Anchor relative paths to this page's own directory (see index.php).
+  $mapBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/') . '/';
+?>
+    <base href="<?= htmlspecialchars($mapBase, ENT_QUOTES) ?>" />
     <title>Manual Override Editor</title>
     <link
       rel="stylesheet"

@@ -539,7 +539,7 @@
 <body>
 
 <header>
-  <div class="badge">🌲 Pacific Northwest MeshCore</div>
+  <div class="badge" id="brandBadge">🌲 Pacific Northwest MeshCore</div>
   <h1>Region Config Generator</h1>
   <p>Enter your location and repeater type to get ready-to-paste CLI commands.</p>
 </header>
@@ -673,265 +673,39 @@
 </main>
 
 <footer>
-  Covers WA · OR · ID · MT · BC &nbsp;·&nbsp;
-  Based on <a href="https://gessaman.com/meshcore/regions/" target="_blank" rel="noopener">PNW MeshCore Regions</a> &nbsp;·&nbsp;
+  <span id="brandCoverage">Covers WA · OR · ID · MT · BC</span> &nbsp;·&nbsp;
+  Based on <a id="brandAttribution" href="https://gessaman.com/meshcore/regions/" target="_blank" rel="noopener">PNW MeshCore Regions</a> &nbsp;·&nbsp;
   Geocoding by <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap / Nominatim</a>
   &nbsp;·&nbsp;
   Canadian postal codes via <a href="https://geocoder.ca" target="_blank" rel="noopener">geocoder.ca</a>
 </footer>
 
-<script src="data.js"></script>
-<script>
+<script type="module">
 "use strict";
 
-// ── Geo ───────────────────────────────────────────────────────────────────────
+import {
+  HIERARCHY, METRO_GROUPS, META,
+  loadRegions, ancestryFor, resolveLocation, computeRecommendation,
+  buildCommandLines, rawText, perLineHtml, esc
+} from "../shared/region-engine.js";
+import { geocode } from "../shared/geocode.js";
 
-function haversineKm(aLat, aLon, bLat, bLon) {
-  const R = 6371, rad = d => d * Math.PI / 180;
-  const dLat = rad(bLat - aLat), dLon = rad(bLon - aLon);
-  const a = Math.sin(dLat/2)**2 +
-            Math.sin(dLon/2)**2 * Math.cos(rad(aLat)) * Math.cos(rad(bLat));
-  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
+await loadRegions();
 
-// ── Resolver ─────────────────────────────────────────────────────────────────
-
-function ancestryFor(tag) {
-  const chain = [];
-  const seen = new Set();
-  let cur = tag;
-  while (cur) {
-    if (seen.has(cur)) break;
-    seen.add(cur);
-    chain.unshift(cur);
-    cur = HIERARCHY[cur]?.parent ?? null;
+// Region identity from META (see regions.json). Heading/instructions are generic.
+(function applyBranding() {
+  if (META.configTitle) document.title = META.configTitle;
+  const set = (id, text) => { const e = document.getElementById(id); if (e && text) e.textContent = text; };
+  set("brandBadge", META.badge);
+  set("brandCoverage", META.coverage);
+  const attr = document.getElementById("brandAttribution");
+  if (attr && META.attribution) {
+    attr.textContent = META.attribution.label ?? attr.textContent;
+    if (META.attribution.url) attr.href = META.attribution.url;
   }
-  return chain;
-}
+})();
 
-function rankSeeds(lat, lon) {
-  return SEEDS.map(s => {
-    const km    = haversineKm(lat, lon, s.lat, s.lon);
-    const score = km - s.r;
-    return { seed: s, km, score, inRadius: km <= s.r };
-  }).sort((a, b) => a.score - b.score);
-}
-
-function resolveLocation(lat, lon, forcePrimaryTag = null, stateOrProvince = null) {
-  const ranked = rankSeeds(lat, lon);
-
-  const primaryEntry = forcePrimaryTag
-    ? (ranked.find(r => r.seed.tag === forcePrimaryTag) ?? ranked[0])
-    : ranked[0];
-  const secondary = ranked.find(r => r.seed.tag !== primaryEntry.seed.tag);
-  const inCount   = ranked.filter(r => r.inRadius).length;
-  const overlap   = inCount > 1;
-
-  const top2 = new Set([primaryEntry.seed.tag, secondary?.seed.tag]);
-  const extraTags  = [];
-  const extraNotes = [];
-
-  // Inland Empire cross-border: recommend ie when geg and cda are both top-2
-  if (top2.has("geg") && top2.has("cda")) {
-    extraTags.push("ie");
-    extraNotes.push(
-      "Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."
-    );
-  }
-
-  // Clark County / SW Washington: Portland metro from the WA side carries wa + sw-wa
-  if (stateOrProvince === "Washington" && primaryEntry.seed.tag === "pdx") {
-    extraTags.push("wa", "sw-wa");
-    extraNotes.push(
-      "Washington side of Portland metro — wa and sw-wa added for state-scoped traffic (Clark County dual-carry with pdx)."
-    );
-  }
-
-  // San Juan Islands (WA): nodes here often reach the wider mesh through
-  // Vancouver Island / BC nodes, so they land on a BC marine seed
-  // (salishmesh/southisland). Keep that BC tag and add WA ancestry too so
-  // Washington-scoped traffic still reaches them (dual-carry across the marine border).
-  if (stateOrProvince === "Washington" &&
-      (primaryEntry.seed.tag === "salishmesh" || primaryEntry.seed.tag === "southisland")) {
-    extraTags.push("wa", "w-wa");
-    extraNotes.push(
-      "San Juan Islands (WA) — wa and w-wa added for Washington-scoped traffic; the BC island tag is kept because San Juans nodes often mesh into the wider network through Vancouver Island / BC nodes (dual-carry)."
-    );
-  }
-
-  return {
-    nearestKm:    ranked[0].km,
-    top5:         ranked.slice(0, 5),
-    primary: {
-      tag:      primaryEntry.seed.tag,
-      label:    primaryEntry.seed.label,
-      km:       primaryEntry.km,
-      ancestry: ancestryFor(primaryEntry.seed.tag)
-    },
-    secondary: secondary ? {
-      tag:      secondary.seed.tag,
-      label:    secondary.seed.label,
-      km:       secondary.km,
-      ancestry: ancestryFor(secondary.seed.tag)
-    } : null,
-    overlapLikely: overlap,
-    gapKm:         secondary ? Math.abs(primaryEntry.km - secondary.km) : null,
-    extraTags,
-    extraNotes
-  };
-}
-
-// ── Policy ────────────────────────────────────────────────────────────────────
-
-function unique(arr) {
-  const seen = new Set(); return arr.filter(v => seen.has(v) ? false : seen.add(v));
-}
-function sharedPrefix(a, b) {
-  const out = [];
-  for (let i = 0; i < Math.min(a.length, b.length); i++) {
-    if (a[i] !== b[i]) break;
-    out.push(a[i]);
-  }
-  return out;
-}
-
-function highSiteStrategy(res) {
-  if (!res.secondary || !res.overlapLikely) return "single-metro";
-  const d = res.gapKm ?? 999;
-  if (d <= 10)  return "dual-metro";
-  if (d >= 28)  return "state-only";
-  return "single-metro";
-}
-
-function computeRecommendation(res, repeaterType, selectedMetros = []) {
-  const pA   = res.primary.ancestry;
-  const pTag = res.primary.tag;
-  const extra      = res.extraTags;
-  const extraNotes = res.extraNotes;
-
-  const nearBoundary = res.secondary && res.overlapLikely &&
-    res.secondary.ancestry[3] !== undefined &&
-    res.secondary.ancestry[3] === pA[3];
-
-  if (repeaterType === "residential") {
-    const tags  = [...pA];
-    const notes = ["Home profile — full ancestry for the selected local area."];
-    if (nearBoundary) {
-      tags.push(res.secondary.tag);
-      notes.push(`Boundary overlap detected — dual local carry added (${pTag} + ${res.secondary.tag}).`);
-    }
-    tags.push(...extra);
-    return { strategy: nearBoundary ? "dual-metro" : "single-metro",
-             tags: unique(tags), notes: [...notes, ...extraNotes] };
-  }
-
-  if (repeaterType === "urban") {
-    const tags  = [...pA];
-    const notes = ["Urban infrastructure — one metro with full ancestry."];
-    if (res.secondary && res.overlapLikely) {
-      tags.push(res.secondary.tag);
-      notes.push(`Dual-carry added — point is in overlapping coverage (${pTag} + ${res.secondary.tag}).`);
-    }
-    tags.push(...extra);
-    return { strategy: tags.length > pA.length ? "dual-metro" : "single-metro",
-             tags: unique(tags), notes: [...notes, ...extraNotes] };
-  }
-
-  if (repeaterType === "high-site") {
-    const metros = selectedMetros.length > 0 ? selectedMetros : [pTag];
-    const allTags = [...pA];
-    for (const tag of metros) allTags.push(...ancestryFor(tag));
-    allTags.push(...extra);
-    const tags = unique(allTags);
-    if (metros.length > 1) {
-      return { strategy: "multi-metro", tags,
-               notes: [`High-site serving ${metros.length} metro areas: ${metros.join(", ")}.`, ...extraNotes] };
-    }
-    return { strategy: "single-metro", tags,
-             notes: ["High-site — single metro affiliation with full ancestry.", ...extraNotes] };
-  }
-
-  return { strategy: "single-metro", tags: unique(pA), notes: [] };
-}
-
-// ── Command builder ───────────────────────────────────────────────────────────
-
-// Build the token sequence for a single `region def` command (firmware 1.16+).
-// tags must be in root-to-leaf order as produced by unique(ancestryFor(...)).
-// Each token is either "tag" (cursor moves to tag) or "tag|jump" (create tag,
-// then reposition cursor to the named existing region).
-function buildRegionDefTokens(tags) {
-  const tokens = [];
-  for (let i = 0; i < tags.length; i++) {
-    const tag = tags[i];
-    if (i === tags.length - 1) {
-      tokens.push(tag);  // last token — no jump needed
-    } else {
-      const nextParent = HIERARCHY[tags[i + 1]]?.parent ?? "*";
-      // If the next tag's parent IS this tag, the cursor will naturally land here.
-      // Otherwise emit tag|nextParent so the cursor is positioned for the next tag.
-      tokens.push(nextParent === tag ? tag : `${tag}|${nextParent}`);
-    }
-  }
-  return tokens;
-}
-
-function buildCommandLines(tags, firmware) {
-  if (firmware === "1.16") {
-    const tokens = buildRegionDefTokens(tags);
-    const defText = `region def ${tokens.join(" ")}`;
-    const lines = [{ type: "def", text: defText, tokens, tooLong: defText.length > 160 }];
-    lines.push({ type: "save" });
-    return lines;
-  }
-
-  const lines = [];
-  const added = new Set();
-  for (const tag of tags) {
-    if (added.has(tag)) continue;
-    const parent = HIERARCHY[tag]?.parent ?? null;
-    lines.push({ type: "put", tag, parent });
-    if (firmware === "1.14") lines.push({ type: "allowf", tag });
-    added.add(tag);
-  }
-  lines.push({ type: "save" });
-  return lines;
-}
-
-function rawText(lines) {
-  return lines.map(l => {
-    if (l.type === "def")    return l.text;
-    if (l.type === "put")    return l.parent ? `region put ${l.tag} ${l.parent}` : `region put ${l.tag}`;
-    if (l.type === "allowf") return `region allowf ${l.tag}`;
-    return "region save";
-  }).join("\n");
-}
-
-function perLineHtml(lines) {
-  return lines.map(l => {
-    let inner, raw;
-    if (l.type === "def") {
-      const tokenHtml = l.tokens.map(t => {
-        const [name, jump] = t.split("|");
-        return `<span class="c-tag">${name}</span>${jump ? `<span class="c-par">|${jump}</span>` : ""}`;
-      }).join(" ");
-      inner = `<span class="c-kw">region def</span> ${tokenHtml}`;
-      raw   = l.text;
-      if (l.tooLong) inner += ` <span title="Command may exceed 160-char serial limit — use v1.15 mode if this causes issues" style="color:var(--gold-warm);cursor:help">⚠</span>`;
-    } else if (l.type === "put") {
-      const par = l.parent ? ` <span class="c-par">${l.parent}</span>` : "";
-      inner = `<span class="c-kw">region put</span> <span class="c-tag">${l.tag}</span>${par}`;
-      raw   = l.parent ? `region put ${l.tag} ${l.parent}` : `region put ${l.tag}`;
-    } else if (l.type === "allowf") {
-      inner = `<span class="c-af">region allowf ${l.tag}</span>`;
-      raw   = `region allowf ${l.tag}`;
-    } else {
-      inner = `<span class="c-save">region save</span>`;
-      raw   = "region save";
-    }
-    return `<div class="cmd-line" data-cmd="${esc(raw)}" title="Click to copy">${inner}<span class="cmd-copy-icon" aria-hidden="true">⎘</span></div>`;
-  }).join("");
-}
+// Engine, command builder, and geocoder now live in /shared (see imports above).
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
@@ -971,8 +745,6 @@ function buildMetroSection() {
 // ── UI helpers ────────────────────────────────────────────────────────────────
 
 const $  = id => document.getElementById(id);
-const esc = s => String(s)
-  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 
 function show(id) { $(id).classList.remove("hidden"); }
 function hide(id) { $(id).classList.add("hidden"); }
@@ -1011,78 +783,6 @@ function setStatus(msg, type) {
   $("loc-status").innerHTML = msg
     ? `<div class="status-msg ${type}" role="alert">${msg}</div>`
     : "";
-}
-
-// ── Geocoding ─────────────────────────────────────────────────────────────────
-
-const CA_PROVINCES = {
-  AB: "Alberta", BC: "British Columbia", MB: "Manitoba",
-  NB: "New Brunswick", NL: "Newfoundland and Labrador",
-  NS: "Nova Scotia", NT: "Northwest Territories", NU: "Nunavut",
-  ON: "Ontario", PE: "Prince Edward Island", QC: "Quebec",
-  SK: "Saskatchewan", YT: "Yukon"
-};
-
-function parseCanadianPostalCode(query) {
-  const compact = query.trim().replace(/[\s-]+/g, "").toUpperCase();
-  if (!/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(compact)) return null;
-  return { compact, formatted: `${compact.slice(0, 3)} ${compact.slice(3)}` };
-}
-
-function parseNominatimHit(hit) {
-  const parts = hit.display_name.split(",").map(s => s.trim());
-  const name  = parts.slice(0, Math.min(3, parts.length)).join(", ");
-  const addr  = hit.address ?? {};
-  return {
-    lat: parseFloat(hit.lat),
-    lon: parseFloat(hit.lon),
-    name,
-    stateOrProvince: addr.state ?? addr.province ?? null
-  };
-}
-
-async function nominatimSearch(params) {
-  const url = "https://nominatim.openstreetmap.org/search?" + new URLSearchParams({
-    format: "json", limit: "1", addressdetails: "1", ...params
-  });
-  const res = await fetch(url, { headers: { "Accept-Language": "en-US,en" } });
-  if (!res.ok) throw new Error("Geocoding service error");
-  const data = await res.json();
-  return data.length ? parseNominatimHit(data[0]) : null;
-}
-
-async function geocodeCanadianPostal({ compact, formatted }) {
-  const fromPostal = await nominatimSearch({ postalcode: formatted, country: "ca" });
-  if (fromPostal) return fromPostal;
-
-  const fromQuery = await nominatimSearch({ q: formatted, countrycodes: "ca" });
-  if (fromQuery) return fromQuery;
-
-  const res = await fetch(`https://geocoder.ca/?locate=${encodeURIComponent(compact)}&json=1`);
-  if (!res.ok) throw new Error("Geocoding service error");
-  const data = await res.json();
-  const lat = parseFloat(data.latt);
-  const lon = parseFloat(data.longt);
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-    throw new Error("No matching location found");
-  }
-  const city     = data.standard?.city;
-  const provAbbr = data.standard?.prov;
-  const provName = provAbbr ? (CA_PROVINCES[provAbbr] ?? provAbbr) : null;
-  return {
-    lat, lon,
-    name: [formatted, city, provName].filter(Boolean).join(", "),
-    stateOrProvince: provName
-  };
-}
-
-async function geocode(query) {
-  const caPostal = parseCanadianPostalCode(query);
-  if (caPostal) return geocodeCanadianPostal(caPostal);
-
-  const hit = await nominatimSearch({ q: query, countrycodes: "us,ca" });
-  if (hit) return hit;
-  throw new Error("No matching location found");
 }
 
 // ── Results renderer ──────────────────────────────────────────────────────────
@@ -1233,17 +933,17 @@ async function doLocate() {
   setStatus("", "");
 
   try {
-    const geo = await geocode(val);
+    const geo = await geocode(val, META.geocoderCountryCodes ?? "us,ca");
     S.lat              = geo.lat;
     S.lon              = geo.lon;
     S.geocodedName     = geo.name;
     S.stateOrProvince  = geo.stateOrProvince;
 
-    const initial = resolveLocation(geo.lat, geo.lon, null, geo.stateOrProvince);
+    const initial = resolveLocation(geo.lat, geo.lon);
 
-    if (initial.nearestKm > 450) {
+    if (initial.nearestKm > (META.outOfAreaKm ?? 450)) {
       setStatus(
-        "This tool covers the Pacific Northwest (WA, OR, ID, MT, BC). " +
+        `This tool covers ${META.coverage ?? META.name ?? "this region"}. ` +
         "That location appears to be outside the covered area — try a city in the region.",
         "warning"
       );
@@ -1271,7 +971,7 @@ $("change-location-btn").addEventListener("click", () => {
 });
 
 $("confirm-loc-btn").addEventListener("click", () => {
-  S.resolution = resolveLocation(S.lat, S.lon, S.candidateTag, S.stateOrProvince);
+  S.resolution = resolveLocation(S.lat, S.lon, S.candidateTag);
   showStep(2);
 });
 

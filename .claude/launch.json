@@ -10,7 +10,7 @@
     {
       "name": "config-tool",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8100", "-d", "config"],
+      "runtimeArgs": ["-m", "http.server", "8100"],
       "port": 8100
     },
     {

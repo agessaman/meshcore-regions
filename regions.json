@@ -1,0 +1,171 @@
+{
+  "version": "2026-06-01",
+  "source": "pnw-meshcore-regions.md",
+  "notes": "Canonical region data for the Pacific Northwest MeshCore tools. Single source of truth shared by /config and /map. 'r' is the additive Voronoi weight in km (score = distKm - r); 'p' is the multi-metro priority.",
+  "hierarchy": {
+    "west":        { "label": "Entire mesh",                       "parent": null },
+    "pnw":         { "label": "Pacific Northwest",                 "parent": "west" },
+
+    "wa":          { "label": "Washington",                        "parent": "pnw" },
+    "w-wa":        { "label": "Western Washington",                "parent": "wa" },
+    "sw-wa":       { "label": "Southwest Washington",              "parent": "wa" },
+    "c-wa":        { "label": "Central Washington",                "parent": "wa" },
+    "e-wa":        { "label": "Eastern Washington",                "parent": "wa" },
+    "sea":         { "label": "Seattle / Tacoma / Bellevue",       "parent": "w-wa" },
+    "oly":         { "label": "Olympia / Lacey / Tumwater",        "parent": "w-wa" },
+    "kit":         { "label": "Kitsap / Bremerton",               "parent": "w-wa" },
+    "grh":         { "label": "Grays Harbor / WA Coast",          "parent": "w-wa" },
+    "bvs":         { "label": "Skagit Valley",                     "parent": "w-wa" },
+    "bli":         { "label": "Bellingham / Whatcom",             "parent": "w-wa" },
+    "cls":         { "label": "Centralia / Chehalis",             "parent": "sw-wa" },
+    "kls":         { "label": "Kelso / Longview",                 "parent": "sw-wa" },
+    "ykm":         { "label": "Yakima",                            "parent": "c-wa" },
+    "eat":         { "label": "Wenatchee",                         "parent": "c-wa" },
+    "eln":         { "label": "Ellensburg",                        "parent": "c-wa" },
+    "mwh":         { "label": "Moses Lake",                        "parent": "c-wa" },
+    "geg":         { "label": "Spokane",                           "parent": "e-wa" },
+    "alw":         { "label": "Walla Walla",                       "parent": "e-wa" },
+    "puw":         { "label": "Pullman",                           "parent": "e-wa" },
+    "ie":          { "label": "Inland Empire",                     "parent": "pnw" },
+
+    "or":          { "label": "Oregon",                            "parent": "pnw" },
+    "wv":          { "label": "Willamette Valley",                 "parent": "or" },
+    "s-or":        { "label": "Southern Oregon",                   "parent": "or" },
+    "coast-or":    { "label": "Oregon Coast",                      "parent": "or" },
+    "c-or":        { "label": "Central Oregon",                    "parent": "or" },
+    "pdx":         { "label": "Portland Metro",                    "parent": "or" },
+    "sle":         { "label": "Salem / Keizer",                   "parent": "wv" },
+    "cvo":         { "label": "Corvallis / Albany",               "parent": "wv" },
+    "eug":         { "label": "Eugene / Springfield",             "parent": "wv" },
+    "mfr":         { "label": "Medford / Ashland",                "parent": "s-or" },
+    "rbg":         { "label": "Roseburg",                          "parent": "s-or" },
+    "lmt":         { "label": "Klamath Falls",                     "parent": "s-or" },
+    "onp":         { "label": "Newport / Lincoln City",           "parent": "coast-or" },
+    "ast":         { "label": "Astoria / Seaside",               "parent": "coast-or" },
+    "otk":         { "label": "Tillamook",                        "parent": "coast-or" },
+    "oth":         { "label": "North Bend / Coos Bay",           "parent": "coast-or" },
+    "bend":        { "label": "Bend / Redmond",                  "parent": "c-or" },
+    "pdt":         { "label": "Pendleton",                         "parent": "c-or" },
+    "bke":         { "label": "Baker City",                       "parent": "c-or" },
+
+    "id":          { "label": "Idaho",                            "parent": "pnw" },
+    "boi":         { "label": "Boise",                            "parent": "id" },
+    "cda":         { "label": "Coeur d'Alene / N. Idaho",         "parent": "id" },
+
+    "mt":          { "label": "Montana",                          "parent": "pnw" },
+    "fca":         { "label": "Flathead Valley / Kalispell",      "parent": "mt" },
+
+    "bc":          { "label": "British Columbia",                 "parent": "pnw" },
+    "swbc":        { "label": "Southwest BC / Lower Mainland",    "parent": "bc" },
+    "vanisle":     { "label": "Vancouver Island",                 "parent": "bc" },
+    "southisland": { "label": "South Vancouver Island / Victoria","parent": "vanisle" },
+    "salishmesh":  { "label": "Salish Sea / Gulf Islands",        "parent": "bc" }
+  },
+  "seeds": [
+    { "tag": "sea",         "label": "Seattle / Tacoma / Bellevue",      "parent": "w-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.4502, "lon": -122.3088, "r": 68,  "p": 72 },
+    { "tag": "oly",         "label": "Olympia / Lacey / Tumwater",       "parent": "w-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.9694, "lon": -122.9022, "r": 34,  "p": 55 },
+    { "tag": "kit",         "label": "Kitsap / Bremerton",               "parent": "w-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.4902, "lon": -122.7643, "r": 30,  "p": 55 },
+    { "tag": "grh",         "label": "Grays Harbor / WA Coast",          "parent": "w-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.9712, "lon": -123.8139, "r": 44,  "p": 50 },
+    { "tag": "bvs",         "label": "Skagit Valley",                    "parent": "w-wa",     "country": "US", "stateOrProvince": "WA", "lat": 48.4699, "lon": -122.4201, "r": 24,  "p": 58 },
+    { "tag": "bli",         "label": "Bellingham / Whatcom",             "parent": "w-wa",     "country": "US", "stateOrProvince": "WA", "lat": 48.7928, "lon": -122.5375, "r": 32,  "p": 60 },
+    { "tag": "cls",         "label": "Centralia / Chehalis",             "parent": "sw-wa",    "country": "US", "stateOrProvince": "WA", "lat": 46.6760, "lon": -122.9830, "r": 24,  "p": 52 },
+    { "tag": "kls",         "label": "Kelso / Longview",                 "parent": "sw-wa",    "country": "US", "stateOrProvince": "WA", "lat": 46.1180, "lon": -122.8980, "r": 24,  "p": 52 },
+    { "tag": "ykm",         "label": "Yakima",                           "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.5682, "lon": -120.5449, "r": 30,  "p": 53 },
+    { "tag": "eat",         "label": "Wenatchee",                        "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.3980, "lon": -120.2070, "r": 26,  "p": 52 },
+    { "tag": "eln",         "label": "Ellensburg",                       "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.9970, "lon": -120.5310, "r": 22,  "p": 51 },
+    { "tag": "mwh",         "label": "Moses Lake",                       "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.2077, "lon": -119.3191, "r": 30,  "p": 52 },
+    { "tag": "geg",         "label": "Spokane",                          "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.6199, "lon": -117.5338, "r": 44,  "p": 66 },
+    { "tag": "alw",         "label": "Walla Walla",                      "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.0949, "lon": -118.2880, "r": 24,  "p": 50 },
+    { "tag": "puw",         "label": "Pullman",                          "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.7439, "lon": -117.1096, "r": 22,  "p": 50 },
+    { "tag": "pdx",         "label": "Portland Metro",                   "parent": "or",       "country": "US", "stateOrProvince": "OR", "lat": 45.5898, "lon": -122.5951, "r": 46,  "p": 68, "crossBorder": true },
+    { "tag": "sle",         "label": "Salem / Keizer",                   "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.9095, "lon": -123.0025, "r": 26,  "p": 54 },
+    { "tag": "cvo",         "label": "Corvallis / Albany",               "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.4972, "lon": -123.2906, "r": 27,  "p": 54 },
+    { "tag": "eug",         "label": "Eugene / Springfield",             "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.1246, "lon": -123.2119, "r": 32,  "p": 56 },
+    { "tag": "mfr",         "label": "Medford / Ashland",                "parent": "s-or",     "country": "US", "stateOrProvince": "OR", "lat": 42.3742, "lon": -122.8735, "r": 30,  "p": 53 },
+    { "tag": "rbg",         "label": "Roseburg",                         "parent": "s-or",     "country": "US", "stateOrProvince": "OR", "lat": 43.2388, "lon": -123.3550, "r": 24,  "p": 50 },
+    { "tag": "lmt",         "label": "Klamath Falls",                    "parent": "s-or",     "country": "US", "stateOrProvince": "OR", "lat": 42.1611, "lon": -121.7333, "r": 26,  "p": 51 },
+    { "tag": "onp",         "label": "Newport / Lincoln City",           "parent": "coast-or", "country": "US", "stateOrProvince": "OR", "lat": 44.5804, "lon": -124.0580, "r": 26,  "p": 51 },
+    { "tag": "ast",         "label": "Astoria / Seaside",                "parent": "coast-or", "country": "US", "stateOrProvince": "OR", "lat": 46.1580, "lon": -123.8780, "r": 23,  "p": 51 },
+    { "tag": "otk",         "label": "Tillamook",                        "parent": "coast-or", "country": "US", "stateOrProvince": "OR", "lat": 45.4563, "lon": -123.8443, "r": 18,  "p": 50 },
+    { "tag": "oth",         "label": "North Bend / Coos Bay",            "parent": "coast-or", "country": "US", "stateOrProvince": "OR", "lat": 43.4171, "lon": -124.2460, "r": 26,  "p": 51 },
+    { "tag": "bend",        "label": "Bend / Redmond",                   "parent": "c-or",     "country": "US", "stateOrProvince": "OR", "lat": 44.2541, "lon": -121.1499, "r": 33,  "p": 57 },
+    { "tag": "pdt",         "label": "Pendleton",                        "parent": "c-or",     "country": "US", "stateOrProvince": "OR", "lat": 45.6951, "lon": -118.8418, "r": 24,  "p": 50 },
+    { "tag": "bke",         "label": "Baker City",                       "parent": "c-or",     "country": "US", "stateOrProvince": "OR", "lat": 44.8383, "lon": -117.8090, "r": 23,  "p": 49 },
+    { "tag": "boi",         "label": "Boise Metro",                      "parent": "id",       "country": "US", "stateOrProvince": "ID", "lat": 43.5644, "lon": -116.2230, "r": 43,  "p": 63 },
+    { "tag": "cda",         "label": "Coeur d'Alene / N. Idaho",         "parent": "id",       "country": "US", "stateOrProvince": "ID", "lat": 47.7069, "lon": -116.8200, "r": 38,  "p": 62, "crossBorderPairTag": "geg" },
+    { "tag": "fca",         "label": "Flathead Valley / Kalispell",      "parent": "mt",       "country": "US", "stateOrProvince": "MT", "lat": 48.3105, "lon": -114.2558, "r": 58,  "p": 58 },
+    { "tag": "swbc",        "label": "Southwest BC / Lower Mainland",    "parent": "bc",       "country": "CA", "stateOrProvince": "BC", "lat": 49.1700, "lon": -122.7000, "r": 80,  "p": 68 },
+    { "tag": "vanisle",     "label": "Vancouver Island",                 "parent": "bc",       "country": "CA", "stateOrProvince": "BC", "lat": 49.5000, "lon": -124.8000, "r": 150, "p": 60 },
+    { "tag": "southisland", "label": "South Vancouver Island / Victoria","parent": "vanisle",  "country": "CA", "stateOrProvince": "BC", "lat": 48.5000, "lon": -123.4000, "r": 50,  "p": 57 },
+    { "tag": "salishmesh",  "label": "Salish Sea / Gulf Islands",        "parent": "bc",       "country": "CA", "stateOrProvince": "BC", "lat": 48.8500, "lon": -123.3000, "r": 65,  "p": 55 }
+  ],
+  "metroGroups": [
+    { "label": "Washington",       "tags": ["sea","oly","kit","grh","bvs","bli","cls","kls","ykm","eat","eln","mwh","geg","alw","puw"] },
+    { "label": "Oregon",           "tags": ["pdx","sle","cvo","eug","mfr","rbg","lmt","onp","ast","otk","oth","bend","pdt","bke"] },
+    { "label": "Idaho",            "tags": ["boi","cda"] },
+    { "label": "Montana",          "tags": ["fca"] },
+    { "label": "British Columbia", "tags": ["swbc","vanisle","southisland","salishmesh"] }
+  ],
+  "meta": {
+    "_comment": "Per-deployment branding and viewport. Another region adopts these tools by editing this whole file — no code changes.",
+    "name": "Pacific Northwest MeshCore",
+    "title": "PNW Repeater Zone Selector",
+    "configTitle": "MeshCore Region Config — Pacific Northwest",
+    "badge": "🌲 Pacific Northwest MeshCore",
+    "tagline": "Search an address or click the map, pick a repeater type, and get ready-to-paste region commands.",
+    "coverage": "Covers WA · OR · ID · MT · BC",
+    "attribution": { "label": "PNW MeshCore Regions", "url": "https://gessaman.com/meshcore/regions/" },
+    "outOfAreaKm": 450,
+    "geocoderCountryCodes": "us,ca",
+    "map": {
+      "center": [46.9, -121.4],
+      "bounds": [[41.8, -125.6], [50.2, -113.0]]
+    }
+  },
+  "borders": [
+    {
+      "_comment": "Polyline as [lon, lat] sorted ascending by lon; border(lon) is the latitude of the line at that longitude. A point with lat above border(lon) is on the 'north' side. mode 'hard' = no cross-side tags and seeds are filtered to the point's side (US/Canada border, doc line 624). mode 'soft' = side only feeds crossBorderRules. field names the seed property the line separates.",
+      "field": "country",
+      "mode": "hard",
+      "north": "CA",
+      "south": "US",
+      "line": [
+        [-125.0, 48.40], [-124.7, 48.40], [-123.55, 48.30], [-123.25, 48.42],
+        [-123.15, 48.66], [-123.08, 48.90], [-123.02, 49.00], [-114.0, 49.00]
+      ]
+    },
+    {
+      "field": "stateOrProvince",
+      "mode": "soft",
+      "north": "WA",
+      "south": "OR",
+      "line": [
+        [-124.2, 46.27], [-123.83, 46.19], [-123.4, 46.15], [-122.9, 46.10],
+        [-122.84, 46.0], [-122.74, 45.87], [-122.67, 45.62], [-122.4, 45.57],
+        [-121.95, 45.64], [-121.5, 45.71], [-121.18, 45.61], [-120.0, 45.70],
+        [-119.5, 45.93], [-119.0, 46.0], [-116.9, 46.0]
+      ]
+    }
+  ],
+  "crossBorderRules": [
+    {
+      "_comment": "Each rule: when ALL conditions in `when` hold, append `addTags` and `note`. Conditions: top2HasAll (both metros in the top-2), primaryState/pointState (seed stateOrProvince vs the point's soft-border side), primaryCountry/pointCountry, primaryTagIn.",
+      "id": "inland-empire",
+      "when": { "top2HasAll": ["geg", "cda"] },
+      "addTags": ["ie"],
+      "note": "Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."
+    },
+    {
+      "id": "columbia-wa-side",
+      "when": { "primaryState": "OR", "pointState": "WA" },
+      "addTags": ["wa", "sw-wa"],
+      "note": "Washington side of an Oregon-metro coverage area — wa and sw-wa added for state-scoped traffic (cross-Columbia dual-carry)."
+    },
+    {
+      "id": "columbia-or-side",
+      "when": { "primaryState": "WA", "pointState": "OR" },
+      "addTags": ["or"],
+      "note": "Oregon side of a Washington-metro coverage area — or added for state-scoped traffic (cross-Columbia dual-carry)."
+    }
+  ]
+}

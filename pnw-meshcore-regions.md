@@ -68,6 +68,7 @@ west                            Entire mesh (Western US / SW Canada)
             coast-or            Oregon Coast
                 onp             Newport / Lincoln City (Lincoln)
                 ast             Astoria / Seaside (Clatsop)
+                otk             Tillamook (Tillamook)
                 oth             North Bend / Coos Bay (Coos)
             c-or                Central Oregon
                 ben             Bend / Redmond (Deschutes)
@@ -137,6 +138,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `lmt` | IATA | Klamath Falls (Crater Lake-Klamath Regional) |
 | `onp` | IATA | Newport Municipal Airport |
 | `ast` | IATA | Astoria Regional Airport |
+| `otk` | IATA | Tillamook Airport |
 | `oth` | IATA | Southwest Oregon Regional (North Bend) |
 | `bend` | Full name | Bend — short enough to use unabbreviated; no well-known IATA code |
 | `pdt` | IATA | Eastern Oregon Regional Airport (Pendleton) |
@@ -749,6 +751,7 @@ flood_scopes = #sle, #wv
 | `coast-or` | Oregon Coast | `or` |
 | `onp` | Newport / Lincoln City | `coast-or` |
 | `ast` | Astoria / Seaside | `coast-or` |
+| `otk` | Tillamook | `coast-or` |
 | `oth` | North Bend / Coos Bay | `coast-or` |
 | `c-or` | Central Oregon | `or` |
 | `bend` | Bend / Redmond | `c-or` |
@@ -770,6 +773,10 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-06-01
+
+- **Tillamook (`otk`)**: Added a dedicated north-central Oregon Coast region (IATA `OTK`, Tillamook Airport) under `coast-or`, filling the gap between `ast` (Astoria / Seaside) and `onp` (Newport / Lincoln City).
 
 ### 2026-05-28
 

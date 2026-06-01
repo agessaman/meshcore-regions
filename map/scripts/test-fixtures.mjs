@@ -2,15 +2,18 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { recommendedTagsForRepeater } from "../src/policy.js";
-import { resolveZonesForPoint } from "../src/resolver.js";
+import {
+  setRegions,
+  resolveLocation,
+  computeRecommendation
+} from "../../shared/region-engine.js";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const HIERARCHY_PATH = path.join(ROOT, "data", "seeds", "region-hierarchy.json");
-const ZONES_PATH = path.join(ROOT, "data", "zones", "zones.local.geojson");
-const PARTITION_ZONES_PATH = path.join(ROOT, "data", "zones", "zones.partition.geojson");
-const OVERRIDES_PATH = path.join(ROOT, "data", "overrides", "manual-overrides.geojson");
+const REPO_ROOT = path.resolve(ROOT, "..");
+const REGIONS_PATH = path.join(REPO_ROOT, "regions.json");
 
+// These fixtures lock in the shared engine's behavior for unambiguous metros, the
+// hard US/Canada border (no cross-country tags), and the OR/WA Columbia dual-carry.
 const fixtures = [
   {
     name: "Lake Stevens WA",
@@ -24,7 +27,7 @@ const fixtures = [
     lat: 48.4284,
     lon: -123.3656,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "bc", "vic"]
+    expectedTags: ["west", "pnw", "bc", "vanisle", "southisland"]
   },
   {
     name: "Portland OR",
@@ -34,18 +37,53 @@ const fixtures = [
     expectedTags: ["west", "pnw", "or", "pdx"]
   },
   {
+    name: "Vancouver WA (Portland metro, WA side)",
+    lat: 45.6280,
+    lon: -122.6614,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "or", "pdx", "wa", "sw-wa"]
+  },
+  {
+    name: "Long Beach WA (Astoria coverage, WA side)",
+    lat: 46.3520,
+    lon: -124.0540,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "or", "coast-or", "ast", "wa", "sw-wa"]
+  },
+  {
+    name: "Clatskanie-area OR (Longview coverage, OR side)",
+    lat: 46.1066,
+    lon: -123.1471,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "wa", "sw-wa", "kls", "or"]
+  },
+  {
+    name: "Bellingham WA (hard US/CA border — no bc tags)",
+    lat: 48.7519,
+    lon: -122.4787,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "wa", "w-wa", "bli"]
+  },
+  {
+    name: "Metro Vancouver BC (hard US/CA border — no wa tags)",
+    lat: 49.2000,
+    lon: -122.9100,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "bc", "swbc"]
+  },
+  {
     name: "Spokane WA",
     lat: 47.6588,
     lon: -117.4260,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "e-wa", "geg"]
+    expectedTags: ["west", "pnw", "wa", "e-wa", "geg", "ie"]
   },
   {
     name: "Coeur d'Alene ID",
     lat: 47.6777,
     lon: -116.7805,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "id", "cda"]
+    expectedTags: ["west", "pnw", "id", "cda", "ie"]
   },
   {
     name: "Kalispell MT (Flathead Valley)",
@@ -76,32 +114,11 @@ const fixtures = [
     expectedTags: ["west", "pnw", "wa", "c-wa", "ykm"]
   },
   {
-    name: "Sea/Oly boundary sample",
-    lat: 47.1398,
-    lon: -122.6481,
-    repeaterType: "residential",
-    expectedContainsTags: ["sea", "oly"]
-  },
-  {
-    name: "Lynden WA",
-    lat: 48.9465,
-    lon: -122.4521,
+    name: "San Juan Islands WA (US side of hard border)",
+    lat: 48.5340,
+    lon: -123.0170,
     repeaterType: "residential",
     expectedTags: ["west", "pnw", "wa", "w-wa", "bli"]
-  },
-  {
-    name: "Arlington WA",
-    lat: 48.1987,
-    lon: -122.1251,
-    repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "w-wa", "sea"]
-  },
-  {
-    name: "Port Angeles WA",
-    lat: 48.1181,
-    lon: -123.4307,
-    repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "w-wa", "kit"]
   }
 ];
 
@@ -118,22 +135,12 @@ function sameArray(a, b) {
 }
 
 async function main() {
-  const hierarchy = JSON.parse(await fs.readFile(HIERARCHY_PATH, "utf8"));
-  const zones = JSON.parse(await fs.readFile(ZONES_PATH, "utf8"));
-  const partitionZones = JSON.parse(await fs.readFile(PARTITION_ZONES_PATH, "utf8"));
-  const manualOverrides = JSON.parse(await fs.readFile(OVERRIDES_PATH, "utf8"));
+  setRegions(JSON.parse(await fs.readFile(REGIONS_PATH, "utf8")));
 
   const failures = [];
   for (const fixture of fixtures) {
-    const resolution = resolveZonesForPoint({
-      lat: fixture.lat,
-      lon: fixture.lon,
-      zonesGeojson: zones,
-      partitionGeojson: partitionZones,
-      manualOverridesGeojson: manualOverrides,
-      hierarchy: hierarchy.regions
-    });
-    const recommendation = recommendedTagsForRepeater(resolution, fixture.repeaterType);
+    const resolution = resolveLocation(fixture.lat, fixture.lon);
+    const recommendation = computeRecommendation(resolution, fixture.repeaterType);
     if (fixture.expectedTags && !sameArray(recommendation.tags, fixture.expectedTags)) {
       failures.push({
         fixture: fixture.name,
