@@ -26,7 +26,7 @@
         <div class="panel-header">
           <div class="badge" id="brandBadge">🌲 Pacific Northwest MeshCore</div>
           <h1>Repeater Zone Selector</h1>
-          <p>Search an address or click the map, pick a repeater type, and get ready-to-paste region commands. <a href="./overrides.php">Override editor</a></p>
+          <p>Search an address or click the map, pick a repeater type, and get ready-to-paste region commands.</p>
         </div>
 
         <!-- Location -->
@@ -78,14 +78,10 @@
           </div>
         </section>
 
-        <!-- Map boundary model -->
+        <!-- Map legend -->
         <section class="section">
-          <h2>Map Boundaries</h2>
-          <div class="btn-group" id="layerGroup">
-            <div class="seg-btn selected" role="button" tabindex="0" data-layer="voronoi">Weighted Voronoi<small>engine decision</small></div>
-            <div class="seg-btn" role="button" tabindex="0" data-layer="partition">Generated partition<small>+ overrides</small></div>
-          </div>
-          <p class="legend-note" id="layerNote"></p>
+          <h2>Map</h2>
+          <p class="legend-note">Each colored cell is the region a clicked point resolves to — <code>argmin(distance − weight)</code>, with a hard US/Canada border. Dots are region seed points; the same logic powers the <a href="/config/">config wizard</a>.</p>
         </section>
 
         <!-- Result -->

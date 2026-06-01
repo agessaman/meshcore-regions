@@ -4,9 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build:zones": "node ./scripts/build-zones.mjs",
-    "validate:zones": "node ./scripts/validate-zones.mjs",
+    "validate:regions": "node ./scripts/validate-regions.mjs",
     "test:fixtures": "node ./scripts/test-fixtures.mjs",
-    "check": "npm run validate:zones && npm run test:fixtures"
+    "check": "npm run validate:regions && npm run test:fixtures"
   }
 }
