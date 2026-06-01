@@ -127,7 +127,7 @@ region save
 
 **Choosing your default:**
 - **Neighborhood / urban nodes:** use your **local metro tag** (`sea`, `pdx`, `geg`, …). Your neighbors carry that tag, so your adverts still reach them — they just don't flood three states away.
-- **Backbone / high-site linkers:** use a **broader tag** matching the traffic you exist to carry — often your **state** (`wa`, `or`) or `pnw`. A linker that announces itself only to one metro defeats the purpose of being a linker. See [Backbone and High-Site Repeaters](../#backbone-and-high-site-repeaters).
+- **Backbone / high-site linkers:** use a **broader tag** matching the traffic you wish to carry — often your **state** (`wa`, `or`) or `pnw`. A linker that announces itself only to one metro defeats the purpose of being a linker. See [Backbone and High-Site Repeaters](../#backbone-and-high-site-repeaters).
 
 ### Step 4 — Companion app: scope your channels
 
