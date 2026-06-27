@@ -44,7 +44,7 @@ const S = {
   geocodedName: "",
   forcePrimaryTag: null,
   repeaterType: "residential",
-  firmware: "1.15",
+  firmware: "1.16",
   selectedMetros: [],
   resolution: null
 };

@@ -114,6 +114,41 @@ const fixtures = [
     expectedTags: ["west", "pnw", "wa", "c-wa", "ykm"]
   },
   {
+    name: "Wenatchee WA",
+    lat: 47.4235,
+    lon: -120.3103,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "wa", "c-wa", "eat"]
+  },
+  {
+    name: "Ellensburg WA",
+    lat: 46.9965,
+    lon: -120.5478,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "wa", "c-wa", "eln"]
+  },
+  {
+    name: "Pullman WA (Palouse — carries ie)",
+    lat: 46.7313,
+    lon: -117.1796,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "wa", "e-wa", "puw", "ie"]
+  },
+  {
+    name: "Walla Walla WA (e-wa, no ie)",
+    lat: 46.0646,
+    lon: -118.3430,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "wa", "e-wa", "alw"]
+  },
+  {
+    name: "Tri-Cities WA (Kennewick — psc under e-wa)",
+    lat: 46.2087,
+    lon: -119.1361,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "wa", "e-wa", "psc"]
+  },
+  {
     name: "San Juan Islands WA (US side of hard border)",
     lat: 48.5340,
     lon: -123.0170,

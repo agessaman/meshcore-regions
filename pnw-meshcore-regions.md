@@ -54,6 +54,7 @@ west                            Entire mesh (Western US / SW Canada)
                 geg             Spokane metro
                 alw             Walla Walla (Walla Walla)
                 puw             Pullman (Whitman)
+                psc             Tri-Cities / Pasco / Kennewick / Richland (Benton, Franklin)
         ie                      Inland Empire (Spokane WA + N. Idaho panhandle)
         or                      Oregon
             pdx                 Portland metro (OR + Clark County WA)
@@ -99,7 +100,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `wa`, `or`, `bc`, `id` | Postal / standard | State and province abbreviations |
 | `sea` | IATA | Seattle-Tacoma International — universally recognized |
 | `pdx` | IATA | Portland International — iconic, avoids OR/WA ambiguity |
-| `ie` | Abbreviation | Inland Empire — established regional identity for Spokane-CdA corridor |
+| `ie` | Abbreviation | Inland Empire — established regional identity for the Spokane–CdA corridor and the Palouse (Pullman) |
 | `swbc` | Abbreviation | Southwest BC / Lower Mainland — community-established name reflecting the Metro Vancouver area |
 | `vanisle` | Abbreviation | Vancouver Island — full island region |
 | `southisland` | Abbreviation | South Vancouver Island / Victoria — established community sub-region of `vanisle` |
@@ -122,6 +123,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `geg` | IATA | Spokane International Airport (Geiger Field) |
 | `alw` | IATA | Walla Walla Regional Airport |
 | `puw` | IATA | Pullman-Moscow Regional Airport |
+| `psc` | IATA | Tri-Cities Airport (Pasco) — Pasco / Kennewick / Richland |
 | `boi` | IATA | Boise (Boise Airport) |
 | `cda` | Abbreviation | Coeur d'Alene — standard local abbreviation; no nearby IATA airport |
 | `mt` | Postal | Montana — partial coverage in this scheme (Flathead Valley first; more metros later) |
@@ -434,6 +436,8 @@ The Inland Empire follows the same pattern as Portland — a cross-border commun
 
 Spokane repeaters carry `ie`, `wa`, and `e-wa`. Coeur d'Alene repeaters carry `ie` and `id`. An `ie`-scoped message reaches both sides. A `wa`-scoped message reaches Spokane but not CdA. An `id`-scoped message reaches CdA but not Spokane. The state boundary and the community boundary are both respected without conflict.
 
+Pullman (the Palouse) sits under `e-wa` like the rest of Eastern Washington but also carries `ie` for Inland Empire community traffic — `region def west pnw wa e-wa puw|pnw ie` (i.e. `ie` as a direct child of `pnw`, not nested under `puw`). Walla Walla (`alw`) and the Tri-Cities (`psc`) stay `e-wa`-only and do **not** carry `ie`; their local SE-Washington traffic is scoped to `e-wa`/`alw`/`psc`. See the [ShrubSteppe SE-WA region proposal](https://wiki.shrubsteppe.net/Proposed%20Region%20Codes), which adopts this same `west → pnw → wa → e-wa → {psc, alw}` chain.
+
 ### Flathead Valley (Montana)
 
 The Flathead (`fca`) sits under `mt` like other metros under their states. For operators who want regional coherence with the Inland Empire mesh community (and Cascadia-fringe geology), the same dual-carry pattern applies: add `ie` as a direct child of `pnw`, alongside `mt`/`fca` ancestry — `region put ie pnw`. An `ie`-scoped message then reaches Flathead repeaters that carry `ie`, while `fca`-scoped traffic stays local to the valley unless repeaters deliberately carry broader tags.
@@ -654,7 +658,6 @@ New local areas can be added without restructuring:
 | `frd` | San Juan Islands / Friday Harbor | `w-wa` | IATA |
 | `nuw` | Whidbey / Camano (Island County) | `w-wa` | IATA (NAS Whidbey / Ault Field) |
 | `mso` | Missoula (western Montana, Bitterroot drainage) | `mt` | IATA — distinct basin from Flathead (`fca`) |
-| `psc` | Tri-Cities (Pasco / Richland / Kennewick) | `e-wa` | IATA |
 | `gorge` | Columbia Gorge (Hood River OR + White Salmon WA) | `pnw` | Abbreviation — cross-border tag like `ie` and `pdx` |
 | `ycd` | Nanaimo / central Vancouver Island | `vanisle` | IATA |
 | `ylw` | Kelowna / Okanagan | `bc` | IATA |
@@ -735,6 +738,7 @@ flood_scopes = #sle, #wv
 | `geg` | Spokane metro | `e-wa` |
 | `alw` | Walla Walla | `e-wa` |
 | `puw` | Pullman | `e-wa` |
+| `psc` | Tri-Cities (Pasco / Kennewick / Richland) | `e-wa` |
 | `ie` | Inland Empire (cross-border) | `pnw` |
 | `mt` | Montana (partial) | `pnw` |
 | `fca` | Flathead Valley / Kalispell / Glacier | `mt` |
@@ -773,6 +777,12 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-06-27
+
+- **Tri-Cities (`psc`)**: Added Tri-Cities (Pasco / Kennewick / Richland, IATA `PSC` — Tri-Cities Airport at Pasco) under `e-wa`, promoted from Future Extensions into the main hierarchy. Updated the hierarchy tree, Name Rationale table, and Quick Reference accordingly.
+- **Pullman / Inland Empire (`ie`)**: Pullman (`puw`, the Palouse) now dual-carries `ie` alongside its `e-wa` ancestry, matching the Spokane / Coeur d'Alene pattern — `region def west pnw wa e-wa puw|pnw ie`. Walla Walla (`alw`) and the Tri-Cities (`psc`) stay `e-wa`-only and do not carry `ie`. Aligns with the [ShrubSteppe SE-Washington region proposal](https://wiki.shrubsteppe.net/Proposed%20Region%20Codes).
+- **Firmware default**: The Config Generator and map selector now default to firmware **v1.16.0+** (single-line `region def`), reflecting the 1.16.0 release. The 1.15 and 1.14 modes remain available via the toggle.
 
 ### 2026-06-01
 

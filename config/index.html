@@ -641,17 +641,17 @@
     <h2>Which firmware version?</h2>
     <p class="hint">Newer firmware supports a compact single-line shorthand; older firmware needs one command per tag.</p>
     <div class="fw-options">
-      <div class="fw-btn" role="button" tabindex="0" data-fw="1.16">
-        v1.16.0+
-        <small><code>region def</code> shorthand — all regions in one compact command</small>
-      </div>
-      <div class="fw-btn selected" role="button" tabindex="0" data-fw="1.15">
-        v1.15.0–1.15.x
-        <small><code>region put</code> per tag — flooding enabled automatically</small>
-      </div>
       <div class="fw-btn" role="button" tabindex="0" data-fw="1.14">
         v1.14.x and earlier
         <small>Requires <code>region allowf &lt;tag&gt;</code> after each <code>region put</code></small>
+      </div>
+      <div class="fw-btn" role="button" tabindex="0" data-fw="1.15">
+        v1.15.0–1.15.x
+        <small><code>region put</code> per tag — flooding enabled automatically</small>
+      </div>
+      <div class="fw-btn selected" role="button" tabindex="0" data-fw="1.16">
+        v1.16.0+
+        <small><code>region def</code> shorthand — all regions in one compact command</small>
       </div>
     </div>
     <div class="nav-row">
@@ -717,7 +717,7 @@ const S = {
   candidateTag: null,
   repeaterType: null,
   selectedMetros: [],
-  firmware: "1.15"
+  firmware: "1.16"
 };
 
 function buildMetroSection() {
@@ -1024,7 +1024,7 @@ $("generate-btn").addEventListener("click", () => {
 // ── Reset / edit ──────────────────────────────────────────────────────────────
 
 function resetAll() {
-  Object.assign(S, { geocodedName:"", stateOrProvince:null, lat:null, lon:null, resolution:null, candidateTag:null, repeaterType:null, selectedMetros:[], firmware:"1.15" });
+  Object.assign(S, { geocodedName:"", stateOrProvince:null, lat:null, lon:null, resolution:null, candidateTag:null, repeaterType:null, selectedMetros:[], firmware:"1.16" });
   $("loc-input").value = "";
   setStatus("", "");
   hide("candidates"); show("loc-form");
@@ -1033,7 +1033,7 @@ function resetAll() {
     c.classList.remove("selected"); c.setAttribute("aria-pressed","false");
   });
   document.querySelectorAll(".fw-btn").forEach(b => b.classList.remove("selected"));
-  document.querySelector('[data-fw="1.15"]').classList.add("selected");
+  document.querySelector('[data-fw="1.16"]').classList.add("selected");
   $("next-2").disabled = true;
   showStep(1);
 }

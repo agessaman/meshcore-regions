@@ -26,6 +26,7 @@
     "geg":         { "label": "Spokane",                           "parent": "e-wa" },
     "alw":         { "label": "Walla Walla",                       "parent": "e-wa" },
     "puw":         { "label": "Pullman",                           "parent": "e-wa" },
+    "psc":         { "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "e-wa" },
     "ie":          { "label": "Inland Empire",                     "parent": "pnw" },
 
     "or":          { "label": "Oregon",                            "parent": "pnw" },
@@ -77,6 +78,7 @@
     { "tag": "geg",         "label": "Spokane",                          "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.6199, "lon": -117.5338, "r": 44,  "p": 66 },
     { "tag": "alw",         "label": "Walla Walla",                      "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.0949, "lon": -118.2880, "r": 24,  "p": 50 },
     { "tag": "puw",         "label": "Pullman",                          "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.7439, "lon": -117.1096, "r": 22,  "p": 50 },
+    { "tag": "psc",         "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "e-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.2396, "lon": -119.1006, "r": 30,  "p": 54 },
     { "tag": "pdx",         "label": "Portland Metro",                   "parent": "or",       "country": "US", "stateOrProvince": "OR", "lat": 45.5898, "lon": -122.5951, "r": 46,  "p": 68, "crossBorder": true },
     { "tag": "sle",         "label": "Salem / Keizer",                   "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.9095, "lon": -123.0025, "r": 26,  "p": 54 },
     { "tag": "cvo",         "label": "Corvallis / Albany",               "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.4972, "lon": -123.2906, "r": 27,  "p": 54 },
@@ -100,7 +102,7 @@
     { "tag": "salishmesh",  "label": "Salish Sea / Gulf Islands",        "parent": "bc",       "country": "CA", "stateOrProvince": "BC", "lat": 48.8500, "lon": -123.3000, "r": 65,  "p": 55 }
   ],
   "metroGroups": [
-    { "label": "Washington",       "tags": ["sea","oly","kit","grh","bvs","bli","cls","kls","ykm","eat","eln","mwh","geg","alw","puw"] },
+    { "label": "Washington",       "tags": ["sea","oly","kit","grh","bvs","bli","cls","kls","ykm","eat","eln","mwh","geg","alw","puw","psc"] },
     { "label": "Oregon",           "tags": ["pdx","sle","cvo","eug","mfr","rbg","lmt","onp","ast","otk","oth","bend","pdt","bke"] },
     { "label": "Idaho",            "tags": ["boi","cda"] },
     { "label": "Montana",          "tags": ["fca"] },
@@ -154,6 +156,12 @@
       "when": { "top2HasAll": ["geg", "cda"] },
       "addTags": ["ie"],
       "note": "Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."
+    },
+    {
+      "id": "palouse-inland-empire",
+      "when": { "primaryTagIn": ["puw"] },
+      "addTags": ["ie"],
+      "note": "Inland Empire tag (ie) added — the Palouse (Pullman) shares the ie region with Spokane and Coeur d'Alene (parent: pnw)."
     },
     {
       "id": "columbia-wa-side",

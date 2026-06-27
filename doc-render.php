@@ -254,7 +254,7 @@ function meshcore_render_doc(string $markdownPath, string $title, string $assetB
         el.innerHTML =
           '<span class="fw-toggle-label">Firmware</span>' +
           ['1.14', '1.15', '1.16'].map(function (fw) {
-            return '<button class="fw-opt" data-fw="' + fw + '" aria-pressed="' + (fw === '1.15') + '">' + fw + '</button>';
+            return '<button class="fw-opt" data-fw="' + fw + '" aria-pressed="' + (fw === '1.16') + '">' + fw + '</button>';
           }).join('');
         el.addEventListener('click', function (e) {
           var btn = e.target.closest('.fw-opt');
@@ -275,7 +275,7 @@ function meshcore_render_doc(string $markdownPath, string $title, string $assetB
         fwOnlyEls = [].slice.call(document.querySelectorAll('[data-fw-only]'));
         if (blocks.length) {
           buildToggle();
-          setFirmware('1.15'); // default selection — hides 1.14-only callouts
+          setFirmware('1.16'); // default selection — hides 1.14-only callouts
         }
       }
 

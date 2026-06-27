@@ -81,7 +81,7 @@ Make sure your repeater is on current MeshCore firmware before configuring regio
 <aside class="gh-alert gh-alert-warning" data-alert="warning" data-fw-only="1.14"><p class="gh-alert-title">Warning</p><div class="gh-alert-body"><p>On <strong>firmware 1.14.0</strong> and earlier <strong>1.14.x</strong>, <code>region put</code> does <strong>not</strong> enable flooding on its own. After each <code>region put</code>, you must also run <strong><code>region allowf &lt;name&gt;</code></strong> for that region. The strategy document's <a href="../#repeater-configuration">Repeater Configuration</a> section covers this. Updating to 1.15.0+ avoids the extra step.</p></div></aside>
 
 > [!TIP]
-> **Coming in 1.16.0:** a single-line `region def` command (MeshCore [PR #2540](https://github.com/meshcore-dev/MeshCore/pull/2540)) lets you load an entire region hierarchy in one message instead of a chain of `region put` commands — more reliable, since a single dropped message can't leave you half-configured. The CLI examples on the rendered docs include a **firmware toggle** (1.14 / 1.15 / 1.16); pick **1.16** to see the `region def` form of any example.
+> **New in 1.16.0:** a single-line `region def` command (MeshCore [PR #2540](https://github.com/meshcore-dev/MeshCore/pull/2540)) lets you load an entire region hierarchy in one message instead of a chain of `region put` commands — more reliable, since a single dropped message can't leave you half-configured. The CLI examples on the rendered docs include a **firmware toggle** (1.14 / 1.15 / 1.16) that now defaults to **1.16**; switch it to **1.15** or **1.14** if you're on older firmware.
 
 ### Step 2 — Add your region tags
 

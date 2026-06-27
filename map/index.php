@@ -72,8 +72,8 @@
         <section class="section">
           <h2>Firmware</h2>
           <div class="btn-group" id="firmwareGroup">
-            <div class="seg-btn" role="button" tabindex="0" data-fw="1.16">v1.16+<small><code>region def</code></small></div>
-            <div class="seg-btn selected" role="button" tabindex="0" data-fw="1.15">v1.15.x<small><code>region put</code></small></div>
+            <div class="seg-btn selected" role="button" tabindex="0" data-fw="1.16">v1.16+<small><code>region def</code></small></div>
+            <div class="seg-btn" role="button" tabindex="0" data-fw="1.15">v1.15.x<small><code>region put</code></small></div>
             <div class="seg-btn" role="button" tabindex="0" data-fw="1.14">v1.14.x<small>+ <code>allowf</code></small></div>
           </div>
         </section>
