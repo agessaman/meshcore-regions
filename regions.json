@@ -11,6 +11,7 @@
     "sw-wa":       { "label": "Southwest Washington",              "parent": "wa" },
     "c-wa":        { "label": "Central Washington",                "parent": "wa" },
     "e-wa":        { "label": "Eastern Washington",                "parent": "wa" },
+    "se-wa":       { "label": "Southeastern Washington",           "parent": "wa" },
     "sea":         { "label": "Seattle / Tacoma / Bellevue",       "parent": "w-wa" },
     "oly":         { "label": "Olympia / Lacey / Tumwater",        "parent": "w-wa" },
     "kit":         { "label": "Kitsap / Bremerton",               "parent": "w-wa" },
@@ -24,9 +25,9 @@
     "eln":         { "label": "Ellensburg",                        "parent": "c-wa" },
     "mwh":         { "label": "Moses Lake",                        "parent": "c-wa" },
     "geg":         { "label": "Spokane",                           "parent": "e-wa" },
-    "alw":         { "label": "Walla Walla",                       "parent": "e-wa" },
-    "puw":         { "label": "Pullman",                           "parent": "e-wa" },
-    "psc":         { "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "e-wa" },
+    "alw":         { "label": "Walla Walla",                       "parent": "se-wa" },
+    "puw":         { "label": "Pullman",                           "parent": "se-wa" },
+    "psc":         { "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "se-wa" },
     "ie":          { "label": "Inland Empire",                     "parent": "pnw" },
 
     "or":          { "label": "Oregon",                            "parent": "pnw" },
@@ -76,9 +77,9 @@
     { "tag": "eln",         "label": "Ellensburg",                       "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.9970, "lon": -120.5310, "r": 22,  "p": 51 },
     { "tag": "mwh",         "label": "Moses Lake",                       "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.2077, "lon": -119.3191, "r": 30,  "p": 52 },
     { "tag": "geg",         "label": "Spokane",                          "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.6199, "lon": -117.5338, "r": 44,  "p": 66 },
-    { "tag": "alw",         "label": "Walla Walla",                      "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.0949, "lon": -118.2880, "r": 24,  "p": 50 },
-    { "tag": "puw",         "label": "Pullman",                          "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.7439, "lon": -117.1096, "r": 22,  "p": 50 },
-    { "tag": "psc",         "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "e-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.2396, "lon": -119.1006, "r": 30,  "p": 54 },
+    { "tag": "alw",         "label": "Walla Walla",                      "parent": "se-wa",    "country": "US", "stateOrProvince": "WA", "lat": 46.0949, "lon": -118.2880, "r": 24,  "p": 50 },
+    { "tag": "puw",         "label": "Pullman",                          "parent": "se-wa",    "country": "US", "stateOrProvince": "WA", "lat": 46.7439, "lon": -117.1096, "r": 22,  "p": 50 },
+    { "tag": "psc",         "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "se-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.2396, "lon": -119.1006, "r": 30,  "p": 54 },
     { "tag": "pdx",         "label": "Portland Metro",                   "parent": "or",       "country": "US", "stateOrProvince": "OR", "lat": 45.5898, "lon": -122.5951, "r": 46,  "p": 68, "crossBorder": true },
     { "tag": "sle",         "label": "Salem / Keizer",                   "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.9095, "lon": -123.0025, "r": 26,  "p": 54 },
     { "tag": "cvo",         "label": "Corvallis / Albany",               "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.4972, "lon": -123.2906, "r": 27,  "p": 54 },
@@ -158,10 +159,10 @@
       "note": "Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."
     },
     {
-      "id": "palouse-inland-empire",
+      "id": "palouse-good-neighbor",
       "when": { "primaryTagIn": ["puw"] },
-      "addTags": ["ie"],
-      "note": "Inland Empire tag (ie) added — the Palouse (Pullman) shares the ie region with Spokane and Coeur d'Alene (parent: pnw)."
+      "addTags": ["e-wa", "alw", "psc", "ie"],
+      "note": "Good-neighbor dual-carry (e-wa, alw, psc) added — Pullman is now primarily se-wa (alongside Walla Walla and the Tri-Cities, which it explicitly dual-carries), plus a tie back to e-wa. Also dual-carries ie (Inland Empire) given its proximity to the Idaho border, but does not carry geg — that Spokane affinity has shifted away."
     },
     {
       "id": "columbia-wa-side",

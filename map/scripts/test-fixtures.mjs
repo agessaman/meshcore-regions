@@ -128,25 +128,25 @@ const fixtures = [
     expectedTags: ["west", "pnw", "wa", "c-wa", "eln"]
   },
   {
-    name: "Pullman WA (Palouse — carries ie)",
+    name: "Pullman WA (Palouse — primary se-wa, dual-carries alw/psc/e-wa/ie)",
     lat: 46.7313,
     lon: -117.1796,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "e-wa", "puw", "ie"]
+    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "e-wa", "alw", "psc", "ie"]
   },
   {
-    name: "Walla Walla WA (e-wa, no ie)",
+    name: "Walla Walla WA (se-wa)",
     lat: 46.0646,
     lon: -118.3430,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "e-wa", "alw"]
+    expectedTags: ["west", "pnw", "wa", "se-wa", "alw"]
   },
   {
-    name: "Tri-Cities WA (Kennewick — psc under e-wa)",
+    name: "Tri-Cities WA (Kennewick — psc under se-wa)",
     lat: 46.2087,
     lon: -119.1361,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "e-wa", "psc"]
+    expectedTags: ["west", "pnw", "wa", "se-wa", "psc"]
   },
   {
     name: "San Juan Islands WA (US side of hard border)",

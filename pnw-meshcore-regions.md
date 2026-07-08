@@ -52,8 +52,9 @@ west                            Entire mesh (Western US / SW Canada)
                 mwh             Moses Lake (Grant)
             e-wa                Eastern Washington
                 geg             Spokane metro
+            se-wa               Southeastern Washington
                 alw             Walla Walla (Walla Walla)
-                puw             Pullman (Whitman)
+                puw             Pullman (Whitman, Asotin, Garfield)
                 psc             Tri-Cities / Pasco / Kennewick / Richland (Benton, Franklin)
         ie                      Inland Empire (Spokane WA + N. Idaho panhandle)
         or                      Oregon
@@ -100,7 +101,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `wa`, `or`, `bc`, `id` | Postal / standard | State and province abbreviations |
 | `sea` | IATA | Seattle-Tacoma International — universally recognized |
 | `pdx` | IATA | Portland International — iconic, avoids OR/WA ambiguity |
-| `ie` | Abbreviation | Inland Empire — established regional identity for the Spokane–CdA corridor and the Palouse (Pullman) |
+| `ie` | Abbreviation | Inland Empire — established regional identity for the Spokane–CdA corridor |
 | `swbc` | Abbreviation | Southwest BC / Lower Mainland — community-established name reflecting the Metro Vancouver area |
 | `vanisle` | Abbreviation | Vancouver Island — full island region |
 | `southisland` | Abbreviation | South Vancouver Island / Victoria — established community sub-region of `vanisle` |
@@ -111,7 +112,8 @@ west                            Entire mesh (Western US / SW Canada)
 | `w-wa` | Abbreviation | Western Washington |
 | `sw-wa` | Abbreviation | Southwest Washington |
 | `c-wa` | Abbreviation | Central Washington |
-| `e-wa` | Abbreviation | Eastern Washington |
+| `e-wa` | Abbreviation | Eastern Washington — now the Spokane-and-points-north branch, see `se-wa` |
+| `se-wa` | Abbreviation | Southeastern Washington — community-established identifier adopted by Walla Walla and the Tri-Cities; see the [ShrubSteppe SE-WA region proposal](https://wiki.shrubsteppe.net/Proposed%20Region%20Codes) |
 | `bvs` | IATA | Skagit Regional Airport (Burlington) |
 | `grh` | Abbreviation | Grays Harbor |
 | `cls` | IATA | Chehalis-Centralia Airport |
@@ -214,7 +216,8 @@ This means carrying `wa` does **not** automatically match traffic scoped to `w-w
 | `wa` | Washington State repeaters |
 | `w-wa` | Western Washington repeaters |
 | `sea` | Seattle metro repeaters |
-| `e-wa` | Eastern Washington repeaters |
+| `e-wa` | Eastern Washington repeaters (Spokane and points north) |
+| `se-wa` | Southeastern Washington repeaters (Walla Walla, Tri-Cities, Pullman) |
 | `or` | Oregon repeaters |
 | `pdx` | Portland metro repeaters (both OR and WA sides) |
 | `wv` | Willamette Valley repeaters |
@@ -301,7 +304,7 @@ Tags become: `west`, `pnw`, `or`, `pdx`, `wv` (18 bytes)
 
 ### Example: Spokane, WA
 
-Spokane sits under `e-wa` (Eastern Washington), and also carries the cross-border `ie` tag for Inland Empire community traffic.
+Spokane sits under `e-wa` (Eastern Washington — now the Spokane-and-points-north branch of the hierarchy), and also carries the cross-border `ie` tag for Inland Empire community traffic.
 
 ```
 region put west
@@ -314,6 +317,40 @@ region save
 ```
 
 Tags carried: `west`, `pnw`, `wa`, `e-wa`, `geg`, `ie` (23 bytes)
+
+### Example: Pullman, WA (the Palouse)
+
+Pullman sits under `se-wa` (Southeastern Washington) alongside Walla Walla and the Tri-Cities, and explicitly dual-carries `alw` and `psc` as a good-neighbor policy toward those two communities, plus `e-wa` as a tie back to the rest of Eastern Washington. Pullman also dual-carries `ie` (Inland Empire) given its proximity to the Idaho border, but does **not** carry `geg` — that Spokane affinity has shifted away.
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region put se-wa wa
+region put puw se-wa
+region put alw se-wa
+region put psc se-wa
+region put e-wa wa
+region put ie pnw
+region save
+```
+
+Tags carried: `west`, `pnw`, `wa`, `se-wa`, `puw`, `alw`, `psc`, `e-wa`, `ie` (37 bytes)
+
+### Example: Walla Walla / Tri-Cities, WA (Southeastern Washington)
+
+Walla Walla (`alw`) and the Tri-Cities (`psc`) sit under `se-wa` (Southeastern Washington), the community-established identifier documented in the [ShrubSteppe SE-WA region proposal](https://wiki.shrubsteppe.net/Proposed%20Region%20Codes).
+
+```
+region put west
+region put pnw west
+region put wa pnw
+region put se-wa wa
+region put alw se-wa
+region save
+```
+
+Tags carried: `west`, `pnw`, `wa`, `se-wa`, `alw` (18 bytes). The Tri-Cities configuration is identical with `psc` in place of `alw`.
 
 ### Example: Coeur d'Alene, ID
 
@@ -436,7 +473,15 @@ The Inland Empire follows the same pattern as Portland — a cross-border commun
 
 Spokane repeaters carry `ie`, `wa`, and `e-wa`. Coeur d'Alene repeaters carry `ie` and `id`. An `ie`-scoped message reaches both sides. A `wa`-scoped message reaches Spokane but not CdA. An `id`-scoped message reaches CdA but not Spokane. The state boundary and the community boundary are both respected without conflict.
 
-Pullman (the Palouse) sits under `e-wa` like the rest of Eastern Washington but also carries `ie` for Inland Empire community traffic — `region def west pnw wa e-wa puw|pnw ie` (i.e. `ie` as a direct child of `pnw`, not nested under `puw`). Walla Walla (`alw`) and the Tri-Cities (`psc`) stay `e-wa`-only and do **not** carry `ie`; their local SE-Washington traffic is scoped to `e-wa`/`alw`/`psc`. See the [ShrubSteppe SE-WA region proposal](https://wiki.shrubsteppe.net/Proposed%20Region%20Codes), which adopts this same `west → pnw → wa → e-wa → {psc, alw}` chain.
+Pullman also dual-carries `ie` given its proximity to the Idaho border, even though it is no longer nested under `e-wa`/`geg` the way Spokane is — see [Southeastern Washington](#southeastern-washington) below.
+
+### Southeastern Washington
+
+Community convention in southeastern Washington has diverged from the flat `e-wa` grouping: `e-wa` now identifies with Spokane and points north, while Walla Walla and the Tri-Cities have adopted `se-wa` (Southeastern Washington) as their own regional identifier — a sibling of `e-wa` directly under `wa`, not nested beneath it. Walla Walla (`alw`) and the Tri-Cities (`psc`) carry `west`/`pnw`/`wa`/`se-wa` plus their own metro tag.
+
+Pullman (the Palouse) sits under `se-wa` alongside Walla Walla and the Tri-Cities (`region def west pnw wa se-wa puw`), and explicitly dual-carries `alw` and `psc` as a good-neighbor policy toward those two communities, plus `e-wa` as a tie back to the rest of Eastern Washington and `ie` (Inland Empire) given its proximity to the Idaho border. Pullman does **not** carry `geg` — that Spokane-specific affinity has shifted away as the `se-wa` identity took hold. See the [ShrubSteppe SE-WA region proposal](https://wiki.shrubsteppe.net/Proposed%20Region%20Codes) (revised 7/5/2026 to introduce `se-wa`), which documents this same `west → pnw → wa → se-wa → {psc, alw}` chain, with Pullman additionally carrying `alw`, `psc`, `e-wa`, and `ie`.
+
+Pullman's service area is understood to extend beyond Whitman County to also cover Asotin and Garfield counties, which have no repeaters of their own.
 
 ### Flathead Valley (Montana)
 
@@ -734,11 +779,12 @@ flood_scopes = #sle, #wv
 | `eat` | Wenatchee | `c-wa` |
 | `eln` | Ellensburg | `c-wa` |
 | `mwh` | Moses Lake | `c-wa` |
-| `e-wa` | Eastern Washington | `wa` |
+| `e-wa` | Eastern Washington (Spokane and points north) | `wa` |
 | `geg` | Spokane metro | `e-wa` |
-| `alw` | Walla Walla | `e-wa` |
-| `puw` | Pullman | `e-wa` |
-| `psc` | Tri-Cities (Pasco / Kennewick / Richland) | `e-wa` |
+| `se-wa` | Southeastern Washington | `wa` |
+| `alw` | Walla Walla | `se-wa` |
+| `puw` | Pullman (dual-carries `alw`, `psc`, `e-wa`, `ie`) | `se-wa` |
+| `psc` | Tri-Cities (Pasco / Kennewick / Richland) | `se-wa` |
 | `ie` | Inland Empire (cross-border) | `pnw` |
 | `mt` | Montana (partial) | `pnw` |
 | `fca` | Flathead Valley / Kalispell / Glacier | `mt` |
@@ -777,6 +823,12 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-07-07
+
+- **Southeastern Washington (`se-wa`)**: Added `se-wa` under `wa`, a sibling of `e-wa`, reflecting community convention that has developed since the last update — `e-wa` now identifies with Spokane and points north, while Walla Walla and the Tri-Cities have adopted `se-wa` as their regional identifier. Reparented `alw` (Walla Walla) and `psc` (Tri-Cities) from `e-wa` to `se-wa`. Updated the hierarchy tree, Name Rationale table, Scoping Behavior table, and Quick Reference accordingly. Aligns with the revised [ShrubSteppe SE-WA region proposal](https://wiki.shrubsteppe.net/Proposed%20Region%20Codes) (revised 7/5/2026 to introduce `se-wa`).
+- **Pullman (`puw`) moves to `se-wa`**: Pullman is now primarily `se-wa` (alongside Walla Walla and the Tri-Cities), reparented from `e-wa`, and explicitly dual-carries `alw` and `psc` as a good-neighbor policy toward those two communities, plus `e-wa` as a tie back to the rest of Eastern Washington and `ie` (Inland Empire) given its proximity to the Idaho border. Pullman does not carry `geg` — that Spokane-specific affinity has shifted away. Added a dedicated Pullman repeater example and a Walla Walla / Tri-Cities (`se-wa`) example.
+- **Pullman coverage**: Documented Pullman's service area as extending beyond Whitman County to also cover Asotin and Garfield counties, which have no repeaters of their own.
 
 ### 2026-06-27
 
