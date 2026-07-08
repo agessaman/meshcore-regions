@@ -128,11 +128,11 @@ const fixtures = [
     expectedTags: ["west", "pnw", "wa", "c-wa", "eln"]
   },
   {
-    name: "Pullman WA (Palouse — primary se-wa, dual-carries alw/psc/e-wa/ie)",
+    name: "Pullman WA (Palouse — primary se-wa, dual-carries alw/psc/e-wa/ie/id/cda)",
     lat: 46.7313,
     lon: -117.1796,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "e-wa", "alw", "psc", "ie"]
+    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "e-wa", "alw", "psc", "ie", "id", "cda"]
   },
   {
     name: "Walla Walla WA (se-wa)",

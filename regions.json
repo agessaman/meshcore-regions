@@ -161,8 +161,8 @@
     {
       "id": "palouse-good-neighbor",
       "when": { "primaryTagIn": ["puw"] },
-      "addTags": ["e-wa", "alw", "psc", "ie"],
-      "note": "Good-neighbor dual-carry (e-wa, alw, psc) added — Pullman is now primarily se-wa (alongside Walla Walla and the Tri-Cities, which it explicitly dual-carries), plus a tie back to e-wa. Also dual-carries ie (Inland Empire) given its proximity to the Idaho border, but does not carry geg — that Spokane affinity has shifted away."
+      "addTags": ["e-wa", "alw", "psc", "ie", "id", "cda"],
+      "note": "Good-neighbor dual-carry (e-wa, alw, psc) added — Pullman is now primarily se-wa (alongside Walla Walla and the Tri-Cities, which it explicitly dual-carries), plus a tie back to e-wa. Also proactively dual-carries ie, id, and cda given its proximity to the Idaho border and the Coeur d'Alene community, but does not carry geg — that Spokane affinity has shifted away."
     },
     {
       "id": "columbia-wa-side",
