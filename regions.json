@@ -29,6 +29,8 @@
     "puw":         { "label": "Pullman",                           "parent": "se-wa" },
     "psc":         { "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "se-wa" },
     "ie":          { "label": "Inland Empire",                     "parent": "pnw" },
+    "palouse":     { "label": "Palouse",                           "parent": "ie" },
+    "lc":          { "label": "Lewiston / Clarkston",              "parent": "ie" },
 
     "or":          { "label": "Oregon",                            "parent": "pnw" },
     "wv":          { "label": "Willamette Valley",                 "parent": "or" },
@@ -96,6 +98,7 @@
     { "tag": "bke",         "label": "Baker City",                       "parent": "c-or",     "country": "US", "stateOrProvince": "OR", "lat": 44.8383, "lon": -117.8090, "r": 23,  "p": 49 },
     { "tag": "boi",         "label": "Boise Metro",                      "parent": "id",       "country": "US", "stateOrProvince": "ID", "lat": 43.5644, "lon": -116.2230, "r": 43,  "p": 63 },
     { "tag": "cda",         "label": "Coeur d'Alene / N. Idaho",         "parent": "id",       "country": "US", "stateOrProvince": "ID", "lat": 47.7069, "lon": -116.8200, "r": 38,  "p": 62, "crossBorderPairTag": "geg" },
+    { "tag": "id",          "label": "Idaho (Moscow / Lewiston / Clearwater)", "parent": "pnw", "country": "US", "stateOrProvince": "ID", "lat": 46.5000, "lon": -116.8000, "r": 50,  "p": 52 },
     { "tag": "fca",         "label": "Flathead Valley / Kalispell",      "parent": "mt",       "country": "US", "stateOrProvince": "MT", "lat": 48.3105, "lon": -114.2558, "r": 58,  "p": 58 },
     { "tag": "swbc",        "label": "Southwest BC / Lower Mainland",    "parent": "bc",       "country": "CA", "stateOrProvince": "BC", "lat": 49.1700, "lon": -122.7000, "r": 80,  "p": 68 },
     { "tag": "vanisle",     "label": "Vancouver Island",                 "parent": "bc",       "country": "CA", "stateOrProvince": "BC", "lat": 49.5000, "lon": -124.8000, "r": 150, "p": 60 },
@@ -105,7 +108,7 @@
   "metroGroups": [
     { "label": "Washington",       "tags": ["sea","oly","kit","grh","bvs","bli","cls","kls","ykm","eat","eln","mwh","geg","alw","puw","psc"] },
     { "label": "Oregon",           "tags": ["pdx","sle","cvo","eug","mfr","rbg","lmt","onp","ast","otk","oth","bend","pdt","bke"] },
-    { "label": "Idaho",            "tags": ["boi","cda"] },
+    { "label": "Idaho",            "tags": ["boi","cda","id"] },
     { "label": "Montana",          "tags": ["fca"] },
     { "label": "British Columbia", "tags": ["swbc","vanisle","southisland","salishmesh"] }
   ],
@@ -152,17 +155,35 @@
   ],
   "crossBorderRules": [
     {
-      "_comment": "Each rule: when ALL conditions in `when` hold, append `addTags` and `note`. Conditions: top2HasAll (both metros in the top-2), primaryState/pointState (seed stateOrProvince vs the point's soft-border side), primaryCountry/pointCountry, primaryTagIn.",
+      "_comment": "Each rule: when ALL conditions in `when` hold, append `addTags` and `note`. Conditions: top2HasAll (both metros in the top-2), primaryState/pointState (seed stateOrProvince vs the point's soft-border side), primaryCountry/pointCountry, primaryTagIn, repeaterTypeIn (only evaluated once a repeater type is chosen, e.g. high-site-only good-neighbor tags).",
       "id": "inland-empire",
       "when": { "top2HasAll": ["geg", "cda"] },
       "addTags": ["ie"],
       "note": "Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."
     },
     {
-      "id": "palouse-good-neighbor",
+      "id": "palouse-cross-border",
       "when": { "primaryTagIn": ["puw"] },
-      "addTags": ["e-wa", "alw", "psc", "ie", "id", "cda"],
-      "note": "Good-neighbor dual-carry (e-wa, alw, psc) added — Pullman is now primarily se-wa (alongside Walla Walla and the Tri-Cities, which it explicitly dual-carries), plus a tie back to e-wa. Also proactively dual-carries ie, id, and cda given its proximity to the Idaho border and the Coeur d'Alene community, but does not carry geg — that Spokane affinity has shifted away."
+      "addTags": ["ie", "palouse", "e-wa"],
+      "note": "Pullman (WA side of the Palouse) dual-carries ie and the cross-border palouse tag it shares with Moscow, ID, plus e-wa as a tie back to the rest of Eastern Washington."
+    },
+    {
+      "id": "palouse-cross-border-idaho",
+      "when": { "primaryTagIn": ["id"] },
+      "addTags": ["ie", "palouse"],
+      "note": "Moscow / Lewiston / Clearwater (ID side of the Palouse) dual-carries ie and the cross-border palouse tag it shares with Pullman, WA."
+    },
+    {
+      "id": "palouse-good-neighbor-highsite",
+      "when": { "primaryTagIn": ["puw"], "repeaterTypeIn": ["high-site"] },
+      "addTags": ["geg", "alw", "psc"],
+      "note": "High-site good-neighbor dual-carry (geg, alw, psc) — reserved for high-site repeaters near those borders, not everyday repeaters."
+    },
+    {
+      "id": "palouse-good-neighbor-highsite-idaho",
+      "when": { "primaryTagIn": ["id"], "repeaterTypeIn": ["high-site"] },
+      "addTags": ["geg", "alw", "psc"],
+      "note": "High-site good-neighbor dual-carry (geg, alw, psc) — reserved for high-site repeaters near those borders, not everyday repeaters."
     },
     {
       "id": "columbia-wa-side",

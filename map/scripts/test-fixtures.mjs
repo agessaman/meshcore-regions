@@ -128,11 +128,32 @@ const fixtures = [
     expectedTags: ["west", "pnw", "wa", "c-wa", "eln"]
   },
   {
-    name: "Pullman WA (Palouse — primary se-wa, dual-carries alw/psc/e-wa/ie/id/cda)",
+    name: "Pullman WA (Palouse — primary se-wa, everyday dual-carries ie/palouse/e-wa)",
     lat: 46.7313,
     lon: -117.1796,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "e-wa", "alw", "psc", "ie", "id", "cda"]
+    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "ie", "palouse", "e-wa"]
+  },
+  {
+    name: "Pullman WA high-site (Palouse — adds good-neighbor geg/alw/psc)",
+    lat: 46.7313,
+    lon: -117.1796,
+    repeaterType: "high-site",
+    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "ie", "palouse", "e-wa", "geg", "alw", "psc"]
+  },
+  {
+    name: "Moscow ID (Palouse — Idaho side, primary id, everyday dual-carries ie/palouse)",
+    lat: 46.7324,
+    lon: -117.0002,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "id", "ie", "palouse"]
+  },
+  {
+    name: "Moscow ID high-site (Palouse — adds good-neighbor geg/alw/psc)",
+    lat: 46.7324,
+    lon: -117.0002,
+    repeaterType: "high-site",
+    expectedTags: ["west", "pnw", "id", "ie", "palouse", "geg", "alw", "psc"]
   },
   {
     name: "Walla Walla WA (se-wa)",
@@ -174,7 +195,7 @@ async function main() {
 
   const failures = [];
   for (const fixture of fixtures) {
-    const resolution = resolveLocation(fixture.lat, fixture.lon);
+    const resolution = resolveLocation(fixture.lat, fixture.lon, fixture.forcePrimaryTag ?? null);
     const recommendation = computeRecommendation(resolution, fixture.repeaterType);
     if (fixture.expectedTags && !sameArray(recommendation.tags, fixture.expectedTags)) {
       failures.push({

@@ -130,7 +130,7 @@ function meshcore_render_doc(string $markdownPath, string $title, string $assetB
         "ykm":"c-wa","eat":"c-wa","eln":"c-wa","mwh":"c-wa",
         "geg":"e-wa",
         "se-wa":"wa","alw":"se-wa","psc":"se-wa","puw":"se-wa",
-        "ie":"pnw",
+        "ie":"pnw","palouse":"ie","lc":"ie",
         "or":"pnw","wv":"or","s-or":"or","coast-or":"or","c-or":"or","pdx":"or",
         "sle":"wv","cvo":"wv","eug":"wv",
         "mfr":"s-or","rbg":"s-or","lmt":"s-or",

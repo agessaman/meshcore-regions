@@ -92,7 +92,24 @@ function ruleMatches(rule, ctx) {
   if (w.pointState !== undefined && ctx.classified.stateOrProvince !== w.pointState) return false;
   if (w.primaryCountry !== undefined && ctx.primary.country !== w.primaryCountry) return false;
   if (w.pointCountry !== undefined && ctx.classified.country !== w.pointCountry) return false;
+  if (w.repeaterTypeIn && !w.repeaterTypeIn.includes(ctx.repeaterType)) return false;
   return true;
+}
+
+// Evaluate every crossBorderRule against ctx, returning the union of addTags/notes
+// for rules that match. ctx.repeaterType is optional — omitting it (or passing none)
+// excludes any rule gated with `repeaterTypeIn`, since that gate can only be
+// evaluated once the operator has picked a repeater type.
+function matchRules(ctx) {
+  const tags = [];
+  const notes = [];
+  for (const rule of CROSS_BORDER_RULES) {
+    if (ruleMatches(rule, ctx)) {
+      tags.push(...(rule.addTags ?? []));
+      if (rule.note) notes.push(rule.note);
+    }
+  }
+  return { tags, notes };
 }
 
 // ── Resolver ─────────────────────────────────────────────────────────────────
@@ -136,17 +153,14 @@ export function resolveLocation(lat, lon, forcePrimaryTag = null) {
   const overlap   = inCount > 1;
 
   const top2 = new Set([primaryEntry.seed.tag, secondary?.seed.tag]);
-  const extraTags  = [];
-  const extraNotes = [];
 
   // Data-driven cross-border / dual-carry rules (see crossBorderRules in regions.json).
-  const ctx = { top2, primary: primaryEntry.seed, classified };
-  for (const rule of CROSS_BORDER_RULES) {
-    if (ruleMatches(rule, ctx)) {
-      extraTags.push(...(rule.addTags ?? []));
-      if (rule.note) extraNotes.push(rule.note);
-    }
-  }
+  // Some rules are gated on repeaterType, which isn't known yet at this point in the
+  // flow — ruleCtx is kept on the result so computeRecommendation can re-evaluate once
+  // the operator picks a type. extraTags/extraNotes below cover only the type-agnostic
+  // rules, for callers that want a preview before a repeater type is chosen.
+  const ruleCtx = { top2, primary: primaryEntry.seed, classified };
+  const { tags: extraTags, notes: extraNotes } = matchRules(ruleCtx);
 
   return {
     country:      classified.country ?? null,
@@ -167,7 +181,8 @@ export function resolveLocation(lat, lon, forcePrimaryTag = null) {
     overlapLikely: overlap,
     gapKm:         secondary ? Math.abs(primaryEntry.km - secondary.km) : null,
     extraTags,
-    extraNotes
+    extraNotes,
+    ruleCtx
   };
 }
 
@@ -196,8 +211,11 @@ export function highSiteStrategy(res) {
 export function computeRecommendation(res, repeaterType, selectedMetros = []) {
   const pA   = res.primary.ancestry;
   const pTag = res.primary.tag;
-  const extra      = res.extraTags;
-  const extraNotes = res.extraNotes;
+  // Re-evaluate crossBorderRules now that repeaterType is known, so rules gated with
+  // `repeaterTypeIn` (e.g. high-site-only good-neighbor tags) are included correctly.
+  const { tags: extra, notes: extraNotes } = res.ruleCtx
+    ? matchRules({ ...res.ruleCtx, repeaterType })
+    : { tags: res.extraTags, notes: res.extraNotes };
 
   const nearBoundary = res.secondary && res.overlapLikely &&
     res.secondary.ancestry[3] !== undefined &&
