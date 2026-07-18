@@ -49,7 +49,7 @@ west                            Entire mesh (Western US / SW Canada)
                 ykm             Yakima (Yakima)
                 eat             Wenatchee (Chelan)
                 eln             Ellensburg (Kittitas)
-                mwh             Moses Lake (Grant)
+                eph             Ephrata (Grant)
             e-wa                Eastern Washington
                 geg             Spokane metro
             se-wa               Southeastern Washington
@@ -125,7 +125,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `ykm` | IATA | Yakima Air Terminal |
 | `eat` | IATA | Pangborn Memorial Airport (Wenatchee) |
 | `eln` | IATA | Bowers Field (Ellensburg) |
-| `mwh` | IATA | Grant County International (Moses Lake) |
+| `eph` | IATA | Ephrata Municipal (Grant County) |
 | `geg` | IATA | Spokane International Airport (Geiger Field) |
 | `alw` | IATA | Walla Walla Regional Airport |
 | `puw` | IATA | Pullman-Moscow Regional Airport |
@@ -822,7 +822,7 @@ flood_scopes = #sle, #wv
 | `ykm` | Yakima | `c-wa` |
 | `eat` | Wenatchee | `c-wa` |
 | `eln` | Ellensburg | `c-wa` |
-| `mwh` | Moses Lake | `c-wa` |
+| `eph` | Ephrata | `c-wa` |
 | `e-wa` | Eastern Washington (Spokane and points north) | `wa` |
 | `geg` | Spokane metro | `e-wa` |
 | `se-wa` | Southeastern Washington | `wa` |
@@ -869,6 +869,10 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-07-17
+
+- **Grant County (`eph`, was `mwh`)**: Switched the Grant County tag from Moses Lake's airport code to Ephrata's (`eph`, Ephrata Municipal). Ephrata is the county seat, and Moses Lake has no MeshCore activity yet.
 
 ### 2026-07-09
 
