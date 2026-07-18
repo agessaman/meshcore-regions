@@ -1,5 +1,5 @@
 {
-  "version": "2026-06-01",
+  "version": "2026-07-17",
   "source": "pnw-meshcore-regions.md",
   "notes": "Canonical region data for the Pacific Northwest MeshCore tools. Single source of truth shared by /config and /map. 'r' is the additive Voronoi weight in km (score = distKm - r); 'p' is the multi-metro priority.",
   "hierarchy": {
@@ -23,7 +23,7 @@
     "ykm":         { "label": "Yakima",                            "parent": "c-wa" },
     "eat":         { "label": "Wenatchee",                         "parent": "c-wa" },
     "eln":         { "label": "Ellensburg",                        "parent": "c-wa" },
-    "mwh":         { "label": "Moses Lake",                        "parent": "c-wa" },
+    "eph":         { "label": "Ephrata",                           "parent": "c-wa" },
     "geg":         { "label": "Spokane",                           "parent": "e-wa" },
     "alw":         { "label": "Walla Walla",                       "parent": "se-wa" },
     "puw":         { "label": "Pullman",                           "parent": "se-wa" },
@@ -77,7 +77,7 @@
     { "tag": "ykm",         "label": "Yakima",                           "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.5682, "lon": -120.5449, "r": 30,  "p": 53 },
     { "tag": "eat",         "label": "Wenatchee",                        "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.3980, "lon": -120.2070, "r": 26,  "p": 52 },
     { "tag": "eln",         "label": "Ellensburg",                       "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 46.9970, "lon": -120.5310, "r": 22,  "p": 51 },
-    { "tag": "mwh",         "label": "Moses Lake",                       "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.2077, "lon": -119.3191, "r": 30,  "p": 52 },
+    { "tag": "eph",         "label": "Ephrata",                          "parent": "c-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.3169, "lon": -119.5481, "r": 30,  "p": 52 },
     { "tag": "geg",         "label": "Spokane",                          "parent": "e-wa",     "country": "US", "stateOrProvince": "WA", "lat": 47.6199, "lon": -117.5338, "r": 44,  "p": 66 },
     { "tag": "alw",         "label": "Walla Walla",                      "parent": "se-wa",    "country": "US", "stateOrProvince": "WA", "lat": 46.0949, "lon": -118.2880, "r": 24,  "p": 50 },
     { "tag": "puw",         "label": "Pullman",                          "parent": "se-wa",    "country": "US", "stateOrProvince": "WA", "lat": 46.7439, "lon": -117.1096, "r": 22,  "p": 50 },
@@ -106,7 +106,7 @@
     { "tag": "salishmesh",  "label": "Salish Sea / Gulf Islands",        "parent": "bc",       "country": "CA", "stateOrProvince": "BC", "lat": 48.8500, "lon": -123.3000, "r": 65,  "p": 55 }
   ],
   "metroGroups": [
-    { "label": "Washington",       "tags": ["sea","oly","kit","grh","bvs","bli","cls","kls","ykm","eat","eln","mwh","geg","alw","puw","psc"] },
+    { "label": "Washington",       "tags": ["sea","oly","kit","grh","bvs","bli","cls","kls","ykm","eat","eln","eph","geg","alw","puw","psc"] },
     { "label": "Oregon",           "tags": ["pdx","sle","cvo","eug","mfr","rbg","lmt","onp","ast","otk","oth","bend","pdt","bke"] },
     { "label": "Idaho",            "tags": ["boi","cda","id"] },
     { "label": "Montana",          "tags": ["fca"] },
