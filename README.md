@@ -1,6 +1,6 @@
 # Pacific Northwest MeshCore Regions
 
-Planning docs and tools for a coordinated region scheme on the PNW mesh (Southern Oregon through BC and the Inland Empire). The scheme favors short, flat, memorable tags with hierarchy in parent relationships—not baked into the name strings—metro-scale boundaries aligned to how people actually use the mesh rather than county lines, and pragmatic cross-border tagging that follows real corridors and community-established names. Scope is about intent: local traffic stays local, and wider scopes provide reach only as far as is needed.
+Planning docs and tools for a coordinated region scheme on the PNW mesh (Southern Oregon through BC and the Inland Northwest). The scheme favors short, flat, memorable tags with hierarchy in parent relationships—not baked into the name strings—metro-scale boundaries aligned to how people actually use the mesh rather than county lines, and pragmatic cross-border tagging that follows real corridors and community-established names. Scope is about intent: local traffic stays local, and wider scopes provide reach only as far as is needed.
 
 ## Contents
 
@@ -44,7 +44,7 @@ region-specific input:
 - `borders` — boundary polylines. `mode: "hard"` filters seeds to the point's side
   (e.g. an international border where tags must not cross); `mode: "soft"` only
   feeds the rules below. `field` names the seed property the line separates.
-- `crossBorderRules` — declarative dual-carry/community-tag rules (e.g. add `ie`
+- `crossBorderRules` — declarative dual-carry/community-tag rules (e.g. add `inw`
   when both Spokane and Coeur d'Alene are nearby). Each rule is a `when` condition
   plus `addTags` and a `note`.
 - `meta` — branding (name, badge, attribution), the map `center`/`bounds`, the

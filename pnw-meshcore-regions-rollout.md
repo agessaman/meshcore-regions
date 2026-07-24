@@ -110,7 +110,7 @@ Find the chain for your own area in the strategy document's [Repeater Configurat
 > **Carry your full ancestry even if your range is short.** A neighborhood node should carry the same `west` / `pnw` / state / metro chain as a backbone node. Stripping tags doesn't make your node "lighter" — it just punches a hole in coverage for everyone who reaches the mesh through you. See [Always carry your full ancestry](../#always-carry-your-full-ancestry).
 
 > [!NOTE]
-> **Cross-border community tags** (`ie` for the Inland Empire, `pdx` for Portland metro) sit *alongside* your state ancestry, not in place of it — add them with their own `region put` if your node serves that community. See [Cross-Border Metro Regions](../#cross-border-metro-regions).
+> **Cross-border community tags** (`inw` for the Inland Northwest, `pdx` for Portland metro) sit *alongside* your state ancestry, not in place of it — add them with their own `region put` if your node serves that community. See [Cross-Border Metro Regions](../#cross-border-metro-regions).
 
 ### Step 3 — Set your default region
 

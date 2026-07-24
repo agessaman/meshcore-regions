@@ -33,7 +33,7 @@ Open `http://localhost:8080/map/`.
   directly — every cell is the region a click there would resolve to.
 - Borders come from `regions.json`: the **hard** US/Canada line filters seeds to the
   point's own country (no cross-country tags), and **soft** lines (the Columbia)
-  drive the OR/WA dual-carry. Cross-border community tags (`ie`, etc.) and the
+  drive the OR/WA dual-carry. Cross-border community tags (`inw`, etc.) and the
   dual-carry rules are declared in `crossBorderRules` — see `resolveLocation`.
 - When a click is near a boundary, recommendations can include both local tags.
 

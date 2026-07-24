@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document proposes a region naming scheme for the Pacific Northwest MeshCore mesh network, spanning from Southern Oregon through the Puget Sound region of Washington State to Vancouver and Victoria in British Columbia, east across the Cascades to the Inland Empire, and into northwest Montana's Flathead Valley (geologically part of Cascadia). The scheme is designed for use with MeshCore's region filtering system (firmware 1.10.0+), which uses hierarchical region tags on repeaters and transport code scoping on messages to control flood propagation.
+This document proposes a region naming scheme for the Pacific Northwest MeshCore mesh network, spanning from Southern Oregon through the Puget Sound region of Washington State to Vancouver and Victoria in British Columbia, east across the Cascades to the Inland Northwest, and into northwest Montana's Flathead Valley (geologically part of Cascadia). The scheme is designed for use with MeshCore's region filtering system (firmware 1.10.0+), which uses region tags on repeaters and transport code scoping on messages to control flood propagation.
 
 The scheme prioritizes short, flat, human-readable names. The parent/child hierarchy is enforced by `region put` commands, not by encoding structure into the names themselves.
 
@@ -14,7 +14,7 @@ The scheme prioritizes short, flat, human-readable names. The parent/child hiera
 - **Short names**: Region names are purely administrative — they never appear in flood packets. But shorter names are easier to type in CLI, easier to remember, and conserve the 172-byte budget in the regions response payload. Three letters or fewer where possible.
 - **MSA-scale regions**: The third level corresponds roughly to OMB Metropolitan Statistical Areas rather than individual counties. People don't segment their daily lives by county lines, and the mesh shouldn't either. The Seattle-Tacoma-Bellevue MSA (King, Pierce, Snohomish counties) is one region: `sea`.
 - **Flat naming**: `west`, `pnw`, `wa`, `sea` — not a complex string like `west-pnw-wa-sea` or `noam-usa-wa-sea`. The hierarchy lives in the parent relationships, not the strings.
-- **Cross-border pragmatism**: Portland straddles OR/WA — it lives under `or`, and Clark County WA repeaters dual-carry `pdx` and `wa`. The Inland Empire straddles WA/ID and uses the same dual-carry pattern. Vancouver BC uses community-established region tags (`swbc`, `vanisle`, `southisland`, `salishmesh`) rather than IATA codes to reflect the actual geographic communities that have formed on the mesh.
+- **Cross-border pragmatism**: Portland straddles OR/WA — it lives under `or`, and Clark County WA repeaters dual-carry `pdx` and `wa`. The Inland Northwest straddles WA/ID and uses the same dual-carry pattern. Vancouver BC uses community-established region tags (`swbc`, `vanisle`, `southisland`, `salishmesh`) rather than IATA codes to reflect the actual geographic communities that have formed on the mesh.
 
 ## Technical Constraints
 
@@ -56,7 +56,7 @@ west                            Entire mesh (Western US / SW Canada)
                 alw             Walla Walla (Walla Walla)
                 puw             Pullman (Whitman, Asotin, Garfield)
                 psc             Tri-Cities / Pasco / Kennewick / Richland (Benton, Franklin)
-        ie                      Inland Empire (Spokane WA + N. Idaho panhandle)
+        inw                     Inland Northwest (Spokane WA + N. Idaho panhandle)
             palouse             Palouse (Pullman WA + Moscow/Lewiston/Clearwater ID, cross-border)
             lc                  Lewiston / Clarkston (Nez Perce Co. ID + Asotin Co. WA, cross-border, proposed)
         or                      Oregon
@@ -103,9 +103,9 @@ west                            Entire mesh (Western US / SW Canada)
 | `wa`, `or`, `bc`, `id` | Postal / standard | State and province abbreviations |
 | `sea` | IATA | Seattle-Tacoma International — universally recognized |
 | `pdx` | IATA | Portland International — iconic, avoids OR/WA ambiguity |
-| `ie` | Abbreviation | Inland Empire — established regional identity for the Spokane–CdA corridor |
-| `palouse` | Community name | Palouse — cross-border sub-region of `ie` shared by Pullman, WA and Moscow, ID |
-| `lc` | Abbreviation | Lewiston / Clarkston — cross-border sub-region of `ie` for the Nez Perce Co. ID / Asotin Co. WA valley; not to be confused with "Lower Columbia" (the `ast`/`kls` corridor) |
+| `inw` | Abbreviation | Inland Northwest — matches the [Wikipedia disambiguation](https://en.wikipedia.org/wiki/Inland_Northwest) for the Spokane–CdA corridor; replaces the historical `ie` ("Inland Empire"), a label that also refers to a distinct region in Southern California. Legacy repeaters may still carry `ie` for interoperability, but it is no longer part of new recommendations |
+| `palouse` | Community name | Palouse — cross-border sub-region of `inw` shared by Pullman, WA and Moscow, ID |
+| `lc` | Abbreviation | Lewiston / Clarkston — cross-border sub-region of `inw` for the Nez Perce Co. ID / Asotin Co. WA valley; not to be confused with "Lower Columbia" (the `ast`/`kls` corridor) |
 | `swbc` | Abbreviation | Southwest BC / Lower Mainland — community-established name reflecting the Metro Vancouver area |
 | `vanisle` | Abbreviation | Vancouver Island — full island region |
 | `southisland` | Abbreviation | South Vancouver Island / Victoria — established community sub-region of `vanisle` |
@@ -225,12 +225,12 @@ This means carrying `wa` does **not** automatically match traffic scoped to `w-w
 | `or` | Oregon repeaters |
 | `pdx` | Portland metro repeaters (both OR and WA sides) |
 | `wv` | Willamette Valley repeaters |
-| `ie` | Inland Empire repeaters (both WA and ID sides) |
+| `inw` | Inland Northwest repeaters (both WA and ID sides) |
 | `palouse` | Palouse repeaters (both the Pullman WA and Moscow ID sides) |
 | `lc` | Lewiston / Clarkston repeaters (both the ID and WA sides, proposed) |
 | `mt` | Montana repeaters using this scheme (partial — see `fca`) |
 | `fca` | Flathead Valley repeaters |
-| `id` | Idaho repeaters (not including `ie` unless they also carry `id`) |
+| `id` | Idaho repeaters (not including `inw` unless they also carry `id`) |
 
 In the firmware, `*` is always present as the root of the region tree (`RegionMap`: id 0, name `"*"`). It is not a pattern that matches every configured region name; it is the bucket for **unscoped** flood traffic (`ROUTE_TYPE_FLOOD`). Whether such packets are forwarded is controlled by flood policy on that root entry (`region allowf` / `region denyf` for `*`—by default, flood is allowed). Scoped traffic still requires a transport-code match to a region you actually carry.
 
@@ -310,7 +310,7 @@ Tags become: `west`, `pnw`, `or`, `pdx`, `wv` (18 bytes)
 
 ### Example: Spokane, WA
 
-Spokane sits under `e-wa` (Eastern Washington — now the Spokane-and-points-north branch of the hierarchy), and also carries the cross-border `ie` tag for Inland Empire community traffic.
+Spokane sits under `e-wa` (Eastern Washington — now the Spokane-and-points-north branch of the hierarchy), and also carries the cross-border `inw` tag for Inland Northwest community traffic.
 
 ```
 region put west
@@ -318,15 +318,15 @@ region put pnw west
 region put wa pnw
 region put e-wa wa
 region put geg e-wa
-region put ie pnw
+region put inw pnw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `wa`, `e-wa`, `geg`, `ie` (23 bytes)
+Tags carried: `west`, `pnw`, `wa`, `e-wa`, `geg`, `inw` (24 bytes)
 
 ### Example: Pullman, WA (the Palouse)
 
-Pullman sits under `se-wa` (Southeastern Washington) alongside Walla Walla and the Tri-Cities. For everyday repeaters, it dual-carries `ie` (Inland Empire) and `palouse` — a sub-region of `ie` shared with Moscow, ID — plus `e-wa` as a tie back to the rest of Eastern Washington. Pullman does **not** carry `alw`, `psc`, or `geg` on everyday repeaters; those good-neighbor tags are reserved for high-site repeaters near those borders (see [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters)).
+Pullman sits under `se-wa` (Southeastern Washington) alongside Walla Walla and the Tri-Cities. For everyday repeaters, it dual-carries `inw` (Inland Northwest) and `palouse` — a sub-region of `inw` shared with Moscow, ID — plus `e-wa` as a tie back to the rest of Eastern Washington. Pullman does **not** carry `alw`, `psc`, or `geg` on everyday repeaters; those good-neighbor tags are reserved for high-site repeaters near those borders (see [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters)).
 
 ```
 region put west
@@ -335,27 +335,27 @@ region put wa pnw
 region put se-wa wa
 region put puw se-wa
 region put e-wa wa
-region put ie pnw
-region put palouse ie
+region put inw pnw
+region put palouse inw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `wa`, `se-wa`, `puw`, `e-wa`, `ie`, `palouse` (37 bytes)
+Tags carried: `west`, `pnw`, `wa`, `se-wa`, `puw`, `e-wa`, `inw`, `palouse` (38 bytes)
 
 ### Example: Moscow, ID (the Palouse, Idaho side)
 
-Moscow, Lewiston, and the Clearwater area carry `id` directly — there is no dedicated metro tag for this stretch of the Idaho panhandle (`cda` is reserved for Coeur d'Alene specifically). Moscow mirrors Pullman across the state line, dual-carrying `ie` and the shared `palouse` tag.
+Moscow, Lewiston, and the Clearwater area carry `id` directly — there is no dedicated metro tag for this stretch of the Idaho panhandle (`cda` is reserved for Coeur d'Alene specifically). Moscow mirrors Pullman across the state line, dual-carrying `inw` and the shared `palouse` tag.
 
 ```
 region put west
 region put pnw west
 region put id pnw
-region put ie pnw
-region put palouse ie
+region put inw pnw
+region put palouse inw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `id`, `ie`, `palouse` (22 bytes)
+Tags carried: `west`, `pnw`, `id`, `inw`, `palouse` (23 bytes)
 
 ### Example: Walla Walla / Tri-Cities, WA (Southeastern Washington)
 
@@ -374,18 +374,18 @@ Tags carried: `west`, `pnw`, `wa`, `se-wa`, `alw` (18 bytes). The Tri-Cities con
 
 ### Example: Coeur d'Alene, ID
 
-The Idaho-side mirror of Spokane. Carries `id` for Idaho-scoped traffic and `ie` for Inland Empire community traffic.
+The Idaho-side mirror of Spokane. Carries `id` for Idaho-scoped traffic and `inw` for Inland Northwest community traffic.
 
 ```
 region put west
 region put pnw west
 region put id pnw
 region put cda id
-region put ie pnw
+region put inw pnw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `id`, `cda`, `ie` (21 bytes)
+Tags carried: `west`, `pnw`, `id`, `cda`, `inw` (22 bytes)
 
 ### Example: Boise, ID
 
@@ -403,18 +403,18 @@ Tags carried: `west`, `pnw`, `id`, `boi` (17 bytes)
 
 ### Example: Flathead Valley, MT (Kalispell / Glacier)
 
-Northwest Montana's Flathead Valley is treated as its own local region under `mt`, not statewide coverage. Like Spokane and Coeur d'Alene, operators who want Inland Empire community scope add `ie` as a sibling under `pnw` (geologic and RF ties to the broader inland corridor).
+Northwest Montana's Flathead Valley is treated as its own local region under `mt`, not statewide coverage. Like Spokane and Coeur d'Alene, operators who want Inland Northwest community scope add `inw` as a sibling under `pnw` (geologic and RF ties to the broader inland corridor).
 
 ```
 region put west
 region put pnw west
 region put mt pnw
 region put fca mt
-region put ie pnw
+region put inw pnw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `mt`, `fca`, `ie` (18 bytes in regions response). Omit `region put ie pnw` if you only want Montana-scoped ancestry without IE-wide chat.
+Tags carried: `west`, `pnw`, `mt`, `fca`, `inw` (19 bytes in regions response). Omit `region put inw pnw` if you only want Montana-scoped ancestry without Inland-Northwest-wide chat.
 
 ### Example: Backbone / high-site relay
 
@@ -422,7 +422,7 @@ See the dedicated [Backbone and High-Site Repeaters](#backbone-and-high-site-rep
 
 ### Example: Border repeater near Portland (Clark County, WA)
 
-A repeater that serves the Portland metro from the Washington side. It carries `pdx` (under `or`) for Portland metro traffic, plus `wa` and `sw-wa` for Washington-scoped traffic. This dual-carry pattern mirrors how Spokane carries both `wa` and `ie`.
+A repeater that serves the Portland metro from the Washington side. It carries `pdx` (under `or`) for Portland metro traffic, plus `wa` and `sw-wa` for Washington-scoped traffic. This dual-carry pattern mirrors how Spokane carries both `wa` and `inw`.
 
 ```
 region put west
@@ -483,17 +483,20 @@ Tags carried: `west`, `pnw`, `wa`, `c-wa`, `ykm` (20 bytes)
 
 ### Portland
 
-Portland lives under `or` in the hierarchy, reflecting that the Portland metro's center of gravity is in Oregon. Clark County WA repeaters use a dual-carry pattern: they carry `pdx` (under `or`) for Portland metro traffic, and also carry `wa` and `sw-wa` for Washington-scoped traffic. This mirrors how Spokane carries both `wa`/`e-wa` and `ie`.
+Portland lives under `or` in the hierarchy, reflecting that the Portland metro's center of gravity is in Oregon. Clark County WA repeaters use a dual-carry pattern: they carry `pdx` (under `or`) for Portland metro traffic, and also carry `wa` and `sw-wa` for Washington-scoped traffic. This mirrors how Spokane carries both `wa`/`e-wa` and `inw`.
 
 Repeaters on the Oregon side carry `or`, `pdx`. Repeaters on the Washington side (Clark County) carry `or`, `pdx`, `wa`, and `sw-wa`. A `pdx`-scoped message reaches both sides. An `or`-scoped message reaches Portland (because Portland repeaters explicitly carry `or` in their configuration). An `or`-scoped message reaches any repeater that carries `or` (Portland configs include `or` in the ancestry chain). It does not match repeaters that carry only `pdx` without `or`. A `wa`-scoped message reaches the Clark County side but not the Oregon side.
 
-### Inland Empire
+### Inland Northwest
 
-The Inland Empire follows the same pattern as Portland — a cross-border community (`ie`) sitting as a direct child of `pnw`, not nested under either `wa` or `id`. The Spokane-Coeur d'Alene corridor functions as a single metro area that happens to straddle a state line.
+The Inland Northwest follows the same pattern as Portland — a cross-border community (`inw`) sitting as a direct child of `pnw`, not nested under either `wa` or `id`. The Spokane-Coeur d'Alene corridor functions as a single metro area that happens to straddle a state line.
 
-Spokane repeaters carry `ie`, `wa`, and `e-wa`. Coeur d'Alene repeaters carry `ie` and `id`. An `ie`-scoped message reaches both sides. A `wa`-scoped message reaches Spokane but not CdA. An `id`-scoped message reaches CdA but not Spokane. The state boundary and the community boundary are both respected without conflict.
+> [!NOTE]
+> This region was previously tagged `ie`, short for "Inland Empire" — a historical label for the Spokane–CdA corridor that is also, and more commonly, used for a distinct region in Southern California. `inw` ("Inland Northwest") avoids that ambiguity and matches the [Wikipedia disambiguation](https://en.wikipedia.org/wiki/Inland_Northwest) for this corridor. New configurations should use `inw`; repeaters that already carry `ie` may keep it for interoperability, but it is no longer part of new recommendations. Because region names are matched literally (see [The naming convention is the coordination mechanism](#the-naming-convention-is-the-coordination-mechanism)), `ie` and `inw` are distinct tags — carrying one does not forward traffic scoped to the other.
 
-Pullman also dual-carries `ie` given its proximity to the Idaho border, even though it is no longer nested under `e-wa`/`geg` the way Spokane is — see [Palouse](#palouse) below.
+Spokane repeaters carry `inw`, `wa`, and `e-wa`. Coeur d'Alene repeaters carry `inw` and `id`. An `inw`-scoped message reaches both sides. A `wa`-scoped message reaches Spokane but not CdA. An `id`-scoped message reaches CdA but not Spokane. The state boundary and the community boundary are both respected without conflict.
+
+Pullman also dual-carries `inw` given its proximity to the Idaho border, even though it is no longer nested under `e-wa`/`geg` the way Spokane is — see [Palouse](#palouse) below.
 
 ### Southeastern Washington
 
@@ -503,7 +506,7 @@ Pullman also sits under `se-wa` alongside Walla Walla and the Tri-Cities — see
 
 ### Palouse
 
-The Palouse straddles the WA/ID line the same way the Inland Empire straddles WA/ID further north: `palouse` is a sub-region of `ie`, not a direct child of `pnw`. Pullman, WA sits under `se-wa`; Moscow, Lewiston, and the Clearwater area sit directly under `id` (no dedicated metro tag — `cda` stays reserved for Coeur d'Alene specifically). Both sides dual-carry `ie` and `palouse`, so an `ie`- or `palouse`-scoped message reaches across the state line while `wa`- and `id`-scoped traffic stay on their own side.
+The Palouse straddles the WA/ID line the same way the Inland Northwest straddles WA/ID further north: `palouse` is a sub-region of `inw`, not a direct child of `pnw`. Pullman, WA sits under `se-wa`; Moscow, Lewiston, and the Clearwater area sit directly under `id` (no dedicated metro tag — `cda` stays reserved for Coeur d'Alene specifically). Both sides dual-carry `inw` and `palouse`, so an `inw`- or `palouse`-scoped message reaches across the state line while `wa`- and `id`-scoped traffic stay on their own side.
 
 Everyday repeaters on both sides keep it light — they do **not** carry `alw`, `psc`, or `geg`. Those good-neighbor tags toward Walla Walla, the Tri-Cities, and Spokane are reserved for high-site repeaters near those borders (see [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters)); close-border high sites on either side of the Palouse should carry all three.
 
@@ -511,25 +514,25 @@ Pullman's service area is understood to extend beyond Whitman County to also cov
 
 ### Lewiston / Clarkston
 
-`lc` is a second, **proposed** cross-border sub-region of `ie`, one valley south of the Palouse — Lewiston, ID (Nez Perce County) and Clarkston, WA (Asotin County) sit as a single twin-city community split by the Snake River, the same way Pullman and Moscow are split by the state line. Per the local mesh's own site, it isn't finalized yet.
+`lc` is a second, **proposed** cross-border sub-region of `inw`, one valley south of the Palouse — Lewiston, ID (Nez Perce County) and Clarkston, WA (Asotin County) sit as a single twin-city community split by the Snake River, the same way Pullman and Moscow are split by the state line. Per the local mesh's own site, it isn't finalized yet.
 
 ```
 region put west
 region put pnw west
 region put id pnw
-region put ie pnw
-region put lc ie
+region put inw pnw
+region put lc inw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `id`, `ie`, `lc` (17 bytes). Clarkston, WA carries the same `ie`/`lc` pair, with `wa` (and likely `se-wa`) ancestry in place of `id` — but as noted above, Asotin County has no repeaters of its own today, so this side is aspirational.
+Tags carried: `west`, `pnw`, `id`, `inw`, `lc` (18 bytes). Clarkston, WA carries the same `inw`/`lc` pair, with `wa` (and likely `se-wa`) ancestry in place of `id` — but as noted above, Asotin County has no repeaters of its own today, so this side is aspirational.
 
 > [!NOTE]
 > `lc` is not related to "Lower Columbia" (the Astoria–Longview corridor covered by `ast` and `kls` in this scheme) — an easy mix-up given both are PNW places commonly shortened to "LC."
 
 ### Flathead Valley (Montana)
 
-The Flathead (`fca`) sits under `mt` like other metros under their states. For operators who want regional coherence with the Inland Empire mesh community (and Cascadia-fringe geology), the same dual-carry pattern applies: add `ie` as a direct child of `pnw`, alongside `mt`/`fca` ancestry — `region put ie pnw`. An `ie`-scoped message then reaches Flathead repeaters that carry `ie`, while `fca`-scoped traffic stays local to the valley unless repeaters deliberately carry broader tags.
+The Flathead (`fca`) sits under `mt` like other metros under their states. For operators who want regional coherence with the Inland Northwest mesh community (and Cascadia-fringe geology), the same dual-carry pattern applies: add `inw` as a direct child of `pnw`, alongside `mt`/`fca` ancestry — `region put inw pnw`. An `inw`-scoped message then reaches Flathead repeaters that carry `inw`, while `fca`-scoped traffic stays local to the valley unless repeaters deliberately carry broader tags.
 
 ---
 
@@ -644,21 +647,21 @@ This is the intended behavior: local stays local, state-wide reaches the state, 
 
 ### Example: Seattle-to-Spokane corridor
 
-Consider a chain of repeaters linking the west side to the Inland Empire:
+Consider a chain of repeaters linking the west side to the Inland Northwest:
 
 ```
 Seattle neighborhood repeater           →  west, pnw, wa, w-wa, sea
 Snoqualmie Pass high-site               →  west, pnw, wa               (Strategy 1)
 Ellensburg repeater                     →  west, pnw, wa, c-wa, eln
-Spokane repeater                        →  west, pnw, wa, e-wa, geg, ie
-Coeur d'Alene repeater                  →  west, pnw, id, cda, ie
+Spokane repeater                        →  west, pnw, wa, e-wa, geg, inw
+Coeur d'Alene repeater                  →  west, pnw, id, cda, inw
 ```
 
-Traffic flow for a message scoped to `ie`:
-- Seattle and pass repeaters: **not forwarded** (no `ie` tag)
-- Spokane: **forwards** (carries `ie`)
-- Coeur d'Alene: **forwards** (carries `ie`)
-- Inland Empire chat stays in the Inland Empire
+Traffic flow for a message scoped to `inw`:
+- Seattle and pass repeaters: **not forwarded** (no `inw` tag)
+- Spokane: **forwards** (carries `inw`)
+- Coeur d'Alene: **forwards** (carries `inw`)
+- Inland Northwest chat stays in the Inland Northwest
 
 Traffic flow for a message scoped to `wa`:
 - All WA repeaters: **forward**
@@ -716,7 +719,7 @@ If you are in Clark County WA and your node can hear Portland metro repeaters ac
 
 If your RF footprint stays entirely on your own side of the line, the standard single-state config is correct. Proximity to a line on a map is not, by itself, a reason to add a neighboring *state* tag — but a genuine community tie across it can justify carrying a neighboring *metro* tag like `pdx`.
 
-The US/Canada border follows the same principle, but with one important difference: there is no cross-border community tag for the Bellingham–Vancouver corridor the way `pdx` bridges the Columbia or `ie` bridges Spokane and Coeur d'Alene. Border crossing there happens at the backbone level — high-site repeaters within RF range across the line relay `pnw`-scoped (or `west`-scoped) traffic between the two countries (see the [Seattle-to-Vancouver corridor example](#example-seattle-to-vancouver-corridor)). A Bellingham repeater carries `west`, `pnw`, `wa`, `w-wa`, `bli` — no `bc` tags. A Metro Vancouver repeater carries `west`, `pnw`, `bc`, `swbc` — no `wa` tags. So a `wa`- or `bc`-scoped message won't propagate beyond its own country — it stops at the first repeater across the line that doesn't carry the tag — while `pnw` reaches both. Neither side's urban nodes need to carry the other country's state or provincial tags.
+The US/Canada border follows the same principle, but with one important difference: there is no cross-border community tag for the Bellingham–Vancouver corridor the way `pdx` bridges the Columbia or `inw` bridges Spokane and Coeur d'Alene. Border crossing there happens at the backbone level — high-site repeaters within RF range across the line relay `pnw`-scoped (or `west`-scoped) traffic between the two countries (see the [Seattle-to-Vancouver corridor example](#example-seattle-to-vancouver-corridor)). A Bellingham repeater carries `west`, `pnw`, `wa`, `w-wa`, `bli` — no `bc` tags. A Metro Vancouver repeater carries `west`, `pnw`, `bc`, `swbc` — no `wa` tags. So a `wa`- or `bc`-scoped message won't propagate beyond its own country — it stops at the first repeater across the line that doesn't carry the tag — while `pnw` reaches both. Neither side's urban nodes need to carry the other country's state or provincial tags.
 
 ---
 
@@ -747,7 +750,7 @@ New local areas can be added without restructuring:
 | `frd` | San Juan Islands / Friday Harbor | `w-wa` | IATA |
 | `nuw` | Whidbey / Camano (Island County) | `w-wa` | IATA (NAS Whidbey / Ault Field) |
 | `mso` | Missoula (western Montana, Bitterroot drainage) | `mt` | IATA — distinct basin from Flathead (`fca`) |
-| `gorge` | Columbia Gorge (Hood River OR + White Salmon WA) | `pnw` | Abbreviation — cross-border tag like `ie` and `pdx` |
+| `gorge` | Columbia Gorge (Hood River OR + White Salmon WA) | `pnw` | Abbreviation — cross-border tag like `inw` and `pdx` |
 | `ycd` | Nanaimo / central Vancouver Island | `vanisle` | IATA |
 | `ylw` | Kelowna / Okanagan | `bc` | IATA |
 
@@ -794,7 +797,7 @@ flood_scopes = #sle, #wv
 ## Adoption Notes
 
 - **Backward compatible**: Unscoped messages flood everywhere via `*`. Regions are opt-in for traffic reduction.
-- **Minimum config**: Every repeater should carry its full ancestry. Because region matching is independent per name (see [The hierarchy is administrative, not functional](#the-hierarchy-is-administrative-not-functional)), skipping a level means that scope won't be forwarded. A Seattle repeater carries `west`, `pnw`, `wa`, `w-wa`, `sea` (5 tags). A Salem repeater carries `west`, `pnw`, `or`, `wv`, `sle` (5 tags). Cross-border community tags like `ie` are additional — they sit alongside the state ancestry, not in place of it.
+- **Minimum config**: Every repeater should carry its full ancestry. Because region matching is independent per name (see [The hierarchy is administrative, not functional](#the-hierarchy-is-administrative-not-functional)), skipping a level means that scope won't be forwarded. A Seattle repeater carries `west`, `pnw`, `wa`, `w-wa`, `sea` (5 tags). A Salem repeater carries `west`, `pnw`, `or`, `wv`, `sle` (5 tags). Cross-border community tags like `inw` are additional — they sit alongside the state ancestry, not in place of it.
 - **Firmware requirement**: MeshCore 1.10.0 or newer. Older firmware ignores transport codes entirely.
 - **Companion app**: The Companion app supports region scoping for client traffic in two ways: a per-channel scope (**Set Region Scope** on the channel) and an app-wide default applied to all flood packets it sends (**Settings → Experimental Settings → Default Region Scope**). It also includes a **Tools → Discover Regions** scan to see which region tags are live nearby. CLI and meshcore-cli expose the full scoping and repeater-configuration commands. Note that region *tags* (`region put`) are still configured only on repeaters, not clients.
 - **Community agreement**: Local area codes (the fourth level) should be agreed upon by the local mesh community. This document provides a starting point; the names should be ratified through Puget Mesh, Cascadia Mesh, PDX Mesh, Salish Mesh, and other local groups.
@@ -827,11 +830,11 @@ flood_scopes = #sle, #wv
 | `geg` | Spokane metro | `e-wa` |
 | `se-wa` | Southeastern Washington | `wa` |
 | `alw` | Walla Walla | `se-wa` |
-| `puw` | Pullman (dual-carries `e-wa`, `ie`, `palouse`; high-site adds `alw`/`psc`/`geg`) | `se-wa` |
+| `puw` | Pullman (dual-carries `e-wa`, `inw`, `palouse`; high-site adds `alw`/`psc`/`geg`) | `se-wa` |
 | `psc` | Tri-Cities (Pasco / Kennewick / Richland) | `se-wa` |
-| `ie` | Inland Empire (cross-border) | `pnw` |
-| `palouse` | Palouse (cross-border, Pullman WA ↔ Moscow ID) | `ie` |
-| `lc` | Lewiston / Clarkston (cross-border, proposed) | `ie` |
+| `inw` | Inland Northwest (cross-border; formerly `ie`, still carried by some legacy repeaters) | `pnw` |
+| `palouse` | Palouse (cross-border, Pullman WA ↔ Moscow ID) | `inw` |
+| `lc` | Lewiston / Clarkston (cross-border, proposed) | `inw` |
 | `mt` | Montana (partial) | `pnw` |
 | `fca` | Flathead Valley / Kalispell / Glacier | `mt` |
 | `or` | Oregon | `pnw` |
@@ -853,7 +856,7 @@ flood_scopes = #sle, #wv
 | `bend` | Bend / Redmond | `c-or` |
 | `pdt` | Pendleton | `c-or` |
 | `bke` | Baker City | `c-or` |
-| `id` | Idaho (Moscow / Lewiston / Clearwater carry this directly, dual-carries `ie`/`palouse`) | `pnw` |
+| `id` | Idaho (Moscow / Lewiston / Clearwater carry this directly, dual-carries `inw`/`palouse`) | `pnw` |
 | `boi` | Boise metro | `id` |
 | `cda` | Coeur d'Alene / N. Idaho | `id` |
 | `bc` | Southern British Columbia | `pnw` |
@@ -869,6 +872,10 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-07-24
+
+- **Inland Empire renamed to Inland Northwest (`ie` → `inw`)**: Renamed the cross-border Spokane/Coeur d'Alene community tag from `ie` ("Inland Empire") to `inw` ("Inland Northwest"). `ie` is a historical label that is also, and more commonly, used for a distinct region in Southern California; `inw` matches the [Wikipedia disambiguation](https://en.wikipedia.org/wiki/Inland_Northwest) for the Spokane–CdA corridor and avoids the ambiguity. `palouse` and `lc` are reparented from `ie` to `inw` accordingly. Repeaters that already carry `ie` may continue to do so for interoperability, but it is no longer part of new recommendations — updated all repeater configuration examples, the hierarchy tree, Name Rationale, Scoping Behavior, Cross-Border Metro Regions, and Quick Reference tables to use `inw`.
 
 ### 2026-07-17
 

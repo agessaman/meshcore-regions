@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-17",
+  "version": "2026-07-24",
   "source": "pnw-meshcore-regions.md",
   "notes": "Canonical region data for the Pacific Northwest MeshCore tools. Single source of truth shared by /config and /map. 'r' is the additive Voronoi weight in km (score = distKm - r); 'p' is the multi-metro priority.",
   "hierarchy": {
@@ -28,9 +28,9 @@
     "alw":         { "label": "Walla Walla",                       "parent": "se-wa" },
     "puw":         { "label": "Pullman",                           "parent": "se-wa" },
     "psc":         { "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "se-wa" },
-    "ie":          { "label": "Inland Empire",                     "parent": "pnw" },
-    "palouse":     { "label": "Palouse",                           "parent": "ie" },
-    "lc":          { "label": "Lewiston / Clarkston",              "parent": "ie" },
+    "inw":         { "label": "Inland Northwest",                  "parent": "pnw" },
+    "palouse":     { "label": "Palouse",                           "parent": "inw" },
+    "lc":          { "label": "Lewiston / Clarkston",              "parent": "inw" },
 
     "or":          { "label": "Oregon",                            "parent": "pnw" },
     "wv":          { "label": "Willamette Valley",                 "parent": "or" },
@@ -156,22 +156,22 @@
   "crossBorderRules": [
     {
       "_comment": "Each rule: when ALL conditions in `when` hold, append `addTags` and `note`. Conditions: top2HasAll (both metros in the top-2), primaryState/pointState (seed stateOrProvince vs the point's soft-border side), primaryCountry/pointCountry, primaryTagIn, repeaterTypeIn (only evaluated once a repeater type is chosen, e.g. high-site-only good-neighbor tags).",
-      "id": "inland-empire",
+      "id": "inland-northwest",
       "when": { "top2HasAll": ["geg", "cda"] },
-      "addTags": ["ie"],
-      "note": "Cross-border Inland Empire tag (ie) added — Spokane and Coeur d'Alene share the ie region (parent: pnw)."
+      "addTags": ["inw"],
+      "note": "Cross-border Inland Northwest tag (inw) added — Spokane and Coeur d'Alene share the inw region (parent: pnw). Some legacy repeaters may instead (or also) carry the older ie tag for interoperability; it is no longer part of new recommendations."
     },
     {
       "id": "palouse-cross-border",
       "when": { "primaryTagIn": ["puw"] },
-      "addTags": ["ie", "palouse", "e-wa"],
-      "note": "Pullman (WA side of the Palouse) dual-carries ie and the cross-border palouse tag it shares with Moscow, ID, plus e-wa as a tie back to the rest of Eastern Washington."
+      "addTags": ["inw", "palouse", "e-wa"],
+      "note": "Pullman (WA side of the Palouse) dual-carries inw and the cross-border palouse tag it shares with Moscow, ID, plus e-wa as a tie back to the rest of Eastern Washington."
     },
     {
       "id": "palouse-cross-border-idaho",
       "when": { "primaryTagIn": ["id"] },
-      "addTags": ["ie", "palouse"],
-      "note": "Moscow / Lewiston / Clearwater (ID side of the Palouse) dual-carries ie and the cross-border palouse tag it shares with Pullman, WA."
+      "addTags": ["inw", "palouse"],
+      "note": "Moscow / Lewiston / Clearwater (ID side of the Palouse) dual-carries inw and the cross-border palouse tag it shares with Pullman, WA."
     },
     {
       "id": "palouse-good-neighbor-highsite",
