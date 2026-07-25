@@ -13,3 +13,9 @@ duplicated in machine-readable form for the tools:
 `pnw-meshcore-regions.md`, make the same change in `regions.json` and
 `doc-render.php` in the same edit.** Grep for the old tag name across the repo
 to catch every occurrence before considering the change done.
+
+`config/`, `map/` and `visualizer/` all read `regions.json` at runtime through
+`shared/region-engine.js` and hold no copy of the data — they need no edit. The
+visualizer also derives its cross-border chart straight from `crossBorderRules`,
+so a new rule appears there on its own (see `visualizer/README.md` for the rule
+shapes it recognises).

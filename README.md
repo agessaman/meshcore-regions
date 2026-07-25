@@ -13,6 +13,7 @@ Planning docs and tools for a coordinated region scheme on the PNW mesh (Souther
 | [explainer/](explainer/) | Visual walkthrough for Companion app region scoping |
 | [config/](config/) | Config generator — region commands from your location |
 | [map/](map/) | Zone map and repeater tag selector ([details](map/README.md)) |
+| [visualizer/](visualizer/) | Hierarchy chart — the tag tree plus cross-border overlaps ([details](visualizer/README.md)) |
 
 ## Running locally
 
@@ -26,6 +27,7 @@ php -S localhost:8080   # from the repo root
 - `http://localhost:8080/` — strategy document (`index.php`)
 - `http://localhost:8080/config/` — config generator
 - `http://localhost:8080/map/` — zone map selector
+- `http://localhost:8080/visualizer/` — region hierarchy chart
 
 Both `config/` and `map/` resolve a location with the **same weighted-Voronoi
 engine and cross-border dual-tag rules**, sourced from the single canonical
@@ -33,8 +35,8 @@ engine and cross-border dual-tag rules**, sourced from the single canonical
 
 ## Adopting this for another region
 
-Both tools are data-driven: a different mesh region can reuse them **without code
-changes** by editing [regions.json](regions.json) alone. It holds every
+All three tools are data-driven: a different mesh region can reuse them **without
+code changes** by editing [regions.json](regions.json) alone. It holds every
 region-specific input:
 
 - `hierarchy` — the region tag tree (parents).
@@ -51,8 +53,8 @@ region-specific input:
   geocoder country codes, and the out-of-area distance.
 
 The shared engine ([shared/region-engine.js](shared/region-engine.js)) reads all of
-the above; nothing in `config/`, `map/src/`, or the build scripts hard-codes a
-place name, tag, viewport, or border.
+the above; nothing in `config/`, `map/src/`, `visualizer/src/`, or the build
+scripts hard-codes a place name, tag, viewport, or border.
 
 ## Acknowledgments
 
