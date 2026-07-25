@@ -13,7 +13,7 @@ Planning docs and tools for a coordinated region scheme on the PNW mesh (Souther
 | [explainer/](explainer/) | Visual walkthrough for Companion app region scoping |
 | [config/](config/) | Config generator — region commands from your location |
 | [map/](map/) | Zone map and repeater tag selector ([details](map/README.md)) |
-| [visualizer/](visualizer/) | Hierarchy chart — the tag tree plus cross-border overlaps ([details](visualizer/README.md)) |
+| [visualizer/](visualizer/) | Region charts — hierarchy tree, and a carriage matrix of who carries what ([details](visualizer/README.md)) |
 
 ## Running locally
 
@@ -27,7 +27,8 @@ php -S localhost:8080   # from the repo root
 - `http://localhost:8080/` — strategy document (`index.php`)
 - `http://localhost:8080/config/` — config generator
 - `http://localhost:8080/map/` — zone map selector
-- `http://localhost:8080/visualizer/` — region hierarchy chart
+- `http://localhost:8080/visualizer/` — region hierarchy tree
+- `http://localhost:8080/visualizer/matrix/` — carriage matrix (who carries what)
 
 Both `config/` and `map/` resolve a location with the **same weighted-Voronoi
 engine and cross-border dual-tag rules**, sourced from the single canonical

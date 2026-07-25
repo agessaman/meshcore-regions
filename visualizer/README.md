@@ -1,14 +1,26 @@
-# Region hierarchy visualizer
+# Region visualizer
 
-A chart of the region scheme: the administrative tree from
-[`regions.json`](../regions.json), plus the cross-border tags that refuse to sit
-in one branch.
+Two charts of the same region scheme from [`regions.json`](../regions.json), each
+answering a different question. They share one model
+([`src/model.js`](src/model.js)) and hold no copy of the region data.
 
-Serve the repository root with PHP and open `/visualizer/`:
+| View | Path | Answers |
+|---|---|---|
+| **Tree** (v1) | `/visualizer/` | Where does a tag sit, and which tags travel outside their branch? |
+| **Carriage matrix** | `/visualizer/matrix/` | What does a repeater *here* carry, and how far does a tag reach? |
+
+Serve the repository root with PHP and open either:
 
 ```bash
 php -S localhost:8080
 ```
+
+---
+
+# Tree view (v1)
+
+The administrative tree, plus the cross-border tags that refuse to sit in one
+branch.
 
 ## What it draws
 
@@ -86,7 +98,75 @@ Rows and rail headers are focusable with `Enter`/`Space` to select and
 | Path | Purpose |
 |---|---|
 | `index.php` | Page shell (PHP only for the `<base href>`, as in `/map`) |
-| `src/model.js` | `regions.json` → tree + overlays; the palette |
+| `src/model.js` | `regions.json` → tree + overlays; the palette. **Shared with the matrix view** |
 | `src/chart.js` | Measurement, layout, SVG rendering, chart events |
 | `src/main.js` | Page wiring — panel, legend, chips, search, table |
 | `public/styles.css` | Styling, shared palette with `/config`, `/map`, `/explainer` |
+
+---
+
+# Carriage matrix (`matrix/`)
+
+Rows are the places a repeater can actually be — the seeded regions, because a
+location only ever resolves to one of those. Columns are every tag. A mark says
+*a repeater in this region carries this tag*.
+
+Both axes run in the same document order, so a region's own ancestry lands on a
+diagonal. **The staircase is the point**: anything off it is a tag travelling
+outside its own branch, so the overlap reads as the anomaly rather than needing
+an annotation to explain it. Read across a row for one repeater's whole tag list;
+read down a column for a tag's reach — every region a message scoped to it gets
+to, which is the property the strategy document keeps returning to.
+
+## Why this exists alongside the tree view
+
+The tree view gave the type-gated rule its own rail column, and that column was
+the one genuinely confusing thing in it. Every other column meant "this row's
+region carries this tag"; that one meant two things at once — a dot was "this
+region *gains* tags", a hollow square was "this tag *gets gained* by someone
+else" — and its header was a repeater type, not a tag. No legend wording fixes a
+column that carries two semantics.
+
+Here repeater type is a **mode**, not a column. Switching to high-site just fills
+in more cells, which is exactly what the rule does. The affected cells are
+visible either way: outlined when the type is off, solid-ringed when it is on, so
+you can see what the choice costs before making it.
+
+## Cell states
+
+| Mark | Meaning |
+|---|---|
+| Green square, shaded by column depth | ancestry — a tag from the region's own branch |
+| Green square with a gold ring | the region's own tag |
+| Solid violet circle | carried from another branch |
+| Faint violet outline | would be carried, but not at this repeater type |
+| Violet ring, hollow centre | carried, and only because of the selected type |
+
+Colour is not the only channel: ancestry is a square and cross-branch is a
+circle, and the column header already names the tag. One accent does all the
+cross-branch work — spending a colour per rule would double-encode something the
+grid already shows positionally. Violet was chosen over the obvious warm accent
+because orange sits ΔE 7.1 from the dark green ramp step under protanopia (a
+fail); violet clears every step of the ramp at ΔE 21–44 across deutan, protan and
+tritan.
+
+## Accessibility
+
+It is a real `<table>` with `<th scope>` on both axes, so the row/column
+association is native rather than reconstructed — which also means it needs no
+separate "data table" view. Marked cells carry visually-hidden text naming the
+kind of carriage. Column and row headers are focusable and selectable with
+`Enter`/`Space`; `Escape` clears.
+
+## Files
+
+| Path | Purpose |
+|---|---|
+| `matrix/index.php` | Page shell |
+| `matrix/src/main.js` | Grid derivation, table build, interaction, detail panel |
+| `matrix/public/styles.css` | Styling; the accent lives here and in `main.js` |
+
+Nothing here is region-specific. The repeater-type control is built from the
+distinct `repeaterTypeIn` values found in `crossBorderRules`, and both axes come
+from the shared model — a new tag, a new rule, or a new repeater type appears
+without a code change.

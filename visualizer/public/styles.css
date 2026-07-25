@@ -97,6 +97,10 @@ a:hover { color: var(--green-dark); }
   transition: background 0.15s, border-color 0.15s;
 }
 .header-nav a:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.4); color: #fff; }
+/* The sibling view of the same data — set apart from the links that leave. */
+.header-nav a:first-child {
+  background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.45);
+}
 
 /* ── Page ────────────────────────────────────────────────────────────────── */
 
