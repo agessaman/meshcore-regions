@@ -25,6 +25,7 @@
         </p>
         <nav class="header-nav" aria-label="Other tools">
           <a href="../">Tree view</a>
+          <a href="../../countymap/">County map</a>
           <a href="../../">Strategy doc</a>
           <a href="../../explainer/">Explainer</a>
           <a href="../../config/">Config generator</a>

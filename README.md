@@ -14,6 +14,7 @@ Planning docs and tools for a coordinated region scheme on the PNW mesh (Souther
 | [config/](config/) | Config generator — region commands from your location |
 | [map/](map/) | Zone map and repeater tag selector ([details](map/README.md)) |
 | [visualizer/](visualizer/) | Region charts — hierarchy tree, and a carriage matrix of who carries what ([details](visualizer/README.md)) |
+| [countymap/](countymap/) | Regions drawn as bundles of counties, with the RF shape alongside ([details](countymap/README.md)) |
 
 ## Running locally
 
@@ -29,6 +30,7 @@ php -S localhost:8080   # from the repo root
 - `http://localhost:8080/map/` — zone map selector
 - `http://localhost:8080/visualizer/` — region hierarchy tree
 - `http://localhost:8080/visualizer/matrix/` — carriage matrix (who carries what)
+- `http://localhost:8080/countymap/` — regions by county
 
 Both `config/` and `map/` resolve a location with the **same weighted-Voronoi
 engine and cross-border dual-tag rules**, sourced from the single canonical

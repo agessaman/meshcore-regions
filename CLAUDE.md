@@ -14,8 +14,13 @@ duplicated in machine-readable form for the tools:
 `doc-render.php` in the same edit.** Grep for the old tag name across the repo
 to catch every occurrence before considering the change done.
 
-`config/`, `map/` and `visualizer/` all read `regions.json` at runtime through
-`shared/region-engine.js` and hold no copy of the data — they need no edit. The
-visualizer also derives its cross-border chart straight from `crossBorderRules`,
-so a new rule appears there on its own (see `visualizer/README.md` for the rule
-shapes it recognises).
+`config/`, `map/`, `visualizer/` and `countymap/` all read `regions.json` at
+runtime through `shared/region-engine.js` and hold no copy of the data — they need
+no edit. The visualizer also derives its cross-border chart straight from
+`crossBorderRules`, so a new rule appears there on its own (see
+`visualizer/README.md` for the rule shapes it recognises).
+
+`countymap/public/boundaries.json` holds county polygons only — no region data —
+so it never needs regenerating when tags change. It does mean a re-parent or a
+seed move can shift which counties a region covers; the county map recomputes that
+at load, so just reload it to check.

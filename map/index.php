@@ -81,7 +81,7 @@
         <!-- Map legend -->
         <section class="section">
           <h2>Map</h2>
-          <p class="legend-note">Each colored cell is the region a clicked point resolves to — <code>argmin(distance − weight)</code>, with a hard US/Canada border. Dots are region seed points; the same logic powers the <a href="/config/">config wizard</a>.</p>
+          <p class="legend-note">Each colored cell is the region a clicked point resolves to — <code>argmin(distance − weight)</code>, with a hard US/Canada border. Dots are region seed points; the same logic powers the <a href="/config/">config wizard</a>. For the same regions drawn as bundles of counties, see the <a href="../countymap/">county map</a>.</p>
         </section>
 
         <!-- Result -->
