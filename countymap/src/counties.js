@@ -42,6 +42,11 @@ export const NO_REGION = "#b8bfbb";
 // between sea and grh) without flagging every county that merely clips a corner.
 const SPLIT_AT = 0.30;
 
+// How far outside its region's own declared radius an area can sit before the map
+// stops asserting it confidently. Three times `r` is a deliberate multiple of the
+// scheme's own number rather than a distance of my choosing — see `far` below.
+const FAR_REACH = 3;
+
 // ── Geometry ──────────────────────────────────────────────────────────────────
 
 export function ringsOf(geometry) {
@@ -117,13 +122,14 @@ export function assignCounties(features) {
     const points = samplePoints(feature.geometry, box);
 
     const tally = new Map();
-    let latSum = 0, lonSum = 0, nearest = Infinity;
+    let latSum = 0, lonSum = 0, nearest = Infinity, kmSum = 0;
 
     for (const [lat, lon] of points) {
       const res = resolveLocation(lat, lon);
       const tag = res.primary.tag;
       tally.set(tag, (tally.get(tag) ?? 0) + 1);
       latSum += lat; lonSum += lon;
+      kmSum += res.primary.km;
       if (res.primary.km < nearest) nearest = res.primary.km;
     }
 
@@ -132,6 +138,14 @@ export function assignCounties(features) {
     const [primary, primaryCount] = ranked[0] ?? [null, 0];
     const [second, secondCount] = ranked[1] ?? [null, 0];
     const secondShare = secondCount / total;
+
+    // How far this area sits from its region's centre, measured in units of that
+    // region's own declared radius. Using `r` as the yardstick rather than a fixed
+    // number of kilometres keeps the judgement inside the scheme: a metro with
+    // r = 22 and one with r = 150 are not claiming the same reach.
+    const seedR = SEEDS.find(s => s.tag === primary)?.r ?? null;
+    const meanKm = points.length ? kmSum / points.length : Infinity;
+    const reach = seedR ? meanKm / seedR : Infinity;
 
     out.set(feature.id, {
       id: feature.id,
@@ -148,8 +162,17 @@ export function assignCounties(features) {
       secondShare: secondShare >= SPLIT_AT ? secondShare : 0,
       split: secondShare >= SPLIT_AT,
       shares: ranked.map(([tag, n]) => ({ tag, share: n / total })),
-      // Beyond the mesh's declared reach there is no sensible answer, so say so
-      // rather than colouring the county after a seed hundreds of km away.
+      meanKm,
+      nearestKm: nearest,
+      seedR,
+      reach,
+      // Not "unserved" — the resolver still answers here, and drawing a line
+      // between served and not is a call for the mesh, not for a map. This only
+      // says the nearest region centre is a long way outside its own stated
+      // radius, and fades the fill to match. Eastern BC resolves to swbc from
+      // 450 km away; that is worth seeing rather than colouring in confidently.
+      far: reach > FAR_REACH,
+      // Beyond the mesh's declared reach there is no sensible answer at all.
       outOfArea: nearest > (META.outOfAreaKm ?? Infinity)
     });
   }

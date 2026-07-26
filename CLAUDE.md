@@ -20,7 +20,9 @@ no edit. The visualizer also derives its cross-border chart straight from
 `crossBorderRules`, so a new rule appears there on its own (see
 `visualizer/README.md` for the rule shapes it recognises).
 
-`countymap/public/boundaries.json` holds county polygons only — no region data —
-so it never needs regenerating when tags change. It does mean a re-parent or a
-seed move can shift which counties a region covers; the county map recomputes that
-at load, so just reload it to check.
+`countymap/public/boundaries.json` holds county, BC district, state and land
+polygons only — no region data — so it never needs regenerating when tags change.
+It does mean a re-parent or a seed move can shift which counties a region covers;
+the county map recomputes that at load, so just reload it to check. Regenerate it
+only to refresh boundaries or widen the area, with
+`node countymap/scripts/build-boundaries.mjs` (needs network).

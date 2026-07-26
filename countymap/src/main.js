@@ -20,13 +20,24 @@ import {
 } from "./counties.js";
 
 const $ = id => document.getElementById(id);
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 const MAP_BOUNDS = META.map?.bounds ?? [[41.8, -125.6], [50.2, -113.0]];
-const CROSS_BORDER_INK = "#7e22ce";
+
+// A neutral ink for the cross-border outlines. They are an annotation over the
+// map, not another category on it — and picking any hue here would collide with a
+// state fill (BC is the violet these outlines used to use).
+const CROSS_BORDER_INK = "#1f2937";
+const SEA = "#e3eaec";
+
+// Nested communities need telling apart where one contains another: `palouse`
+// sits inside `inw` and shares part of its edge. Bigger outlines get the longer
+// dash and are drawn first, so the tighter inner one stays legible on top.
+const OVERLAY_DASH = ["12 7", "4 4", "1 5", "9 4 2 4"];
 
 const state = {
   mode: "counties",
-  overlay: null,
+  overlays: new Set(),
   selected: null,      // county id
   query: "",
   matches: { counties: new Set(), regions: new Set() }
@@ -85,7 +96,23 @@ const crossBorderOverlays = model.overlays
     }
     return { ...o, countyIds: members };
   })
-  .filter(o => o.countyIds.size > 0);
+  // An overlay with a single member region isn't showing a shared area — its
+  // outline is just that region's own bundle drawn twice. `e-wa` is one: Pullman
+  // carries it, nothing else does, so on a map it says nothing the bundle didn't.
+  .filter(o => o.countyIds.size > 0 && o.members.length > 1)
+  // Largest first: an outline that contains another is drawn underneath it.
+  .sort((a, b) => b.countyIds.size - a.countyIds.size);
+
+// Only claim nesting where the hierarchy actually says so — `palouse`'s parent is
+// `inw`, but `e-wa`'s is `wa`, and sorting by size would happily imply otherwise.
+function nestedPair(active) {
+  for (const inner of active) {
+    const parent = model.byTag.get(inner.tag)?.parent?.tag;
+    const outer = active.find(o => o.tag === parent);
+    if (outer) return { inner, outer };
+  }
+  return null;
+}
 
 // ── Map ───────────────────────────────────────────────────────────────────────
 
@@ -120,6 +147,7 @@ const paneFor = (name, z) => {
 };
 paneFor("coverage", 350);
 paneFor("counties", 400);
+paneFor("sea", 420);
 paneFor("states", 440);
 paneFor("bundles", 450);
 paneFor("overlay", 460);
@@ -152,6 +180,13 @@ function styleCounty(feature) {
              fillOpacity: showFill ? 0.35 : 0, opacity: 0.9 };
   }
   const dimmed = state.query && !state.matches.counties.has(feature.id);
+  // Fill strength falls off with distance from the region's centre, measured in
+  // that region's own radii. Deliberately a ramp and not a cutoff: the resolver
+  // answers everywhere, "covered" is a judgement the mesh owns rather than this
+  // map, and every threshold I tested either washed out half of eastern Oregon or
+  // let eastern BC keep a confident swbc fill from 250 km away. A ramp states the
+  // distance without ruling on it.
+  const solid = clamp(0.72 - Math.max(0, county.reach - 1) * 0.085, 0.3, 0.72);
   // Over the coverage raster the county lines are the whole reference — they need
   // to be legible ink, not the white hairlines that work between pale fills.
   return {
@@ -159,8 +194,20 @@ function styleCounty(feature) {
     weight: state.mode === "coverage" ? 0.7 : 0.8,
     opacity: state.mode === "coverage" ? 0.45 : 0.9,
     fillColor: fillFor(county.primary),
-    fillOpacity: showFill ? (dimmed ? 0.18 : 0.72) : 0
+    fillOpacity: showFill ? (dimmed ? solid * 0.3 : solid) : 0
   };
+}
+
+// Sea mask — a rectangle with every landmass punched out, laid over the fills so
+// they stop at the coast. Without it BC's districts and the US coastal counties
+// claim their legal share of open water, and `vanisle` does not look remotely
+// like Vancouver Island.
+if (boundaries.sea) {
+  L.geoJSON(boundaries.sea, {
+    pane: "sea",
+    interactive: false,
+    style: { color: SEA, weight: 0, fillColor: SEA, fillOpacity: 1, fillRule: "evenodd" }
+  }).addTo(map);
 }
 
 // State lines, drawn hard. Every cross-border rule in the scheme exists because of
@@ -198,19 +245,47 @@ function drawBundles() {
 // Cross-border community outline — one community, drawn across the state line.
 const overlayLayer = L.layerGroup([], { pane: "overlay" }).addTo(map);
 
+// All active communities are drawn at once. Showing one at a time hid the nesting
+// entirely: `palouse`'s counties are a strict subset of `inw`'s, so selecting
+// `inw` erased `palouse` from the map — even though `palouse`'s parent *is* `inw`,
+// which is exactly the relationship worth seeing.
+// Overlay names are placed first and their boxes handed to drawLabels, so a
+// community name and a region name never land on top of each other.
+let labelBoxes = [];
+
 function drawOverlay() {
   overlayLayer.clearLayers();
-  const ov = crossBorderOverlays.find(o => o.id === state.overlay);
-  if (!ov) return;
-  const lines = chainSegments(outlineSegments(topology, ov.countyIds))
-    .map(line => line.map(([lon, lat]) => [lat, lon]));
-  L.polyline(lines, {
-    pane: "overlay", color: "#ffffff", weight: 7, opacity: 0.85, interactive: false
-  }).addTo(overlayLayer);
-  L.polyline(lines, {
-    pane: "overlay", color: CROSS_BORDER_INK, weight: 3.5, opacity: 1,
-    dashArray: "9 5", lineJoin: "round", interactive: false
-  }).addTo(overlayLayer);
+  labelBoxes = [];
+  for (const [i, ov] of crossBorderOverlays.entries()) {
+    if (!state.overlays.has(ov.id)) continue;
+    const lines = chainSegments(outlineSegments(topology, ov.countyIds))
+      .map(line => line.map(([lon, lat]) => [lat, lon]));
+    if (!lines.length) continue;
+
+    L.polyline(lines, {
+      pane: "overlay", color: "#ffffff", weight: 6.5, opacity: 0.9, interactive: false
+    }).addTo(overlayLayer);
+    L.polyline(lines, {
+      pane: "overlay", color: CROSS_BORDER_INK,
+      weight: 3.4 - i * 0.5, opacity: 1,
+      dashArray: OVERLAY_DASH[i % OVERLAY_DASH.length],
+      lineJoin: "round", interactive: false
+    }).addTo(overlayLayer);
+
+    // Name each outline on the map, at the top of its own shape, so two nested
+    // dashed lines are never ambiguous.
+    const top = lines.flat().reduce((a, p) => (p[0] > a[0] ? p : a), [-90, 0]);
+    const tp = map.latLngToContainerPoint(top);
+    labelBoxes.push({ x: tp.x - 26, y: tp.y - 34, w: 52, h: 20 });
+    L.marker(top, {
+      pane: "labels", interactive: false,
+      icon: L.divIcon({
+        className: "region-label-wrap",
+        html: `<span class="overlay-label">${esc(ov.tag)}</span>`,
+        iconSize: null
+      })
+    }).addTo(overlayLayer);
+  }
 }
 
 // Seed dots — why a county landed where it did.
@@ -250,7 +325,7 @@ function drawLabels() {
   const byArea = [...regionsWithCounties].sort((a, b) =>
     countiesOf(b).reduce((n, c) => n + c.samples, 0) - countiesOf(a).reduce((n, c) => n + c.samples, 0));
 
-  const placed = [];
+  const placed = [...labelBoxes];
   const overlaps = (a, b) =>
     a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 
@@ -352,25 +427,36 @@ function directoryPanel() {
   }
 
   const splitCount = [...counties.values()].filter(c => c.split).length;
-  const ov = crossBorderOverlays.find(o => o.id === state.overlay);
+  const farCount = [...counties.values()].filter(c => c.far).length;
+  const active = crossBorderOverlays.filter(o => state.overlays.has(o.id));
 
   return `
-    ${ov ? `
+    ${active.length ? `
       <div class="overlay-card">
-        <div class="overlay-card-head">
-          <code>${esc(ov.tag)}</code>
-          <span>${esc(ov.title)}</span>
-        </div>
+        <div class="overlay-card-head"><span>Cross-border communities</span></div>
         <p>
-          The dashed outline is one community drawn across state lines: every county
-          whose region also carries <code>${esc(ov.tag)}</code>. A message scoped to it
-          reaches all of them; a state-scoped message still stops at the line.
+          Each dashed outline is one community drawn across state lines: every area whose
+          region also carries that tag. A message scoped to it reaches all of them; a
+          state-scoped message still stops at the line.
         </p>
-        <p class="overlay-card-foot">
-          ${ov.countyIds.size} ${ov.countyIds.size === 1 ? "county" : "counties"} across
-          ${esc(overlayStates(ov).join(" · "))} — via
-          ${ov.members.map(m => `<code>${esc(m.tag)}</code>`).join(" ")}
-        </p>
+        <ul class="overlay-list">
+          ${active.map((o, i) => `
+            <li>
+              <span class="overlay-key" style="--dash:${OVERLAY_DASH[crossBorderOverlays.indexOf(o) % OVERLAY_DASH.length]}"></span>
+              <code>${esc(o.tag)}</code>
+              <span class="overlay-li-name">${esc(o.title)}</span>
+              <span class="overlay-li-meta">${o.countyIds.size} · ${esc(overlayStates(o).join(" "))}</span>
+            </li>`).join("")}
+        </ul>
+        ${(() => {
+          const pair = nestedPair(active);
+          return pair ? `
+            <p class="overlay-card-foot">
+              One outline sits inside another because the hierarchy says so:
+              <code>${esc(pair.inner.tag)}</code> is a sub-region of
+              <code>${esc(pair.outer.tag)}</code>.
+            </p>` : "";
+        })()}
       </div>` : ""}
     <div class="panel-intro">
       <h2>Which counties are in my region?</h2>
@@ -381,10 +467,17 @@ function directoryPanel() {
         fastest way to answer the question.
       </p>
       <p class="panel-note">
-        <strong>${splitCount}</strong> ${splitCount === 1 ? "county is" : "counties are"}
+        <strong>${splitCount}</strong> ${splitCount === 1 ? "area is" : "areas are"}
         genuinely shared between two regions. Those are hatched on the map, and RF has no
         edge there at all — the <em>RF coverage</em> mode above shows the real shape.
       </p>
+      ${farCount ? `
+        <p class="panel-note is-far">
+          Fill strength falls off with distance from the region's centre, counted in that
+          region's own radii. <strong>${farCount}</strong> sit more than three radii out —
+          they still resolve, because the rule always answers, but "nearest" and "covered"
+          are different claims. Eastern BC reaches <code>swbc</code> from over 400 km.
+        </p>` : ""}
     </div>
     ${[...byState].map(([st, regions]) => `
       <section class="dir-state">
@@ -404,24 +497,28 @@ function directoryPanel() {
             </p>
           </div>`).join("")}
       </section>`).join("")}
-    ${bcNote()}`;
+    ${unbundledNote()}`;
 }
 
-function bcNote() {
-  const bcTags = Object.entries(HIERARCHY)
-    .filter(([tag]) => ancestryFor(tag).includes("bc") && SEEDS.some(s => s.tag === tag))
-    .map(([tag, entry]) => ({ tag, label: entry.label }));
-  if (!bcTags.length) return "";
+// Some seeded regions never win a plurality anywhere — `southisland` and
+// `salishmesh` are sub-areas of BC districts that also hold a lot of Vancouver
+// Island, so at district granularity the bigger neighbour takes the bundle. Say so
+// rather than letting them silently vanish from the directory.
+function unbundledNote() {
+  const missing = SEEDS
+    .filter(s => !regionsWithCounties.includes(s.tag))
+    .map(s => ({ tag: s.tag, label: labelFor(s.tag), state: s.stateOrProvince }));
+  if (!missing.length) return "";
   return `
     <section class="dir-state is-note">
-      <h3>British Columbia</h3>
+      <h3>No bundle of their own</h3>
       <p class="panel-note">
-        BC has regional districts rather than counties, and no compact public boundary
-        set to draw them from — so BC regions are not bundled here. Their centres are on
-        the map, and the <em>RF coverage</em> mode shows them in full.
+        These regions resolve real ground, but never win the largest share of any single
+        county or district — a bigger neighbour takes every one they sit inside. The
+        <em>RF coverage</em> mode shows their true extent.
       </p>
       <p class="dir-counties">
-        ${bcTags.map(t => `<span class="county-link is-static">${esc(t.tag)}</span>`).join("")}
+        ${missing.map(m => `<span class="county-link is-static" title="${esc(m.label)}">${esc(m.tag)}</span>`).join("")}
       </p>
     </section>`;
 }
@@ -508,18 +605,22 @@ function stateName(code) {
 // ── Controls ──────────────────────────────────────────────────────────────────
 
 function renderOverlayChips() {
+  const anyOn = state.overlays.size > 0;
   $("overlayChips").innerHTML = crossBorderOverlays.map(o => `
-    <button type="button" class="overlay-chip${state.overlay === o.id ? " is-on" : ""}"
-            data-overlay="${esc(o.id)}" aria-pressed="${state.overlay === o.id}">
+    <button type="button" class="overlay-chip${state.overlays.has(o.id) ? " is-on" : ""}"
+            data-overlay="${esc(o.id)}" aria-pressed="${state.overlays.has(o.id)}">
       <code>${esc(o.tag)}</code>
       <span class="chip-count">${o.countyIds.size}</span>
     </button>`).join("") +
-    `<button type="button" class="overlay-chip is-none${state.overlay ? "" : " is-on"}"
-             data-overlay="" aria-pressed="${!state.overlay}">none</button>`;
+    `<button type="button" class="overlay-chip is-none${anyOn ? "" : " is-on"}"
+             data-overlay="" aria-pressed="${!anyOn}">none</button>`;
 
   for (const btn of $("overlayChips").querySelectorAll("button")) {
     btn.addEventListener("click", () => {
-      state.overlay = btn.dataset.overlay || null;
+      const id = btn.dataset.overlay;
+      if (!id) state.overlays.clear();
+      else if (state.overlays.has(id)) state.overlays.delete(id);
+      else state.overlays.add(id);
       renderOverlayChips();
       drawOverlay();
       renderLegend();
@@ -530,6 +631,7 @@ function renderOverlayChips() {
 
 function renderLegend() {
   const splitCount = [...counties.values()].filter(c => c.split).length;
+  const farCount = [...counties.values()].filter(c => c.far).length;
   const statesShown = [...new Set([...counties.values()].map(c => c.state))]
     .filter(s => STATE_HUES[s])
     .sort();
@@ -545,7 +647,9 @@ function renderLegend() {
     <span class="legend-group">
       <span class="legend-item"><span class="lg lg-split"></span> shared county (${splitCount})</span>
       <span class="legend-item"><span class="lg lg-seed"></span> region centre</span>
-      ${state.overlay ? `<span class="legend-item"><span class="lg lg-cross"></span>
+      ${farCount ? `<span class="legend-item"><span class="lg lg-far"></span>
+        fill fades with distance from centre</span>` : ""}
+      ${state.overlays.size ? `<span class="legend-item"><span class="lg lg-cross"></span>
         cross-border community</span>` : ""}
     </span>`;
 }
@@ -669,16 +773,16 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && state.selected) { state.selected = null; refresh(); }
 });
 
-// Open on the flagship cross-border community — a single outline spanning two
-// states says more about the scheme than any amount of legend.
-state.overlay = crossBorderOverlays.find(o => o.tag === "inw")?.id ?? crossBorderOverlays[0]?.id ?? null;
+// Open with every cross-border community showing. They nest, and the nesting is
+// the part worth seeing — one outline inside another is the hierarchy on a map.
+for (const o of crossBorderOverlays) state.overlays.add(o.id);
 
 renderOverlayChips();
 refresh();
 $("mapLoading").remove();
 
 console.info(
-  `countymap: ${counties.size} counties → ${regionsWithCounties.length} regions, ` +
+  `countymap: ${counties.size} areas → ${regionsWithCounties.length} regions, ` +
   `${[...counties.values()].filter(c => c.split).length} shared, ` +
   `data ${data.version}`
 );

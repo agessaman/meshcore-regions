@@ -14,7 +14,7 @@ Planning docs and tools for a coordinated region scheme on the PNW mesh (Souther
 | [config/](config/) | Config generator — region commands from your location |
 | [map/](map/) | Zone map and repeater tag selector ([details](map/README.md)) |
 | [visualizer/](visualizer/) | Region charts — hierarchy tree, and a carriage matrix of who carries what ([details](visualizer/README.md)) |
-| [countymap/](countymap/) | Regions drawn as bundles of counties, with the RF shape alongside ([details](countymap/README.md)) |
+| [countymap/](countymap/) | Regions drawn as bundles of counties and BC districts, with the RF shape alongside ([details](countymap/README.md)) |
 
 ## Running locally
 

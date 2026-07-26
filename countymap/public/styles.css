@@ -199,6 +199,14 @@ a { color: var(--green); }
 }
 .region-label.is-dim { opacity: 0.3; }
 
+.overlay-label {
+  display: inline-block; transform: translate(-50%, -140%);
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: #fff; background: #1f2937;
+  border-radius: 5px; padding: 1px 6px; white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
 .leaflet-tooltip.county-tip {
   background: rgba(26,46,37,0.95); color: #fff;
   border: none; border-radius: 7px; box-shadow: 0 2px 10px rgba(0,0,0,0.25);
@@ -240,7 +248,11 @@ a { color: var(--green); }
   width: 9px; height: 9px; border-radius: 50%;
   background: #2a78d6; border: 1.5px solid #fff; box-shadow: 0 0 0 1px var(--border);
 }
-.lg-cross { background: none; border-top: 3px dashed var(--cross); height: 0; }
+.lg-cross { background: none; border-top: 3px dashed #1f2937; height: 0; }
+.lg-far {
+  background: repeating-linear-gradient(90deg, #cfe0f4 0 6px, #ffffff 6px 8px);
+  opacity: 0.55; border: 1px solid var(--border);
+}
 .legend-note { font-style: italic; }
 
 /* ── Panel ───────────────────────────────────────────────────────────────── */
@@ -253,19 +265,31 @@ a { color: var(--green); }
 }
 
 .overlay-card {
-  border: 1.5px solid color-mix(in srgb, var(--cross) 35%, #fff);
-  background: color-mix(in srgb, var(--cross) 5%, #fff);
-  border-radius: var(--radius); padding: 0.7rem 0.85rem; margin-bottom: 1rem;
+  border: 1px solid var(--border); background: #fbfdfc;
+  border-left: 3px solid #1f2937;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 0.7rem 0.85rem; margin-bottom: 1rem;
 }
-.overlay-card-head { display: flex; align-items: baseline; gap: 0.45rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
-.overlay-card-head code {
-  font-size: 0.78rem; font-weight: 700; color: #fff;
-  background: var(--cross); padding: 0.05rem 0.4rem; border-radius: 4px;
+.overlay-card-head { margin-bottom: 0.35rem; }
+.overlay-card-head span {
+  font-size: 0.64rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--text-muted);
 }
-.overlay-card-head span { font-size: 0.86rem; font-weight: 700; color: var(--cross); }
 .overlay-card p { font-size: 0.81rem; line-height: 1.5; color: var(--text); }
-.overlay-card code { font-family: var(--font-mono); font-size: 0.76rem; color: var(--cross); font-weight: 700; }
-.overlay-card-foot { font-size: 0.76rem; color: var(--text-muted); margin-top: 0.35rem; }
+.overlay-card code { font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700; }
+.overlay-card-foot { font-size: 0.76rem; color: var(--text-muted); margin-top: 0.45rem; }
+
+.overlay-list { list-style: none; margin: 0.5rem 0 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.overlay-list li { display: flex; align-items: center; gap: 0.4rem; font-size: 0.79rem; }
+.overlay-key {
+  width: 24px; height: 0; flex: 0 0 auto;
+  border-top: 2.5px dashed #1f2937;
+}
+.overlay-li-name { color: var(--text-muted); min-width: 0; }
+.overlay-li-meta { margin-left: auto; font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; }
+
+.panel-note.is-far { border-left-color: var(--border); }
+.panel-note code { font-family: var(--font-mono); font-size: 0.74rem; }
 
 .panel-intro h2 { font-size: 1.02rem; font-weight: 700; color: var(--green-dark); line-height: 1.3; }
 .panel-intro p { font-size: 0.84rem; margin-top: 0.45rem; line-height: 1.55; }
