@@ -88,10 +88,6 @@ west                            Entire mesh (Western US / SW Canada)
             vanisle             Vancouver Island
                 southisland     South Vancouver Island / Victoria
             salishmesh          Salish Sea / Gulf Islands
-    ca                          California (future)
-        nca                     Northern California
-        bay                     Bay Area
-        sca                     Southern California
 ```
 
 ### Name Rationale
@@ -725,25 +721,9 @@ The US/Canada border follows the same principle, but with one important differen
 
 ## Future Extensions
 
-### California
-
-As the mesh extends south, California gets its own state tag under `west`, with sub-regions nested beneath it:
-
-```
-west
-    pnw
-        (existing regions)
-    ca
-        nca                 Northern California
-        bay                 Bay Area
-        sca                 Southern California
-```
-
-No changes to any existing PNW repeater configuration are needed. California repeaters carry `west` and `ca` as their upper-level tags, and `west`-scoped traffic reaches the whole mesh.
-
 ### Additional PNW areas
 
-New local areas can be added without restructuring:
+New local areas can be added without restructuring, for example:
 
 | Tag | Area | Parent | Source |
 |---|---|---|---|
@@ -864,10 +844,6 @@ flood_scopes = #sle, #wv
 | `vanisle` | Vancouver Island | `bc` |
 | `southisland` | South Vancouver Island / Victoria | `vanisle` |
 | `salishmesh` | Salish Sea / Gulf Islands | `bc` |
-| `ca` | California (future) | `west` |
-| `nca` | Northern California (future) | `ca` |
-| `bay` | Bay Area (future) | `ca` |
-| `sca` | Southern California (future) | `ca` |
 
 ---
 
