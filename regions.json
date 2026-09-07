@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-24",
+  "version": "2026-09-06",
   "source": "pnw-meshcore-regions.md",
   "notes": "Canonical region data for the Pacific Northwest MeshCore tools. Single source of truth shared by /config and /map. 'r' is the additive Voronoi weight in km (score = distKm - r); 'p' is the multi-metro priority.",
   "hierarchy": {
@@ -38,6 +38,7 @@
     "coast-or":    { "label": "Oregon Coast",                      "parent": "or" },
     "c-or":        { "label": "Central Oregon",                    "parent": "or" },
     "pdx":         { "label": "Portland Metro",                    "parent": "or" },
+    "mmv":         { "label": "McMinnville / Yamhill",             "parent": "wv" },
     "sle":         { "label": "Salem / Keizer",                   "parent": "wv" },
     "cvo":         { "label": "Corvallis / Albany",               "parent": "wv" },
     "eug":         { "label": "Eugene / Springfield",             "parent": "wv" },
@@ -83,6 +84,7 @@
     { "tag": "puw",         "label": "Pullman",                          "parent": "se-wa",    "country": "US", "stateOrProvince": "WA", "lat": 46.7439, "lon": -117.1096, "r": 22,  "p": 50 },
     { "tag": "psc",         "label": "Tri-Cities (Pasco / Kennewick / Richland)", "parent": "se-wa", "country": "US", "stateOrProvince": "WA", "lat": 46.2396, "lon": -119.1006, "r": 30,  "p": 54 },
     { "tag": "pdx",         "label": "Portland Metro",                   "parent": "or",       "country": "US", "stateOrProvince": "OR", "lat": 45.5898, "lon": -122.5951, "r": 46,  "p": 68, "crossBorder": true },
+    { "tag": "mmv",         "label": "McMinnville / Yamhill",             "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 45.1944, "lon": -123.1361, "r": 18,  "p": 50 },
     { "tag": "sle",         "label": "Salem / Keizer",                   "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.9095, "lon": -123.0025, "r": 26,  "p": 54 },
     { "tag": "cvo",         "label": "Corvallis / Albany",               "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.4972, "lon": -123.2906, "r": 27,  "p": 54 },
     { "tag": "eug",         "label": "Eugene / Springfield",             "parent": "wv",       "country": "US", "stateOrProvince": "OR", "lat": 44.1246, "lon": -123.2119, "r": 32,  "p": 56 },
@@ -107,7 +109,7 @@
   ],
   "metroGroups": [
     { "label": "Washington",       "tags": ["sea","oly","kit","grh","bvs","bli","cls","kls","ykm","eat","eln","eph","geg","alw","puw","psc"] },
-    { "label": "Oregon",           "tags": ["pdx","sle","cvo","eug","mfr","rbg","lmt","onp","ast","otk","oth","bend","pdt","bke"] },
+    { "label": "Oregon",           "tags": ["pdx","mmv","sle","cvo","eug","mfr","rbg","lmt","onp","ast","otk","oth","bend","pdt","bke"] },
     { "label": "Idaho",            "tags": ["boi","cda","id"] },
     { "label": "Montana",          "tags": ["fca"] },
     { "label": "British Columbia", "tags": ["swbc","vanisle","southisland","salishmesh"] }

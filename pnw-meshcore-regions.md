@@ -62,6 +62,7 @@ west                            Entire mesh (Western US / SW Canada)
         or                      Oregon
             pdx                 Portland metro (OR + Clark County WA)
             wv                  Willamette Valley
+                mmv             McMinnville / Yamhill (Yamhill)
                 sle             Salem / Keizer (Marion, Polk)
                 cvo             Corvallis / Albany (Benton, Linn)
                 eug             Eugene / Springfield (Lane)
@@ -134,6 +135,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `s-or` | Abbreviation | Southern Oregon |
 | `coast-or` | Abbreviation | Oregon Coast |
 | `c-or` | Abbreviation | Central Oregon |
+| `mmv` | IATA | McMinnville Municipal Airport — community-requested carve-out between Portland and Salem; small coverage by design |
 | `sle` | IATA | McNary Field (Salem) |
 | `cvo` | IATA | Corvallis Municipal Airport |
 | `eug` | IATA | Eugene (Mahlon Sweet Field) |
@@ -446,6 +448,21 @@ region save
 ```
 
 Tags carried: `west`, `pnw`, `or`, `wv`, `sle` (18 bytes in regions response)
+
+### Example: McMinnville, OR (Yamhill)
+
+A repeater serving McMinnville and the surrounding Yamhill County towns. Newberg stays with the Portland metro (`pdx`).
+
+```
+region put west
+region put pnw west
+region put or pnw
+region put wv or
+region put mmv wv
+region save
+```
+
+Tags carried: `west`, `pnw`, `or`, `wv`, `mmv` (18 bytes in regions response)
 
 ### Example: Medford, OR (Southern Oregon)
 
@@ -820,6 +837,7 @@ flood_scopes = #sle, #wv
 | `or` | Oregon | `pnw` |
 | `pdx` | Portland metro (cross-border) | `or` |
 | `wv` | Willamette Valley | `or` |
+| `mmv` | McMinnville / Yamhill | `wv` |
 | `sle` | Salem / Keizer | `wv` |
 | `cvo` | Corvallis / Albany | `wv` |
 | `eug` | Eugene / Springfield | `wv` |
@@ -848,6 +866,10 @@ flood_scopes = #sle, #wv
 ---
 
 ## Changelog
+
+### 2026-09-06
+
+- **McMinnville (`mmv`)**: Added a dedicated Yamhill County region (IATA `MMV`, McMinnville Municipal Airport) under `wv`, a community-requested carve-out between Portland (`pdx`) and Salem (`sle`). Small coverage by design — Newberg stays with the Portland metro.
 
 ### 2026-07-24
 

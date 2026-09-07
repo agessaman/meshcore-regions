@@ -100,6 +100,20 @@ const fixtures = [
     expectedTags: ["west", "pnw", "or", "wv", "sle"]
   },
   {
+    name: "McMinnville OR",
+    lat: 45.2101,
+    lon: -123.1946,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "or", "wv", "mmv"]
+  },
+  {
+    name: "Newberg OR (stays Portland metro, not mmv)",
+    lat: 45.3001,
+    lon: -122.9731,
+    repeaterType: "residential",
+    expectedTags: ["west", "pnw", "or", "pdx"]
+  },
+  {
     name: "Medford OR",
     lat: 42.3265,
     lon: -122.8756,
