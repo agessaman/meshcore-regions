@@ -76,14 +76,14 @@ const fixtures = [
     lat: 47.6588,
     lon: -117.4260,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "e-wa", "geg", "ie"]
+    expectedTags: ["west", "pnw", "wa", "e-wa", "geg", "inw"]
   },
   {
     name: "Coeur d'Alene ID",
     lat: 47.6777,
     lon: -116.7805,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "id", "cda", "ie"]
+    expectedTags: ["west", "pnw", "id", "cda", "inw"]
   },
   {
     name: "Kalispell MT (Flathead Valley)",
@@ -142,32 +142,32 @@ const fixtures = [
     expectedTags: ["west", "pnw", "wa", "c-wa", "eln"]
   },
   {
-    name: "Pullman WA (Palouse — primary se-wa, everyday dual-carries ie/palouse/e-wa)",
+    name: "Pullman WA (Palouse — primary se-wa, everyday dual-carries palouse/e-wa)",
     lat: 46.7313,
     lon: -117.1796,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "ie", "palouse", "e-wa"]
+    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "palouse", "e-wa"]
   },
   {
     name: "Pullman WA high-site (Palouse — adds good-neighbor geg/alw/psc)",
     lat: 46.7313,
     lon: -117.1796,
     repeaterType: "high-site",
-    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "ie", "palouse", "e-wa", "geg", "alw", "psc"]
+    expectedTags: ["west", "pnw", "wa", "se-wa", "puw", "palouse", "e-wa", "geg", "alw", "psc"]
   },
   {
-    name: "Moscow ID (Palouse — Idaho side, primary id, everyday dual-carries ie/palouse)",
+    name: "Moscow ID (Palouse — Idaho side, primary lws, everyday dual-carries palouse)",
     lat: 46.7324,
     lon: -117.0002,
     repeaterType: "residential",
-    expectedTags: ["west", "pnw", "id", "ie", "palouse"]
+    expectedTags: ["west", "pnw", "id", "n-id", "lws", "palouse"]
   },
   {
     name: "Moscow ID high-site (Palouse — adds good-neighbor geg/alw/psc)",
     lat: 46.7324,
     lon: -117.0002,
     repeaterType: "high-site",
-    expectedTags: ["west", "pnw", "id", "ie", "palouse", "geg", "alw", "psc"]
+    expectedTags: ["west", "pnw", "id", "n-id", "lws", "palouse", "geg", "alw", "psc"]
   },
   {
     name: "Walla Walla WA (se-wa)",

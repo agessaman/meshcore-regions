@@ -128,15 +128,15 @@ function meshcore_render_doc(string $markdownPath, string $title, string $assetB
         "sea":"w-wa","oly":"w-wa","kit":"w-wa","grh":"w-wa","bvs":"w-wa","bli":"w-wa",
         "cls":"sw-wa","kls":"sw-wa",
         "ykm":"c-wa","eat":"c-wa","eln":"c-wa","eph":"c-wa",
-        "geg":"e-wa",
+        "geg":"e-wa","wsu":"e-wa",
         "se-wa":"wa","alw":"se-wa","psc":"se-wa","puw":"se-wa",
-        "inw":"pnw","palouse":"inw","lc":"inw",
+        "inw":"pnw","palouse":"pnw",
         "or":"pnw","wv":"or","s-or":"or","coast-or":"or","c-or":"or","pdx":"or",
         "sle":"wv","cvo":"wv","eug":"wv","mmv":"wv",
         "mfr":"s-or","rbg":"s-or","lmt":"s-or",
         "onp":"coast-or","ast":"coast-or","oth":"coast-or",
         "bend":"c-or","pdt":"c-or","bke":"c-or",
-        "id":"pnw","boi":"id","cda":"id",
+        "id":"pnw","n-id":"id","lws":"n-id","uofi":"n-id","boi":"id","cda":"id",
         "mt":"pnw","fca":"mt",
         "bc":"pnw","swbc":"bc","vanisle":"bc","southisland":"vanisle","salishmesh":"bc"
       };

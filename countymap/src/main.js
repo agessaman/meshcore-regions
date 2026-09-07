@@ -30,9 +30,9 @@ const MAP_BOUNDS = META.map?.bounds ?? [[41.8, -125.6], [50.2, -113.0]];
 const CROSS_BORDER_INK = "#1f2937";
 const SEA = "#e3eaec";
 
-// Nested communities need telling apart where one contains another: `palouse`
-// sits inside `inw` and shares part of its edge. Bigger outlines get the longer
-// dash and are drawn first, so the tighter inner one stays legible on top.
+// Nested communities need telling apart where one contains another. Bigger
+// outlines get the longer dash and are drawn first, so a tighter inner one
+// stays legible on top. `palouse` and `inw` are peers under `pnw` (not nested).
 const OVERLAY_DASH = ["12 7", "4 4", "1 5", "9 4 2 4"];
 
 const state = {
@@ -103,8 +103,8 @@ const crossBorderOverlays = model.overlays
   // Largest first: an outline that contains another is drawn underneath it.
   .sort((a, b) => b.countyIds.size - a.countyIds.size);
 
-// Only claim nesting where the hierarchy actually says so — `palouse`'s parent is
-// `inw`, but `e-wa`'s is `wa`, and sorting by size would happily imply otherwise.
+// Only claim nesting where the hierarchy actually says so — `palouse` and `inw`
+// are both children of `pnw`, and sorting by size would happily imply otherwise.
 function nestedPair(active) {
   for (const inner of active) {
     const parent = model.byTag.get(inner.tag)?.parent?.tag;
@@ -245,10 +245,10 @@ function drawBundles() {
 // Cross-border community outline — one community, drawn across the state line.
 const overlayLayer = L.layerGroup([], { pane: "overlay" }).addTo(map);
 
-// All active communities are drawn at once. Showing one at a time hid the nesting
-// entirely: `palouse`'s counties are a strict subset of `inw`'s, so selecting
-// `inw` erased `palouse` from the map — even though `palouse`'s parent *is* `inw`,
-// which is exactly the relationship worth seeing.
+// All active communities are drawn at once. Showing one at a time hid overlapping
+// outlines: `palouse` and `inw` used to nest (`palouse` under `inw`), so selecting
+// the outer one erased the inner. They are now peers under `pnw`, but drawing
+// every active overlay together still keeps adjacent community edges visible.
 // Overlay names are placed first and their boxes handed to drawLabels, so a
 // community name and a region name never land on top of each other.
 let labelBoxes = [];

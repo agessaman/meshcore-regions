@@ -52,9 +52,9 @@ the bundles are close, and where they aren't, you can see exactly where.
 - **Dashed outlines are cross-border communities** (`inw`, `palouse`, …), each drawn
   as one shape across the state line. This is the clearest rendering of that idea
   anywhere in the repo: a real place on a real map, not a rail or a matrix column.
-  They are drawn **all at once**, because they nest — `palouse`'s areas are a strict
-  subset of `inw`'s, and showing one at a time erased the inner one entirely even
-  though `palouse`'s parent *is* `inw`. An overlay with only one member region is
+  They are drawn **all at once**, because adjacent community outlines can overlap
+  or used to nest (`palouse` is now a peer of `inw` under `pnw`, not a child of
+  it). Showing one at a time hid the other. An overlay with only one member region is
   left off: its outline would just be that region's own bundle drawn twice.
 - **Dots are region centres** — the seeds the resolver actually measures from.
 

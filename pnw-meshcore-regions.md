@@ -52,13 +52,13 @@ west                            Entire mesh (Western US / SW Canada)
                 eph             Ephrata (Grant)
             e-wa                Eastern Washington
                 geg             Spokane metro
+                wsu             WSU Pullman campus (live, campus nodes only)
             se-wa               Southeastern Washington
                 alw             Walla Walla (Walla Walla)
-                puw             Pullman (Whitman, Asotin, Garfield)
+                puw             Pullman (Whitman, Asotin, Garfield) — WA-side Palouse local
                 psc             Tri-Cities / Pasco / Kennewick / Richland (Benton, Franklin)
         inw                     Inland Northwest (Spokane WA + N. Idaho panhandle)
-            palouse             Palouse (Pullman WA + Moscow/Lewiston/Clearwater ID, cross-border)
-            lc                  Lewiston / Clarkston (Nez Perce Co. ID + Asotin Co. WA, cross-border, proposed)
+        palouse                 Palouse (cross-border shared scope: WA + ID + OR tri-state corner)
         or                      Oregon
             pdx                 Portland metro (OR + Clark County WA)
             wv                  Willamette Valley
@@ -79,7 +79,10 @@ west                            Entire mesh (Western US / SW Canada)
                 ben             Bend / Redmond (Deschutes)
                 pdt             Pendleton (Umatilla)
                 bke             Baker City (Baker)
-        id                      Idaho (Moscow / Lewiston / Clearwater carry id directly — no dedicated metro tag)
+        id                      Idaho
+            n-id                Northern Idaho (Moscow, Lewiston, Clearwater)
+                lws             Lewiston / Moscow / Clearwater (ID-side Palouse local)
+                uofi            University of Idaho, Moscow campus (proposed)
             boi                 Boise metro
             cda                 Coeur d'Alene / N. Idaho panhandle
         mt                      Montana (partial — statewide expansion planned)
@@ -100,9 +103,12 @@ west                            Entire mesh (Western US / SW Canada)
 | `wa`, `or`, `bc`, `id` | Postal / standard | State and province abbreviations |
 | `sea` | IATA | Seattle-Tacoma International — universally recognized |
 | `pdx` | IATA | Portland International — iconic, avoids OR/WA ambiguity |
-| `inw` | Abbreviation | Inland Northwest — matches the [Wikipedia disambiguation](https://en.wikipedia.org/wiki/Inland_Northwest) for the Spokane–CdA corridor; replaces the historical `ie` ("Inland Empire"), a label that also refers to a distinct region in Southern California. Legacy repeaters may still carry `ie` for interoperability, but it is no longer part of new recommendations |
-| `palouse` | Community name | Palouse — cross-border sub-region of `inw` shared by Pullman, WA and Moscow, ID |
-| `lc` | Abbreviation | Lewiston / Clarkston — cross-border sub-region of `inw` for the Nez Perce Co. ID / Asotin Co. WA valley; not to be confused with "Lower Columbia" (the `ast`/`kls` corridor) |
+| `inw` | Abbreviation | Inland Northwest — matches the [Wikipedia disambiguation](https://en.wikipedia.org/wiki/Inland_Northwest) for the Spokane–CdA corridor; replaces the historical `ie` ("Inland Empire"), a label that also refers to a distinct region in Southern California. Legacy repeaters may still carry `ie` for interoperability, but it is no longer part of new recommendations. Palouse Mesh no longer carries `inw` on everyday Palouse repeaters |
+| `palouse` | Community name | Palouse — shared cross-border scope for the WA/ID/OR tri-state corner; a peer of `wa`, `id`, and `or` under `pnw` (Palouse Mesh, August 2026). Not nested under `inw` |
+| `n-id` | Abbreviation | Northern Idaho — Palouse Mesh grouping under `id` for the Moscow / Lewiston / Clearwater corridor. Coeur d'Alene remains `cda` under `id` |
+| `lws` | IATA | Lewiston–Nez Perce County Regional Airport — Idaho-side Palouse local scope (Moscow, Lewiston, Clearwater); counterpart to `puw` |
+| `wsu` | Abbreviation | WSU Pullman campus — live campus-only tag under `e-wa`, not part of everyday city repeater config |
+| `uofi` | Abbreviation | University of Idaho, Moscow campus — proposed campus-only tag under `n-id` |
 | `swbc` | Abbreviation | Southwest BC / Lower Mainland — community-established name reflecting the Metro Vancouver area |
 | `vanisle` | Abbreviation | Vancouver Island — full island region |
 | `southisland` | Abbreviation | South Vancouver Island / Victoria — established community sub-region of `vanisle` |
@@ -125,7 +131,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `eph` | IATA | Ephrata Municipal (Grant County) |
 | `geg` | IATA | Spokane International Airport (Geiger Field) |
 | `alw` | IATA | Walla Walla Regional Airport |
-| `puw` | IATA | Pullman-Moscow Regional Airport |
+| `puw` | IATA | Pullman-Moscow Regional Airport — WA-side Palouse local scope (shared cross-border role moved to `palouse` in August 2026) |
 | `psc` | IATA | Tri-Cities Airport (Pasco) — Pasco / Kennewick / Richland |
 | `boi` | IATA | Boise (Boise Airport) |
 | `cda` | Abbreviation | Coeur d'Alene — standard local abbreviation; no nearby IATA airport |
@@ -147,7 +153,7 @@ west                            Entire mesh (Western US / SW Canada)
 | `otk` | IATA | Tillamook Airport |
 | `oth` | IATA | Southwest Oregon Regional (North Bend) |
 | `bend` | Full name | Bend — short enough to use unabbreviated; no well-known IATA code |
-| `pdt` | IATA | Eastern Oregon Regional Airport (Pendleton) |
+| `pdt` | IATA | Eastern Oregon Regional Airport (Pendleton). Palouse Mesh's proposed Oregon-side Palouse operators (Wallowa County) dual-carry `palouse` on this existing NE Oregon tag |
 | `bke` | IATA | Baker City Municipal Airport |
 | `nca` | Abbreviation | Northern California |
 | `ca` | Postal | California state |
@@ -223,9 +229,9 @@ This means carrying `wa` does **not** automatically match traffic scoped to `w-w
 | `or` | Oregon repeaters |
 | `pdx` | Portland metro repeaters (both OR and WA sides) |
 | `wv` | Willamette Valley repeaters |
-| `inw` | Inland Northwest repeaters (both WA and ID sides) |
-| `palouse` | Palouse repeaters (both the Pullman WA and Moscow ID sides) |
-| `lc` | Lewiston / Clarkston repeaters (both the ID and WA sides, proposed) |
+| `inw` | Inland Northwest repeaters (both WA and ID sides of the Spokane–CdA corridor) |
+| `palouse` | Palouse Mesh (WA, ID, and OR tri-state corner) |
+| `lws` | Idaho-side Palouse local repeaters (Moscow, Lewiston, Clearwater) |
 | `mt` | Montana repeaters using this scheme (partial — see `fca`) |
 | `fca` | Flathead Valley repeaters |
 | `id` | Idaho repeaters (not including `inw` unless they also carry `id`) |
@@ -324,7 +330,7 @@ Tags carried: `west`, `pnw`, `wa`, `e-wa`, `geg`, `inw` (24 bytes)
 
 ### Example: Pullman, WA (the Palouse)
 
-Pullman sits under `se-wa` (Southeastern Washington) alongside Walla Walla and the Tri-Cities. For everyday repeaters, it dual-carries `inw` (Inland Northwest) and `palouse` — a sub-region of `inw` shared with Moscow, ID — plus `e-wa` as a tie back to the rest of Eastern Washington. Pullman does **not** carry `alw`, `psc`, or `geg` on everyday repeaters; those good-neighbor tags are reserved for high-site repeaters near those borders (see [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters)).
+Pullman sits under `se-wa` (Southeastern Washington) alongside Walla Walla and the Tri-Cities. For everyday repeaters, it dual-carries `palouse` — Palouse Mesh's shared cross-border scope, a peer of `wa`/`id`/`or` under `pnw` — plus `e-wa` as a tie back to the rest of Eastern Washington. It does **not** carry `inw` (that tag stays with the Spokane–CdA corridor). Pullman does **not** carry `alw`, `psc`, or `geg` on everyday repeaters; those good-neighbor tags are reserved for high-site repeaters near those borders (see [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters)).
 
 ```
 region put west
@@ -333,27 +339,27 @@ region put wa pnw
 region put se-wa wa
 region put puw se-wa
 region put e-wa wa
-region put inw pnw
-region put palouse inw
+region put palouse pnw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `wa`, `se-wa`, `puw`, `e-wa`, `inw`, `palouse` (38 bytes)
+Tags carried: `west`, `pnw`, `wa`, `se-wa`, `puw`, `e-wa`, `palouse` (34 bytes)
 
-### Example: Moscow, ID (the Palouse, Idaho side)
+### Example: Moscow / Lewiston, ID (the Palouse, Idaho side)
 
-Moscow, Lewiston, and the Clearwater area carry `id` directly — there is no dedicated metro tag for this stretch of the Idaho panhandle (`cda` is reserved for Coeur d'Alene specifically). Moscow mirrors Pullman across the state line, dual-carrying `inw` and the shared `palouse` tag.
+Moscow, Lewiston, and the Clearwater area sit under `n-id` with local tag `lws` (Lewiston–Nez Perce County Regional Airport). `cda` stays reserved for Coeur d'Alene. Idaho-side Palouse Mesh dual-carries `palouse` the same way Pullman does, and does not carry `inw`.
 
 ```
 region put west
 region put pnw west
 region put id pnw
-region put inw pnw
-region put palouse inw
+region put n-id id
+region put lws n-id
+region put palouse pnw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `id`, `inw`, `palouse` (23 bytes)
+Tags carried: `west`, `pnw`, `id`, `n-id`, `lws`, `palouse` (28 bytes)
 
 ### Example: Walla Walla / Tri-Cities, WA (Southeastern Washington)
 
@@ -509,7 +515,7 @@ The Inland Northwest follows the same pattern as Portland — a cross-border com
 
 Spokane repeaters carry `inw`, `wa`, and `e-wa`. Coeur d'Alene repeaters carry `inw` and `id`. An `inw`-scoped message reaches both sides. A `wa`-scoped message reaches Spokane but not CdA. An `id`-scoped message reaches CdA but not Spokane. The state boundary and the community boundary are both respected without conflict.
 
-Pullman also dual-carries `inw` given its proximity to the Idaho border, even though it is no longer nested under `e-wa`/`geg` the way Spokane is — see [Palouse](#palouse) below.
+Palouse Mesh no longer dual-carries `inw` on everyday Pullman or Moscow repeaters — their shared community tag is `palouse`. See [Palouse](#palouse) below.
 
 ### Southeastern Washington
 
@@ -517,31 +523,35 @@ Community convention in southeastern Washington has diverged from the flat `e-wa
 
 Pullman also sits under `se-wa` alongside Walla Walla and the Tri-Cities — see [Palouse](#palouse) below for its cross-border tagging.
 
+Palouse Mesh asks that `se-wa` not be used as a delivery channel for bot output or diagnostics — it is a partnership scope for intentional messages between SE-WA communities ([Shrubsteppe Mesh](https://shrubsteppe.net/) and Palouse Mesh). Scope bot traffic to the local metro (`puw`, `alw`, `psc`) instead.
+
 ### Palouse
 
-The Palouse straddles the WA/ID line the same way the Inland Northwest straddles WA/ID further north: `palouse` is a sub-region of `inw`, not a direct child of `pnw`. Pullman, WA sits under `se-wa`; Moscow, Lewiston, and the Clearwater area sit directly under `id` (no dedicated metro tag — `cda` stays reserved for Coeur d'Alene specifically). Both sides dual-carry `inw` and `palouse`, so an `inw`- or `palouse`-scoped message reaches across the state line while `wa`- and `id`-scoped traffic stay on their own side.
+`palouse` is Palouse Mesh's shared cross-border scope for the Palouse as one community — Whitman, Asotin, and Garfield counties on the WA side, the Moscow / Lewiston / Clearwater corridor on the Idaho side, and the eastern Oregon corner. It sits alongside the state tags (`wa`, `id`, `or`) as a peer under `pnw`, not nested under `inw`. Each state also carries its own narrower local scope: `puw` (WA, under `se-wa`), `lws` (ID, under `n-id`), and — for Wallowa County operators — the existing `pdt` tag (OR, under `c-or`) plus `palouse`.
 
-Everyday repeaters on both sides keep it light — they do **not** carry `alw`, `psc`, or `geg`. Those good-neighbor tags toward Walla Walla, the Tri-Cities, and Spokane are reserved for high-site repeaters near those borders (see [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters)); close-border high sites on either side of the Palouse should carry all three.
+A `palouse`-scoped message reaches every Palouse Mesh repeater that listed it, regardless of state. `wa`- and `id`-scoped traffic stay on their own side. `inw` remains the Spokane–CdA community tag and is not part of everyday Palouse Mesh config.
 
-Pullman's service area is understood to extend beyond Whitman County to also cover Asotin and Garfield counties, which have no repeaters of their own — for now; see Lewiston / Clarkston below.
+Everyday repeaters on both sides keep it light — they do **not** carry `alw`, `psc`, or `geg`. Those good-neighbor tags toward Walla Walla, the Tri-Cities, and Spokane are reserved for high-site repeaters near those borders (see [Backbone and High-Site Repeaters](#backbone-and-high-site-repeaters)). High sites with real reach across the WA/ID line should also consider carrying the adjacent state's regional scopes (`wa` / `se-wa` / `e-wa` or `id` / `n-id`) in addition to their own.
 
-### Lewiston / Clarkston
+Pullman's service area is understood to extend beyond Whitman County to also cover Asotin and Garfield counties, which currently have no repeaters of their own.
 
-`lc` is a second, **proposed** cross-border sub-region of `inw`, one valley south of the Palouse — Lewiston, ID (Nez Perce County) and Clarkston, WA (Asotin County) sit as a single twin-city community split by the Snake River, the same way Pullman and Moscow are split by the state line. Per the local mesh's own site, it isn't finalized yet.
+Campus scopes are not part of everyday city repeater config: `wsu` (WSU Pullman, live) nests under `e-wa`, and `uofi` (University of Idaho, Moscow, proposed) nests under `n-id`, so campus mesh stays on campus without flooding `palouse`.
+
+### Wallowa County, OR (proposed Palouse Mesh Oregon side)
+
+Palouse Mesh's Oregon-side config dual-carries `palouse` on the existing Pendleton (`pdt`) ancestry. This scheme's `pdt` remains Pendleton (IATA, Umatilla County); Palouse Mesh documents Wallowa County operators using that NE Oregon tag rather than a separate Wallowa code.
 
 ```
 region put west
 region put pnw west
-region put id pnw
-region put inw pnw
-region put lc inw
+region put or pnw
+region put c-or or
+region put pdt c-or
+region put palouse pnw
 region save
 ```
 
-Tags carried: `west`, `pnw`, `id`, `inw`, `lc` (18 bytes). Clarkston, WA carries the same `inw`/`lc` pair, with `wa` (and likely `se-wa`) ancestry in place of `id` — but as noted above, Asotin County has no repeaters of its own today, so this side is aspirational.
-
-> [!NOTE]
-> `lc` is not related to "Lower Columbia" (the Astoria–Longview corridor covered by `ast` and `kls` in this scheme) — an easy mix-up given both are PNW places commonly shortened to "LC."
+Tags carried: `west`, `pnw`, `or`, `c-or`, `pdt`, `palouse` (28 bytes)
 
 ### Flathead Valley (Montana)
 
@@ -825,13 +835,13 @@ flood_scopes = #sle, #wv
 | `eph` | Ephrata | `c-wa` |
 | `e-wa` | Eastern Washington (Spokane and points north) | `wa` |
 | `geg` | Spokane metro | `e-wa` |
+| `wsu` | WSU Pullman campus (live, campus nodes only) | `e-wa` |
 | `se-wa` | Southeastern Washington | `wa` |
 | `alw` | Walla Walla | `se-wa` |
-| `puw` | Pullman (dual-carries `e-wa`, `inw`, `palouse`; high-site adds `alw`/`psc`/`geg`) | `se-wa` |
+| `puw` | Pullman (dual-carries `e-wa`, `palouse`; high-site adds `alw`/`psc`/`geg`) | `se-wa` |
 | `psc` | Tri-Cities (Pasco / Kennewick / Richland) | `se-wa` |
-| `inw` | Inland Northwest (cross-border; formerly `ie`, still carried by some legacy repeaters) | `pnw` |
-| `palouse` | Palouse (cross-border, Pullman WA ↔ Moscow ID) | `inw` |
-| `lc` | Lewiston / Clarkston (cross-border, proposed) | `inw` |
+| `inw` | Inland Northwest (cross-border Spokane–CdA; formerly `ie`, still carried by some legacy repeaters) | `pnw` |
+| `palouse` | Palouse Mesh shared scope (WA + ID + OR tri-state corner) | `pnw` |
 | `mt` | Montana (partial) | `pnw` |
 | `fca` | Flathead Valley / Kalispell / Glacier | `mt` |
 | `or` | Oregon | `pnw` |
@@ -854,9 +864,12 @@ flood_scopes = #sle, #wv
 | `bend` | Bend / Redmond | `c-or` |
 | `pdt` | Pendleton | `c-or` |
 | `bke` | Baker City | `c-or` |
-| `id` | Idaho (Moscow / Lewiston / Clearwater carry this directly, dual-carries `inw`/`palouse`) | `pnw` |
+| `id` | Idaho | `pnw` |
+| `n-id` | Northern Idaho (Moscow / Lewiston / Clearwater) | `id` |
+| `lws` | Lewiston / Moscow / Clearwater (ID-side Palouse local; dual-carries `palouse`) | `n-id` |
+| `uofi` | University of Idaho, Moscow campus (proposed, campus nodes only) | `n-id` |
 | `boi` | Boise metro | `id` |
-| `cda` | Coeur d'Alene / N. Idaho | `id` |
+| `cda` | Coeur d'Alene / N. Idaho (dual-carries `inw`) | `id` |
 | `bc` | Southern British Columbia | `pnw` |
 | `swbc` | Southwest BC / Lower Mainland | `bc` |
 | `vanisle` | Vancouver Island | `bc` |
@@ -869,6 +882,7 @@ flood_scopes = #sle, #wv
 
 ### 2026-09-06
 
+- **Palouse Mesh August 2026 alignment** ([palouse-mesh.net/regions](https://palouse-mesh.net/regions/)): `palouse` is now a peer of `wa`/`id`/`or` under `pnw`, not a child of `inw`. Everyday Palouse configs drop `inw` (that tag stays with Spokane–CdA). Added `n-id` and Idaho-side local `lws` (IATA Lewiston–Nez Perce County Regional Airport); Moscow / Lewiston / Clearwater no longer carry `id` as a leaf. Added campus tags `wsu` (live, under `e-wa`) and `uofi` (proposed, under `n-id`). Documented Palouse Mesh's proposed Oregon-side dual-carry of `palouse` on existing `pdt` ancestry for Wallowa County — `pdt` itself remains Pendleton. Retired proposed `lc` (superseded by `lws` on the ID side; Clarkston stays in Pullman's `puw` coverage). High-site Palouse nodes may also carry the adjacent state's regional scopes.
 - **McMinnville (`mmv`)**: Added a dedicated Yamhill County region (IATA `MMV`, McMinnville Municipal Airport) under `wv`, a community-requested carve-out between Portland (`pdx`) and Salem (`sle`). Small coverage by design — Newberg stays with the Portland metro.
 
 ### 2026-07-24
